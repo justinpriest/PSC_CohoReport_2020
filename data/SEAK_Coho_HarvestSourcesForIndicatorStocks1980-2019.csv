@@ -1,0 +1,943 @@
+Year,River,Fishery_Type,Coho_Harvest_Count
+1980,Auke Creek,AK_Gillnet (Drift & Set),29
+1980,Auke Creek,AK_Other,0
+1980,Auke Creek,AK_Seine,0
+1980,Auke Creek,AK_Sport,24
+1980,Auke Creek,AK_Troll,117
+1980,Auke Creek,CAN_AllFisheries,0
+1981,Auke Creek,AK_Gillnet (Drift & Set),31
+1981,Auke Creek,AK_Other,0
+1981,Auke Creek,AK_Seine,0
+1981,Auke Creek,AK_Sport,19
+1981,Auke Creek,AK_Troll,280
+1981,Auke Creek,CAN_AllFisheries,0
+1982,Auke Creek,AK_Gillnet (Drift & Set),24
+1982,Auke Creek,AK_Other,0
+1982,Auke Creek,AK_Seine,117
+1982,Auke Creek,AK_Sport,2
+1982,Auke Creek,AK_Troll,149
+1982,Auke Creek,CAN_AllFisheries,0
+1983,Auke Creek,AK_Gillnet (Drift & Set),28
+1983,Auke Creek,AK_Other,0
+1983,Auke Creek,AK_Seine,10
+1983,Auke Creek,AK_Sport,122
+1983,Auke Creek,AK_Troll,385
+1983,Auke Creek,CAN_AllFisheries,0
+1984,Auke Creek,AK_Gillnet (Drift & Set),13
+1984,Auke Creek,AK_Other,0
+1984,Auke Creek,AK_Seine,8
+1984,Auke Creek,AK_Sport,51
+1984,Auke Creek,AK_Troll,372
+1984,Auke Creek,CAN_AllFisheries,0
+1985,Auke Creek,AK_Gillnet (Drift & Set),71
+1985,Auke Creek,AK_Other,0
+1985,Auke Creek,AK_Seine,3
+1985,Auke Creek,AK_Sport,73
+1985,Auke Creek,AK_Troll,594
+1985,Auke Creek,CAN_AllFisheries,0
+1986,Auke Creek,AK_Gillnet (Drift & Set),60
+1986,Auke Creek,AK_Other,0
+1986,Auke Creek,AK_Seine,2
+1986,Auke Creek,AK_Sport,37
+1986,Auke Creek,AK_Troll,421
+1986,Auke Creek,CAN_AllFisheries,0
+1987,Auke Creek,AK_Gillnet (Drift & Set),48
+1987,Auke Creek,AK_Other,0
+1987,Auke Creek,AK_Seine,2
+1987,Auke Creek,AK_Sport,23
+1987,Auke Creek,AK_Troll,438
+1987,Auke Creek,CAN_AllFisheries,0
+1988,Auke Creek,AK_Gillnet (Drift & Set),72
+1988,Auke Creek,AK_Other,0
+1988,Auke Creek,AK_Seine,12
+1988,Auke Creek,AK_Sport,55
+1988,Auke Creek,AK_Troll,306
+1988,Auke Creek,CAN_AllFisheries,0
+1989,Auke Creek,AK_Gillnet (Drift & Set),15
+1989,Auke Creek,AK_Other,0
+1989,Auke Creek,AK_Seine,7
+1989,Auke Creek,AK_Sport,49
+1989,Auke Creek,AK_Troll,533
+1989,Auke Creek,CAN_AllFisheries,0
+1990,Auke Creek,AK_Gillnet (Drift & Set),57
+1990,Auke Creek,AK_Other,0
+1990,Auke Creek,AK_Seine,15
+1990,Auke Creek,AK_Sport,78
+1990,Auke Creek,AK_Troll,635
+1990,Auke Creek,CAN_AllFisheries,0
+1991,Auke Creek,AK_Gillnet (Drift & Set),152
+1991,Auke Creek,AK_Other,0
+1991,Auke Creek,AK_Seine,8
+1991,Auke Creek,AK_Sport,11
+1991,Auke Creek,AK_Troll,200
+1991,Auke Creek,CAN_AllFisheries,0
+1992,Auke Creek,AK_Gillnet (Drift & Set),196
+1992,Auke Creek,AK_Other,0
+1992,Auke Creek,AK_Seine,10
+1992,Auke Creek,AK_Sport,46
+1992,Auke Creek,AK_Troll,603
+1992,Auke Creek,CAN_AllFisheries,0
+1993,Auke Creek,AK_Gillnet (Drift & Set),92
+1993,Auke Creek,AK_Other,0
+1993,Auke Creek,AK_Seine,8
+1993,Auke Creek,AK_Sport,19
+1993,Auke Creek,AK_Troll,611
+1993,Auke Creek,CAN_AllFisheries,0
+1994,Auke Creek,AK_Gillnet (Drift & Set),218
+1994,Auke Creek,AK_Other,0
+1994,Auke Creek,AK_Seine,224
+1994,Auke Creek,AK_Sport,112
+1994,Auke Creek,AK_Troll,1064
+1994,Auke Creek,CAN_AllFisheries,0
+1995,Auke Creek,AK_Gillnet (Drift & Set),65
+1995,Auke Creek,AK_Other,0
+1995,Auke Creek,AK_Seine,5
+1995,Auke Creek,AK_Sport,26
+1995,Auke Creek,AK_Troll,264
+1995,Auke Creek,CAN_AllFisheries,0
+1996,Auke Creek,AK_Gillnet (Drift & Set),133
+1996,Auke Creek,AK_Other,0
+1996,Auke Creek,AK_Seine,11
+1996,Auke Creek,AK_Sport,36
+1996,Auke Creek,AK_Troll,446
+1996,Auke Creek,CAN_AllFisheries,0
+1997,Auke Creek,AK_Gillnet (Drift & Set),0
+1997,Auke Creek,AK_Other,0
+1997,Auke Creek,AK_Seine,4
+1997,Auke Creek,AK_Sport,50
+1997,Auke Creek,AK_Troll,94
+1997,Auke Creek,CAN_AllFisheries,0
+1998,Auke Creek,AK_Gillnet (Drift & Set),43
+1998,Auke Creek,AK_Other,0
+1998,Auke Creek,AK_Seine,17
+1998,Auke Creek,AK_Sport,54
+1998,Auke Creek,AK_Troll,437
+1998,Auke Creek,CAN_AllFisheries,0
+1999,Auke Creek,AK_Gillnet (Drift & Set),58
+1999,Auke Creek,AK_Other,0
+1999,Auke Creek,AK_Seine,5
+1999,Auke Creek,AK_Sport,42
+1999,Auke Creek,AK_Troll,485
+1999,Auke Creek,CAN_AllFisheries,0
+2000,Auke Creek,AK_Gillnet (Drift & Set),23
+2000,Auke Creek,AK_Other,0
+2000,Auke Creek,AK_Seine,6
+2000,Auke Creek,AK_Sport,29
+2000,Auke Creek,AK_Troll,228
+2000,Auke Creek,CAN_AllFisheries,0
+2001,Auke Creek,AK_Gillnet (Drift & Set),41
+2001,Auke Creek,AK_Other,0
+2001,Auke Creek,AK_Seine,10
+2001,Auke Creek,AK_Sport,55
+2001,Auke Creek,AK_Troll,435
+2001,Auke Creek,CAN_AllFisheries,0
+2002,Auke Creek,AK_Gillnet (Drift & Set),77
+2002,Auke Creek,AK_Other,0
+2002,Auke Creek,AK_Seine,8
+2002,Auke Creek,AK_Sport,51
+2002,Auke Creek,AK_Troll,288
+2002,Auke Creek,CAN_AllFisheries,0
+2003,Auke Creek,AK_Gillnet (Drift & Set),59
+2003,Auke Creek,AK_Other,0
+2003,Auke Creek,AK_Seine,4
+2003,Auke Creek,AK_Sport,45
+2003,Auke Creek,AK_Troll,211
+2003,Auke Creek,CAN_AllFisheries,0
+2004,Auke Creek,AK_Gillnet (Drift & Set),71
+2004,Auke Creek,AK_Other,0
+2004,Auke Creek,AK_Seine,47
+2004,Auke Creek,AK_Sport,15
+2004,Auke Creek,AK_Troll,199
+2004,Auke Creek,CAN_AllFisheries,0
+2005,Auke Creek,AK_Gillnet (Drift & Set),6
+2005,Auke Creek,AK_Other,0
+2005,Auke Creek,AK_Seine,0
+2005,Auke Creek,AK_Sport,31
+2005,Auke Creek,AK_Troll,240
+2005,Auke Creek,CAN_AllFisheries,0
+2006,Auke Creek,AK_Gillnet (Drift & Set),77
+2006,Auke Creek,AK_Other,0
+2006,Auke Creek,AK_Seine,0
+2006,Auke Creek,AK_Sport,26
+2006,Auke Creek,AK_Troll,196
+2006,Auke Creek,CAN_AllFisheries,0
+2007,Auke Creek,AK_Gillnet (Drift & Set),30
+2007,Auke Creek,AK_Other,0
+2007,Auke Creek,AK_Seine,6
+2007,Auke Creek,AK_Sport,14
+2007,Auke Creek,AK_Troll,134
+2007,Auke Creek,CAN_AllFisheries,0
+2008,Auke Creek,AK_Gillnet (Drift & Set),76
+2008,Auke Creek,AK_Other,0
+2008,Auke Creek,AK_Seine,0
+2008,Auke Creek,AK_Sport,9
+2008,Auke Creek,AK_Troll,292
+2008,Auke Creek,CAN_AllFisheries,0
+2009,Auke Creek,AK_Gillnet (Drift & Set),46
+2009,Auke Creek,AK_Other,0
+2009,Auke Creek,AK_Seine,0
+2009,Auke Creek,AK_Sport,8
+2009,Auke Creek,AK_Troll,179
+2009,Auke Creek,CAN_AllFisheries,0
+2010,Auke Creek,AK_Gillnet (Drift & Set),134
+2010,Auke Creek,AK_Other,0
+2010,Auke Creek,AK_Seine,0
+2010,Auke Creek,AK_Sport,22
+2010,Auke Creek,AK_Troll,194
+2010,Auke Creek,CAN_AllFisheries,0
+2011,Auke Creek,AK_Gillnet (Drift & Set),93
+2011,Auke Creek,AK_Other,0
+2011,Auke Creek,AK_Seine,31
+2011,Auke Creek,AK_Sport,16
+2011,Auke Creek,AK_Troll,137
+2011,Auke Creek,CAN_AllFisheries,0
+2012,Auke Creek,AK_Gillnet (Drift & Set),7
+2012,Auke Creek,AK_Other,0
+2012,Auke Creek,AK_Seine,4
+2012,Auke Creek,AK_Sport,17
+2012,Auke Creek,AK_Troll,212
+2012,Auke Creek,CAN_AllFisheries,0
+2013,Auke Creek,AK_Gillnet (Drift & Set),69
+2013,Auke Creek,AK_Other,0
+2013,Auke Creek,AK_Seine,28
+2013,Auke Creek,AK_Sport,27
+2013,Auke Creek,AK_Troll,406
+2013,Auke Creek,CAN_AllFisheries,0
+2014,Auke Creek,AK_Gillnet (Drift & Set),107
+2014,Auke Creek,AK_Other,0
+2014,Auke Creek,AK_Seine,0
+2014,Auke Creek,AK_Sport,21
+2014,Auke Creek,AK_Troll,265
+2014,Auke Creek,CAN_AllFisheries,0
+2015,Auke Creek,AK_Gillnet (Drift & Set),14
+2015,Auke Creek,AK_Other,0
+2015,Auke Creek,AK_Seine,2
+2015,Auke Creek,AK_Sport,17
+2015,Auke Creek,AK_Troll,140
+2015,Auke Creek,CAN_AllFisheries,0
+2016,Auke Creek,AK_Gillnet (Drift & Set),49
+2016,Auke Creek,AK_Other,0
+2016,Auke Creek,AK_Seine,0
+2016,Auke Creek,AK_Sport,0
+2016,Auke Creek,AK_Troll,20
+2016,Auke Creek,CAN_AllFisheries,0
+2017,Auke Creek,AK_Gillnet (Drift & Set),19
+2017,Auke Creek,AK_Other,0
+2017,Auke Creek,AK_Seine,0
+2017,Auke Creek,AK_Sport,14
+2017,Auke Creek,AK_Troll,163
+2017,Auke Creek,CAN_AllFisheries,0
+2018,Auke Creek,AK_Gillnet (Drift & Set),105
+2018,Auke Creek,AK_Other,0
+2018,Auke Creek,AK_Seine,0
+2018,Auke Creek,AK_Sport,18
+2018,Auke Creek,AK_Troll,65
+2018,Auke Creek,CAN_AllFisheries,0
+2019,Auke Creek,AK_Gillnet (Drift & Set),104
+2019,Auke Creek,AK_Other,0
+2019,Auke Creek,AK_Seine,0
+2019,Auke Creek,AK_Sport,6
+2019,Auke Creek,AK_Troll,27
+2019,Auke Creek,CAN_AllFisheries,0
+1974,Berners River,AK_Gillnet (Drift & Set),4580.704918
+1974,Berners River,AK_Other,0
+1974,Berners River,AK_Seine,405.8852459
+1974,Berners River,AK_Sport,0
+1974,Berners River,AK_Troll,9161.409836
+1974,Berners River,CAN_AllFisheries,0
+1978,Berners River,AK_Gillnet (Drift & Set),4143.686824
+1978,Berners River,AK_Other,0
+1978,Berners River,AK_Seine,0
+1978,Berners River,AK_Sport,0
+1978,Berners River,AK_Troll,7208.21042
+1978,Berners River,CAN_AllFisheries,0
+1979,Berners River,AK_Gillnet (Drift & Set),1774.321462
+1979,Berners River,AK_Other,0
+1979,Berners River,AK_Seine,410.7606873
+1979,Berners River,AK_Sport,94.92633818
+1979,Berners River,AK_Troll,4892.119069
+1979,Berners River,CAN_AllFisheries,0
+1982,Berners River,AK_Gillnet (Drift & Set),10964.72409
+1982,Berners River,AK_Other,0
+1982,Berners River,AK_Seine,0
+1982,Berners River,AK_Sport,0
+1982,Berners River,AK_Troll,14139.74235
+1982,Berners River,CAN_AllFisheries,0
+1983,Berners River,AK_Gillnet (Drift & Set),6977.07722
+1983,Berners River,AK_Other,0
+1983,Berners River,AK_Seine,0
+1983,Berners River,AK_Sport,420.9569676
+1983,Berners River,AK_Troll,17176.46193
+1983,Berners River,CAN_AllFisheries,0
+1984,Berners River,AK_Gillnet (Drift & Set),NA
+1984,Berners River,AK_Other,NA
+1984,Berners River,AK_Seine,NA
+1984,Berners River,AK_Sport,NA
+1984,Berners River,AK_Troll,NA
+1984,Berners River,CAN_AllFisheries,NA
+1985,Berners River,AK_Gillnet (Drift & Set),7015.97401
+1985,Berners River,AK_Other,0
+1985,Berners River,AK_Seine,289.9523386
+1985,Berners River,AK_Sport,0
+1985,Berners River,AK_Troll,10861.48059
+1985,Berners River,CAN_AllFisheries,0
+1986,Berners River,AK_Gillnet (Drift & Set),8804.329471
+1986,Berners River,AK_Other,0
+1986,Berners River,AK_Seine,0
+1986,Berners River,AK_Sport,565.684404
+1986,Berners River,AK_Troll,13565.22992
+1986,Berners River,CAN_AllFisheries,0
+1987,Berners River,AK_Gillnet (Drift & Set),3317.157223
+1987,Berners River,AK_Other,0
+1987,Berners River,AK_Seine,0
+1987,Berners River,AK_Sport,166.2250977
+1987,Berners River,AK_Troll,7210.757033
+1987,Berners River,CAN_AllFisheries,0
+1988,Berners River,AK_Gillnet (Drift & Set),6196.486788
+1988,Berners River,AK_Other,0
+1988,Berners River,AK_Seine,167.4528225
+1988,Berners River,AK_Sport,0
+1988,Berners River,AK_Troll,6060.400329
+1988,Berners River,CAN_AllFisheries,0
+1989,Berners River,AK_Gillnet (Drift & Set),1664.529588
+1989,Berners River,AK_Other,0
+1989,Berners River,AK_Seine,0
+1989,Berners River,AK_Sport,0
+1989,Berners River,AK_Troll,10582.78989
+1989,Berners River,CAN_AllFisheries,0
+1990,Berners River,AK_Gillnet (Drift & Set),7350.590657
+1990,Berners River,AK_Other,0
+1990,Berners River,AK_Seine,183.8608217
+1990,Berners River,AK_Sport,369.2722135
+1990,Berners River,AK_Troll,15006.90656
+1990,Berners River,CAN_AllFisheries,0
+1991,Berners River,AK_Gillnet (Drift & Set),16639.54022
+1991,Berners River,AK_Other,0
+1991,Berners River,AK_Seine,284.6487783
+1991,Berners River,AK_Sport,84.03103659
+1991,Berners River,AK_Troll,6448.584819
+1991,Berners River,CAN_AllFisheries,0
+1992,Berners River,AK_Gillnet (Drift & Set),14678.98207
+1992,Berners River,AK_Other,0
+1992,Berners River,AK_Seine,508.3385561
+1992,Berners River,AK_Sport,189.2598061
+1992,Berners River,AK_Troll,15318.19469
+1992,Berners River,CAN_AllFisheries,0
+1993,Berners River,AK_Gillnet (Drift & Set),14281.6727
+1993,Berners River,AK_Other,0
+1993,Berners River,AK_Seine,165.8859205
+1993,Berners River,AK_Sport,179.7282386
+1993,Berners River,AK_Troll,19308.33479
+1993,Berners River,CAN_AllFisheries,0
+1994,Berners River,AK_Gillnet (Drift & Set),27909.14683
+1994,Berners River,AK_Other,0
+1994,Berners River,AK_Seine,1380.901158
+1994,Berners River,AK_Sport,810.2829941
+1994,Berners River,AK_Troll,27339.01799
+1994,Berners River,CAN_AllFisheries,9.539432177
+1995,Berners River,AK_Gillnet (Drift & Set),14869.17183
+1995,Berners River,AK_Other,0
+1995,Berners River,AK_Seine,24.90344475
+1995,Berners River,AK_Sport,210.3846521
+1995,Berners River,AK_Troll,8765.690758
+1995,Berners River,CAN_AllFisheries,0
+1996,Berners River,AK_Gillnet (Drift & Set),6434.071113
+1996,Berners River,AK_Other,0
+1996,Berners River,AK_Seine,234.4486623
+1996,Berners River,AK_Sport,406.4488587
+1996,Berners River,AK_Troll,10528.73004
+1996,Berners River,CAN_AllFisheries,0
+1997,Berners River,AK_Gillnet (Drift & Set),2253.769423
+1997,Berners River,AK_Other,18
+1997,Berners River,AK_Seine,231.3978932
+1997,Berners River,AK_Sport,278.0002956
+1997,Berners River,AK_Troll,2452.842308
+1997,Berners River,CAN_AllFisheries,0
+1998,Berners River,AK_Gillnet (Drift & Set),5222.935138
+1998,Berners River,AK_Other,0
+1998,Berners River,AK_Seine,394.5025358
+1998,Berners River,AK_Sport,293.2535855
+1998,Berners River,AK_Troll,10424.44756
+1998,Berners River,CAN_AllFisheries,0
+1999,Berners River,AK_Gillnet (Drift & Set),9571.587477
+1999,Berners River,AK_Other,0
+1999,Berners River,AK_Seine,199.6091994
+1999,Berners River,AK_Sport,577.5524848
+1999,Berners River,AK_Troll,12876.41192
+1999,Berners River,CAN_AllFisheries,0
+2000,Berners River,AK_Gillnet (Drift & Set),5330.081268
+2000,Berners River,AK_Other,6
+2000,Berners River,AK_Seine,171.1066845
+2000,Berners River,AK_Sport,497.0713813
+2000,Berners River,AK_Troll,4810.703564
+2000,Berners River,CAN_AllFisheries,0
+2001,Berners River,AK_Gillnet (Drift & Set),3522.947967
+2001,Berners River,AK_Other,0
+2001,Berners River,AK_Seine,178.2302067
+2001,Berners River,AK_Sport,347.2272674
+2001,Berners River,AK_Troll,8814.345685
+2001,Berners River,CAN_AllFisheries,0
+2002,Berners River,AK_Gillnet (Drift & Set),12076.71349
+2002,Berners River,AK_Other,0
+2002,Berners River,AK_Seine,311.94612
+2002,Berners River,AK_Sport,1079.962277
+2002,Berners River,AK_Troll,8649.799149
+2002,Berners River,CAN_AllFisheries,0
+2003,Berners River,AK_Gillnet (Drift & Set),11377.239
+2003,Berners River,AK_Other,0
+2003,Berners River,AK_Seine,250.6496224
+2003,Berners River,AK_Sport,550.3528578
+2003,Berners River,AK_Troll,6822.780149
+2003,Berners River,CAN_AllFisheries,0
+2004,Berners River,AK_Gillnet (Drift & Set),7351.741119
+2004,Berners River,AK_Other,0
+2004,Berners River,AK_Seine,83.34392254
+2004,Berners River,AK_Sport,497.0393603
+2004,Berners River,AK_Troll,10791.87953
+2004,Berners River,CAN_AllFisheries,0
+2005,Berners River,AK_Gillnet (Drift & Set),2546.106628
+2005,Berners River,AK_Other,0
+2005,Berners River,AK_Seine,121.2216062
+2005,Berners River,AK_Sport,231.861115
+2005,Berners River,AK_Troll,4638.685593
+2005,Berners River,CAN_AllFisheries,0
+2006,Berners River,AK_Gillnet (Drift & Set),6160.747743
+2006,Berners River,AK_Other,0
+2006,Berners River,AK_Seine,0
+2006,Berners River,AK_Sport,109.93983
+2006,Berners River,AK_Troll,4081.51653
+2006,Berners River,CAN_AllFisheries,0
+2007,Berners River,AK_Gillnet (Drift & Set),1668.241463
+2007,Berners River,AK_Other,0
+2007,Berners River,AK_Seine,39.76615034
+2007,Berners River,AK_Sport,161.0773963
+2007,Berners River,AK_Troll,2937.465407
+2007,Berners River,CAN_AllFisheries,0
+2008,Berners River,AK_Gillnet (Drift & Set),3469.358364
+2008,Berners River,AK_Other,0
+2008,Berners River,AK_Seine,0
+2008,Berners River,AK_Sport,149.2063089
+2008,Berners River,AK_Troll,3878.194539
+2008,Berners River,CAN_AllFisheries,0
+2009,Berners River,AK_Gillnet (Drift & Set),2037.189163
+2009,Berners River,AK_Other,0
+2009,Berners River,AK_Seine,63.46978025
+2009,Berners River,AK_Sport,180.0981722
+2009,Berners River,AK_Troll,2806.689
+2009,Berners River,CAN_AllFisheries,0
+2010,Berners River,AK_Gillnet (Drift & Set),7257.809484
+2010,Berners River,AK_Other,0
+2010,Berners River,AK_Seine,110.4222284
+2010,Berners River,AK_Sport,314.896199
+2010,Berners River,AK_Troll,6451.032192
+2010,Berners River,CAN_AllFisheries,0
+2011,Berners River,AK_Gillnet (Drift & Set),1902.776603
+2011,Berners River,AK_Other,0
+2011,Berners River,AK_Seine,251.4977341
+2011,Berners River,AK_Sport,40.45929318
+2011,Berners River,AK_Troll,3727.768059
+2011,Berners River,CAN_AllFisheries,0
+2012,Berners River,AK_Gillnet (Drift & Set),919.8546467
+2012,Berners River,AK_Other,0
+2012,Berners River,AK_Seine,0
+2012,Berners River,AK_Sport,28.29353576
+2012,Berners River,AK_Troll,2074.576987
+2012,Berners River,CAN_AllFisheries,0
+2013,Berners River,AK_Gillnet (Drift & Set),6289.002651
+2013,Berners River,AK_Other,0
+2013,Berners River,AK_Seine,369.3129152
+2013,Berners River,AK_Sport,323.7342177
+2013,Berners River,AK_Troll,7520.631489
+2013,Berners River,CAN_AllFisheries,0
+2014,Berners River,AK_Gillnet (Drift & Set),6206.770282
+2014,Berners River,AK_Other,0
+2014,Berners River,AK_Seine,0
+2014,Berners River,AK_Sport,281.1419177
+2014,Berners River,AK_Troll,4301.124104
+2014,Berners River,CAN_AllFisheries,0
+2015,Berners River,AK_Gillnet (Drift & Set),1888.027052
+2015,Berners River,AK_Other,0
+2015,Berners River,AK_Seine,120
+2015,Berners River,AK_Sport,217.7842243
+2015,Berners River,AK_Troll,3578.670112
+2015,Berners River,CAN_AllFisheries,0
+2016,Berners River,AK_Gillnet (Drift & Set),2226.260468
+2016,Berners River,AK_Other,0
+2016,Berners River,AK_Seine,11.27694138
+2016,Berners River,AK_Sport,141.7638828
+2016,Berners River,AK_Troll,931.1804287
+2016,Berners River,CAN_AllFisheries,0
+2017,Berners River,AK_Gillnet (Drift & Set),1623.265961
+2017,Berners River,AK_Other,0
+2017,Berners River,AK_Seine,863
+2017,Berners River,AK_Sport,279.1198222
+2017,Berners River,AK_Troll,4463.539644
+2017,Berners River,CAN_AllFisheries,0
+2018,Berners River,AK_Gillnet (Drift & Set),3018.070223
+2018,Berners River,AK_Other,0
+2018,Berners River,AK_Seine,0
+2018,Berners River,AK_Sport,124.4460551
+2018,Berners River,AK_Troll,1087.638298
+2018,Berners River,CAN_AllFisheries,0
+2019,Berners River,AK_Gillnet (Drift & Set),2240.187214
+2019,Berners River,AK_Other,0
+2019,Berners River,AK_Seine,0
+2019,Berners River,AK_Sport,81.18364369
+2019,Berners River,AK_Troll,1047.181476
+2019,Berners River,CAN_AllFisheries,0
+1982,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1982,Ford Arm Lake,AK_Other,0
+1982,Ford Arm Lake,AK_Seine,106
+1982,Ford Arm Lake,AK_Sport,0
+1982,Ford Arm Lake,AK_Troll,1927
+1982,Ford Arm Lake,CAN_AllFisheries,0
+1983,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1983,Ford Arm Lake,AK_Other,0
+1983,Ford Arm Lake,AK_Seine,912
+1983,Ford Arm Lake,AK_Sport,0
+1983,Ford Arm Lake,AK_Troll,3344
+1983,Ford Arm Lake,CAN_AllFisheries,0
+1984,Ford Arm Lake,AK_Gillnet (Drift & Set),NA
+1984,Ford Arm Lake,AK_Other,NA
+1984,Ford Arm Lake,AK_Seine,NA
+1984,Ford Arm Lake,AK_Sport,NA
+1984,Ford Arm Lake,AK_Troll,NA
+1984,Ford Arm Lake,CAN_AllFisheries,NA
+1985,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1985,Ford Arm Lake,AK_Other,0
+1985,Ford Arm Lake,AK_Seine,0
+1985,Ford Arm Lake,AK_Sport,0
+1985,Ford Arm Lake,AK_Troll,2482
+1985,Ford Arm Lake,CAN_AllFisheries,0
+1986,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1986,Ford Arm Lake,AK_Other,0
+1986,Ford Arm Lake,AK_Seine,63
+1986,Ford Arm Lake,AK_Sport,0
+1986,Ford Arm Lake,AK_Troll,2483
+1986,Ford Arm Lake,CAN_AllFisheries,0
+1987,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1987,Ford Arm Lake,AK_Other,0
+1987,Ford Arm Lake,AK_Seine,81
+1987,Ford Arm Lake,AK_Sport,0
+1987,Ford Arm Lake,AK_Troll,1458
+1987,Ford Arm Lake,CAN_AllFisheries,0
+1988,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1988,Ford Arm Lake,AK_Other,0
+1988,Ford Arm Lake,AK_Seine,46
+1988,Ford Arm Lake,AK_Sport,0
+1988,Ford Arm Lake,AK_Troll,2816
+1988,Ford Arm Lake,CAN_AllFisheries,31
+1989,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1989,Ford Arm Lake,AK_Other,0
+1989,Ford Arm Lake,AK_Seine,185
+1989,Ford Arm Lake,AK_Sport,0
+1989,Ford Arm Lake,AK_Troll,3799
+1989,Ford Arm Lake,CAN_AllFisheries,0
+1990,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1990,Ford Arm Lake,AK_Other,0
+1990,Ford Arm Lake,AK_Seine,100
+1990,Ford Arm Lake,AK_Sport,0
+1990,Ford Arm Lake,AK_Troll,2982
+1990,Ford Arm Lake,CAN_AllFisheries,0
+1991,Ford Arm Lake,AK_Gillnet (Drift & Set),10
+1991,Ford Arm Lake,AK_Other,0
+1991,Ford Arm Lake,AK_Seine,44
+1991,Ford Arm Lake,AK_Sport,0
+1991,Ford Arm Lake,AK_Troll,3203
+1991,Ford Arm Lake,CAN_AllFisheries,0
+1992,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1992,Ford Arm Lake,AK_Other,0
+1992,Ford Arm Lake,AK_Seine,233
+1992,Ford Arm Lake,AK_Sport,0
+1992,Ford Arm Lake,AK_Troll,5252
+1992,Ford Arm Lake,CAN_AllFisheries,0
+1993,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1993,Ford Arm Lake,AK_Other,0
+1993,Ford Arm Lake,AK_Seine,434
+1993,Ford Arm Lake,AK_Sport,176
+1993,Ford Arm Lake,AK_Troll,7749
+1993,Ford Arm Lake,CAN_AllFisheries,0
+1994,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1994,Ford Arm Lake,AK_Other,0
+1994,Ford Arm Lake,AK_Seine,1020
+1994,Ford Arm Lake,AK_Sport,384
+1994,Ford Arm Lake,AK_Troll,6856
+1994,Ford Arm Lake,CAN_AllFisheries,0
+1995,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1995,Ford Arm Lake,AK_Other,0
+1995,Ford Arm Lake,AK_Seine,759
+1995,Ford Arm Lake,AK_Sport,0
+1995,Ford Arm Lake,AK_Troll,3582
+1995,Ford Arm Lake,CAN_AllFisheries,0
+1996,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1996,Ford Arm Lake,AK_Other,0
+1996,Ford Arm Lake,AK_Seine,0
+1996,Ford Arm Lake,AK_Sport,281
+1996,Ford Arm Lake,AK_Troll,3083
+1996,Ford Arm Lake,CAN_AllFisheries,0
+1997,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1997,Ford Arm Lake,AK_Other,0
+1997,Ford Arm Lake,AK_Seine,0
+1997,Ford Arm Lake,AK_Sport,351
+1997,Ford Arm Lake,AK_Troll,4702
+1997,Ford Arm Lake,CAN_AllFisheries,0
+1998,Ford Arm Lake,AK_Gillnet (Drift & Set),20
+1998,Ford Arm Lake,AK_Other,0
+1998,Ford Arm Lake,AK_Seine,435
+1998,Ford Arm Lake,AK_Sport,785
+1998,Ford Arm Lake,AK_Troll,7835
+1998,Ford Arm Lake,CAN_AllFisheries,0
+1999,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+1999,Ford Arm Lake,AK_Other,0
+1999,Ford Arm Lake,AK_Seine,66
+1999,Ford Arm Lake,AK_Sport,436
+1999,Ford Arm Lake,AK_Troll,5893
+1999,Ford Arm Lake,CAN_AllFisheries,0
+2000,Ford Arm Lake,AK_Gillnet (Drift & Set),14
+2000,Ford Arm Lake,AK_Other,0
+2000,Ford Arm Lake,AK_Seine,916
+2000,Ford Arm Lake,AK_Sport,211
+2000,Ford Arm Lake,AK_Troll,4604
+2000,Ford Arm Lake,CAN_AllFisheries,0
+2001,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2001,Ford Arm Lake,AK_Other,0
+2001,Ford Arm Lake,AK_Seine,115
+2001,Ford Arm Lake,AK_Sport,480
+2001,Ford Arm Lake,AK_Troll,5821
+2001,Ford Arm Lake,CAN_AllFisheries,0
+2002,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2002,Ford Arm Lake,AK_Other,0
+2002,Ford Arm Lake,AK_Seine,1260
+2002,Ford Arm Lake,AK_Sport,998
+2002,Ford Arm Lake,AK_Troll,5751
+2002,Ford Arm Lake,CAN_AllFisheries,0
+2003,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2003,Ford Arm Lake,AK_Other,0
+2003,Ford Arm Lake,AK_Seine,504
+2003,Ford Arm Lake,AK_Sport,1770
+2003,Ford Arm Lake,AK_Troll,4154
+2003,Ford Arm Lake,CAN_AllFisheries,0
+2004,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2004,Ford Arm Lake,AK_Other,0
+2004,Ford Arm Lake,AK_Seine,524
+2004,Ford Arm Lake,AK_Sport,319
+2004,Ford Arm Lake,AK_Troll,7722
+2004,Ford Arm Lake,CAN_AllFisheries,0
+2005,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2005,Ford Arm Lake,AK_Other,0
+2005,Ford Arm Lake,AK_Seine,60
+2005,Ford Arm Lake,AK_Sport,672
+2005,Ford Arm Lake,AK_Troll,5134
+2005,Ford Arm Lake,CAN_AllFisheries,0
+2006,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2006,Ford Arm Lake,AK_Other,0
+2006,Ford Arm Lake,AK_Seine,367
+2006,Ford Arm Lake,AK_Sport,844
+2006,Ford Arm Lake,AK_Troll,3866
+2006,Ford Arm Lake,CAN_AllFisheries,0
+2007,Ford Arm Lake,AK_Gillnet (Drift & Set),7
+2007,Ford Arm Lake,AK_Other,0
+2007,Ford Arm Lake,AK_Seine,217
+2007,Ford Arm Lake,AK_Sport,202
+2007,Ford Arm Lake,AK_Troll,5673
+2007,Ford Arm Lake,CAN_AllFisheries,0
+2008,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2008,Ford Arm Lake,AK_Other,0
+2008,Ford Arm Lake,AK_Seine,1047
+2008,Ford Arm Lake,AK_Sport,277
+2008,Ford Arm Lake,AK_Troll,4563
+2008,Ford Arm Lake,CAN_AllFisheries,0
+2009,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2009,Ford Arm Lake,AK_Other,0
+2009,Ford Arm Lake,AK_Seine,248
+2009,Ford Arm Lake,AK_Sport,93
+2009,Ford Arm Lake,AK_Troll,4604
+2009,Ford Arm Lake,CAN_AllFisheries,0
+2010,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2010,Ford Arm Lake,AK_Other,0
+2010,Ford Arm Lake,AK_Seine,570
+2010,Ford Arm Lake,AK_Sport,132
+2010,Ford Arm Lake,AK_Troll,2151
+2010,Ford Arm Lake,CAN_AllFisheries,0
+2011,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2011,Ford Arm Lake,AK_Other,0
+2011,Ford Arm Lake,AK_Seine,6238
+2011,Ford Arm Lake,AK_Sport,79
+2011,Ford Arm Lake,AK_Troll,2613
+2011,Ford Arm Lake,CAN_AllFisheries,0
+2012,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2012,Ford Arm Lake,AK_Other,0
+2012,Ford Arm Lake,AK_Seine,862
+2012,Ford Arm Lake,AK_Sport,151
+2012,Ford Arm Lake,AK_Troll,2884
+2012,Ford Arm Lake,CAN_AllFisheries,0
+2013,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2013,Ford Arm Lake,AK_Other,0
+2013,Ford Arm Lake,AK_Seine,2069
+2013,Ford Arm Lake,AK_Sport,103
+2013,Ford Arm Lake,AK_Troll,3426
+2013,Ford Arm Lake,CAN_AllFisheries,0
+2014,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2014,Ford Arm Lake,AK_Other,0
+2014,Ford Arm Lake,AK_Seine,2397
+2014,Ford Arm Lake,AK_Sport,330
+2014,Ford Arm Lake,AK_Troll,4927
+2014,Ford Arm Lake,CAN_AllFisheries,0
+2015,Ford Arm Lake,AK_Gillnet (Drift & Set),0
+2015,Ford Arm Lake,AK_Other,0
+2015,Ford Arm Lake,AK_Seine,380
+2015,Ford Arm Lake,AK_Sport,118
+2015,Ford Arm Lake,AK_Troll,3078
+2015,Ford Arm Lake,CAN_AllFisheries,0
+2016,Ford Arm Lake,AK_Gillnet (Drift & Set),NA
+2016,Ford Arm Lake,AK_Other,NA
+2016,Ford Arm Lake,AK_Seine,NA
+2016,Ford Arm Lake,AK_Sport,NA
+2016,Ford Arm Lake,AK_Troll,NA
+2016,Ford Arm Lake,CAN_AllFisheries,NA
+2017,Ford Arm Lake,AK_Gillnet (Drift & Set),NA
+2017,Ford Arm Lake,AK_Other,NA
+2017,Ford Arm Lake,AK_Seine,NA
+2017,Ford Arm Lake,AK_Sport,NA
+2017,Ford Arm Lake,AK_Troll,NA
+2017,Ford Arm Lake,CAN_AllFisheries,NA
+2018,Ford Arm Lake,AK_Gillnet (Drift & Set),NA
+2018,Ford Arm Lake,AK_Other,NA
+2018,Ford Arm Lake,AK_Seine,NA
+2018,Ford Arm Lake,AK_Sport,NA
+2018,Ford Arm Lake,AK_Troll,NA
+2018,Ford Arm Lake,CAN_AllFisheries,NA
+2019,Ford Arm Lake,AK_Gillnet (Drift & Set),NA
+2019,Ford Arm Lake,AK_Other,NA
+2019,Ford Arm Lake,AK_Seine,NA
+2019,Ford Arm Lake,AK_Sport,NA
+2019,Ford Arm Lake,AK_Troll,NA
+2019,Ford Arm Lake,CAN_AllFisheries,NA
+1982,Hugh Smith Lake,AK_Gillnet (Drift & Set),202.755539
+1982,Hugh Smith Lake,AK_Other,0
+1982,Hugh Smith Lake,AK_Seine,627.5435741
+1982,Hugh Smith Lake,AK_Sport,0
+1982,Hugh Smith Lake,AK_Troll,2757.822713
+1982,Hugh Smith Lake,CAN_AllFisheries,400.2762745
+1983,Hugh Smith Lake,AK_Gillnet (Drift & Set),276.859736
+1983,Hugh Smith Lake,AK_Other,49
+1983,Hugh Smith Lake,AK_Seine,424.1033939
+1983,Hugh Smith Lake,AK_Sport,0
+1983,Hugh Smith Lake,AK_Troll,1373.619409
+1983,Hugh Smith Lake,CAN_AllFisheries,264.2056472
+1984,Hugh Smith Lake,AK_Gillnet (Drift & Set),471.2840371
+1984,Hugh Smith Lake,AK_Other,18
+1984,Hugh Smith Lake,AK_Seine,503.5810202
+1984,Hugh Smith Lake,AK_Sport,0
+1984,Hugh Smith Lake,AK_Troll,1266.002263
+1984,Hugh Smith Lake,CAN_AllFisheries,357.6307759
+1985,Hugh Smith Lake,AK_Gillnet (Drift & Set),137.103303
+1985,Hugh Smith Lake,AK_Other,5
+1985,Hugh Smith Lake,AK_Seine,287.3504201
+1985,Hugh Smith Lake,AK_Sport,0
+1985,Hugh Smith Lake,AK_Troll,867.9489282
+1985,Hugh Smith Lake,CAN_AllFisheries,239.4708592
+1986,Hugh Smith Lake,AK_Gillnet (Drift & Set),212.976457
+1986,Hugh Smith Lake,AK_Other,0
+1986,Hugh Smith Lake,AK_Seine,492.5193397
+1986,Hugh Smith Lake,AK_Sport,15.78935871
+1986,Hugh Smith Lake,AK_Troll,1597.654807
+1986,Hugh Smith Lake,CAN_AllFisheries,264.3028332
+1987,Hugh Smith Lake,AK_Gillnet (Drift & Set),147.7206205
+1987,Hugh Smith Lake,AK_Other,4
+1987,Hugh Smith Lake,AK_Seine,81.60089423
+1987,Hugh Smith Lake,AK_Sport,28.23311292
+1987,Hugh Smith Lake,AK_Troll,657.2578116
+1987,Hugh Smith Lake,CAN_AllFisheries,207.9678462
+1988,Hugh Smith Lake,AK_Gillnet (Drift & Set),78.09100273
+1988,Hugh Smith Lake,AK_Other,0
+1988,Hugh Smith Lake,AK_Seine,206.90987
+1988,Hugh Smith Lake,AK_Sport,0
+1988,Hugh Smith Lake,AK_Troll,405.9205545
+1988,Hugh Smith Lake,CAN_AllFisheries,268.92
+1989,Hugh Smith Lake,AK_Gillnet (Drift & Set),246.6823498
+1989,Hugh Smith Lake,AK_Other,0
+1989,Hugh Smith Lake,AK_Seine,319.5116894
+1989,Hugh Smith Lake,AK_Sport,61.78442353
+1989,Hugh Smith Lake,AK_Troll,1216.741522
+1989,Hugh Smith Lake,CAN_AllFisheries,126.4282353
+1990,Hugh Smith Lake,AK_Gillnet (Drift & Set),637.2987106
+1990,Hugh Smith Lake,AK_Other,23
+1990,Hugh Smith Lake,AK_Seine,566.1803671
+1990,Hugh Smith Lake,AK_Sport,0
+1990,Hugh Smith Lake,AK_Troll,1803.250221
+1990,Hugh Smith Lake,CAN_AllFisheries,893.44
+1991,Hugh Smith Lake,AK_Gillnet (Drift & Set),941.3673719
+1991,Hugh Smith Lake,AK_Other,0
+1991,Hugh Smith Lake,AK_Seine,190.3827398
+1991,Hugh Smith Lake,AK_Sport,37.51413345
+1991,Hugh Smith Lake,AK_Troll,2103.337163
+1991,Hugh Smith Lake,CAN_AllFisheries,658.1659917
+1992,Hugh Smith Lake,AK_Gillnet (Drift & Set),600.0422492
+1992,Hugh Smith Lake,AK_Other,0
+1992,Hugh Smith Lake,AK_Seine,676.0526274
+1992,Hugh Smith Lake,AK_Sport,39.89474078
+1992,Hugh Smith Lake,AK_Troll,1854.471855
+1992,Hugh Smith Lake,CAN_AllFisheries,298.220164
+1993,Hugh Smith Lake,AK_Gillnet (Drift & Set),665.8996793
+1993,Hugh Smith Lake,AK_Other,0
+1993,Hugh Smith Lake,AK_Seine,269.0579198
+1993,Hugh Smith Lake,AK_Sport,0
+1993,Hugh Smith Lake,AK_Troll,2227.137461
+1993,Hugh Smith Lake,CAN_AllFisheries,247.7072093
+1994,Hugh Smith Lake,AK_Gillnet (Drift & Set),1450.244384
+1994,Hugh Smith Lake,AK_Other,0
+1994,Hugh Smith Lake,AK_Seine,1123.247757
+1994,Hugh Smith Lake,AK_Sport,44.97378467
+1994,Hugh Smith Lake,AK_Troll,4333.046489
+1994,Hugh Smith Lake,CAN_AllFisheries,759.2462513
+1995,Hugh Smith Lake,AK_Gillnet (Drift & Set),1587.994004
+1995,Hugh Smith Lake,AK_Other,0
+1995,Hugh Smith Lake,AK_Seine,947.3031572
+1995,Hugh Smith Lake,AK_Sport,98.10320011
+1995,Hugh Smith Lake,AK_Troll,2018.307843
+1995,Hugh Smith Lake,CAN_AllFisheries,275.4826738
+1996,Hugh Smith Lake,AK_Gillnet (Drift & Set),486.5979169
+1996,Hugh Smith Lake,AK_Other,0
+1996,Hugh Smith Lake,AK_Seine,622.7624412
+1996,Hugh Smith Lake,AK_Sport,125.3008381
+1996,Hugh Smith Lake,AK_Troll,1585.438206
+1996,Hugh Smith Lake,CAN_AllFisheries,177.9204962
+1997,Hugh Smith Lake,AK_Gillnet (Drift & Set),397.4138167
+1997,Hugh Smith Lake,AK_Other,0
+1997,Hugh Smith Lake,AK_Seine,108.3336998
+1997,Hugh Smith Lake,AK_Sport,45.34784906
+1997,Hugh Smith Lake,AK_Troll,1321.327762
+1997,Hugh Smith Lake,CAN_AllFisheries,91.18088176
+1998,Hugh Smith Lake,AK_Gillnet (Drift & Set),980.2697828
+1998,Hugh Smith Lake,AK_Other,0
+1998,Hugh Smith Lake,AK_Seine,471.1464118
+1998,Hugh Smith Lake,AK_Sport,150.1531407
+1998,Hugh Smith Lake,AK_Troll,1771.482374
+1998,Hugh Smith Lake,CAN_AllFisheries,15.21557478
+1999,Hugh Smith Lake,AK_Gillnet (Drift & Set),725.8227519
+1999,Hugh Smith Lake,AK_Other,0
+1999,Hugh Smith Lake,AK_Seine,282.877106
+1999,Hugh Smith Lake,AK_Sport,179.5333742
+1999,Hugh Smith Lake,AK_Troll,1756.6023
+1999,Hugh Smith Lake,CAN_AllFisheries,30.34675182
+2000,Hugh Smith Lake,AK_Gillnet (Drift & Set),115.7413902
+2000,Hugh Smith Lake,AK_Other,0
+2000,Hugh Smith Lake,AK_Seine,45.44673235
+2000,Hugh Smith Lake,AK_Sport,96.67888444
+2000,Hugh Smith Lake,AK_Troll,488.5620019
+2000,Hugh Smith Lake,CAN_AllFisheries,0
+2001,Hugh Smith Lake,AK_Gillnet (Drift & Set),324.0072447
+2001,Hugh Smith Lake,AK_Other,0
+2001,Hugh Smith Lake,AK_Seine,454.0525795
+2001,Hugh Smith Lake,AK_Sport,58.21184045
+2001,Hugh Smith Lake,AK_Troll,696.431443
+2001,Hugh Smith Lake,CAN_AllFisheries,6.706729671
+2002,Hugh Smith Lake,AK_Gillnet (Drift & Set),554.805772
+2002,Hugh Smith Lake,AK_Other,0
+2002,Hugh Smith Lake,AK_Seine,450.9331167
+2002,Hugh Smith Lake,AK_Sport,91.34474295
+2002,Hugh Smith Lake,AK_Troll,891.5136974
+2002,Hugh Smith Lake,CAN_AllFisheries,126.3506208
+2003,Hugh Smith Lake,AK_Gillnet (Drift & Set),689.9219028
+2003,Hugh Smith Lake,AK_Other,0
+2003,Hugh Smith Lake,AK_Seine,353.8558775
+2003,Hugh Smith Lake,AK_Sport,105.9278878
+2003,Hugh Smith Lake,AK_Troll,894.4445508
+2003,Hugh Smith Lake,CAN_AllFisheries,122.2520499
+2004,Hugh Smith Lake,AK_Gillnet (Drift & Set),242.5300229
+2004,Hugh Smith Lake,AK_Other,0
+2004,Hugh Smith Lake,AK_Seine,195.7995093
+2004,Hugh Smith Lake,AK_Sport,60.22243597
+2004,Hugh Smith Lake,AK_Troll,1016.587691
+2004,Hugh Smith Lake,CAN_AllFisheries,136.4186935
+2005,Hugh Smith Lake,AK_Gillnet (Drift & Set),531.9646984
+2005,Hugh Smith Lake,AK_Other,0
+2005,Hugh Smith Lake,AK_Seine,122.4381595
+2005,Hugh Smith Lake,AK_Sport,59.0989845
+2005,Hugh Smith Lake,AK_Troll,1162.818744
+2005,Hugh Smith Lake,CAN_AllFisheries,43.89524096
+2006,Hugh Smith Lake,AK_Gillnet (Drift & Set),169.5824353
+2006,Hugh Smith Lake,AK_Other,0
+2006,Hugh Smith Lake,AK_Seine,63.75752043
+2006,Hugh Smith Lake,AK_Sport,7.344874557
+2006,Hugh Smith Lake,AK_Troll,702.58882
+2006,Hugh Smith Lake,CAN_AllFisheries,91.60758812
+2007,Hugh Smith Lake,AK_Gillnet (Drift & Set),300.4462527
+2007,Hugh Smith Lake,AK_Other,0
+2007,Hugh Smith Lake,AK_Seine,174.7971346
+2007,Hugh Smith Lake,AK_Sport,73.50629374
+2007,Hugh Smith Lake,AK_Troll,1262.171751
+2007,Hugh Smith Lake,CAN_AllFisheries,254.1346637
+2008,Hugh Smith Lake,AK_Gillnet (Drift & Set),779
+2008,Hugh Smith Lake,AK_Other,0
+2008,Hugh Smith Lake,AK_Seine,244
+2008,Hugh Smith Lake,AK_Sport,33
+2008,Hugh Smith Lake,AK_Troll,716
+2008,Hugh Smith Lake,CAN_AllFisheries,263
+2009,Hugh Smith Lake,AK_Gillnet (Drift & Set),483
+2009,Hugh Smith Lake,AK_Other,0
+2009,Hugh Smith Lake,AK_Seine,268
+2009,Hugh Smith Lake,AK_Sport,18
+2009,Hugh Smith Lake,AK_Troll,1049
+2009,Hugh Smith Lake,CAN_AllFisheries,284
+2010,Hugh Smith Lake,AK_Gillnet (Drift & Set),691.1073684
+2010,Hugh Smith Lake,AK_Other,12
+2010,Hugh Smith Lake,AK_Seine,285.7947368
+2010,Hugh Smith Lake,AK_Sport,37.49473684
+2010,Hugh Smith Lake,AK_Troll,1203.102105
+2010,Hugh Smith Lake,CAN_AllFisheries,319
+2011,Hugh Smith Lake,AK_Gillnet (Drift & Set),320.7573508
+2011,Hugh Smith Lake,AK_Other,97
+2011,Hugh Smith Lake,AK_Seine,148.2737878
+2011,Hugh Smith Lake,AK_Sport,25.3626216
+2011,Hugh Smith Lake,AK_Troll,777.8018425
+2011,Hugh Smith Lake,CAN_AllFisheries,432
+2012,Hugh Smith Lake,AK_Gillnet (Drift & Set),659.072094
+2012,Hugh Smith Lake,AK_Other,81
+2012,Hugh Smith Lake,AK_Seine,311.6776999
+2012,Hugh Smith Lake,AK_Sport,41.19295136
+2012,Hugh Smith Lake,AK_Troll,821.3478153
+2012,Hugh Smith Lake,CAN_AllFisheries,342
+2013,Hugh Smith Lake,AK_Gillnet (Drift & Set),782.480616
+2013,Hugh Smith Lake,AK_Other,159
+2013,Hugh Smith Lake,AK_Seine,767.2650283
+2013,Hugh Smith Lake,AK_Sport,53.29259585
+2013,Hugh Smith Lake,AK_Troll,1754.813727
+2013,Hugh Smith Lake,CAN_AllFisheries,436
+2014,Hugh Smith Lake,AK_Gillnet (Drift & Set),780.2093324
+2014,Hugh Smith Lake,AK_Other,64
+2014,Hugh Smith Lake,AK_Seine,392.1795356
+2014,Hugh Smith Lake,AK_Sport,45.21851476
+2014,Hugh Smith Lake,AK_Troll,1872.856976
+2014,Hugh Smith Lake,CAN_AllFisheries,406
+2015,Hugh Smith Lake,AK_Gillnet (Drift & Set),272.4471347
+2015,Hugh Smith Lake,AK_Other,0
+2015,Hugh Smith Lake,AK_Seine,111.5563947
+2015,Hugh Smith Lake,AK_Sport,16.87377609
+2015,Hugh Smith Lake,AK_Troll,469.9811385
+2015,Hugh Smith Lake,CAN_AllFisheries,121
+2016,Hugh Smith Lake,AK_Gillnet (Drift & Set),440.0566551
+2016,Hugh Smith Lake,AK_Other,0
+2016,Hugh Smith Lake,AK_Seine,153.9068344
+2016,Hugh Smith Lake,AK_Sport,132.4378051
+2016,Hugh Smith Lake,AK_Troll,786.4054781
+2016,Hugh Smith Lake,CAN_AllFisheries,82
+2017,Hugh Smith Lake,AK_Gillnet (Drift & Set),216.1501961
+2017,Hugh Smith Lake,AK_Other,57
+2017,Hugh Smith Lake,AK_Seine,49.25882353
+2017,Hugh Smith Lake,AK_Sport,56.78705882
+2017,Hugh Smith Lake,AK_Troll,681.8164706
+2017,Hugh Smith Lake,CAN_AllFisheries,106
+2018,Hugh Smith Lake,AK_Gillnet (Drift & Set),279.4107317
+2018,Hugh Smith Lake,AK_Other,8
+2018,Hugh Smith Lake,AK_Seine,98.43121951
+2018,Hugh Smith Lake,AK_Sport,17.17073171
+2018,Hugh Smith Lake,AK_Troll,229.7014634
+2018,Hugh Smith Lake,CAN_AllFisheries,288.6829268
+2019,Hugh Smith Lake,AK_Gillnet (Drift & Set),269.7950716
+2019,Hugh Smith Lake,AK_Other,32
+2019,Hugh Smith Lake,AK_Seine,220.1248711
+2019,Hugh Smith Lake,AK_Sport,35.76962751
+2019,Hugh Smith Lake,AK_Troll,628.0934097
+2019,Hugh Smith Lake,CAN_AllFisheries,181.2209742
