@@ -574,7 +574,7 @@ Year,River,Species,Escapement_Count,Count_Type,Expansion
 2016,Situk River,Coho Salmon,6177,,Unexpanded
 2017,Situk River,Coho Salmon,4122,,Unexpanded
 2018,Situk River,Coho Salmon,6198,,Unexpanded
-2019,Situk River,Coho Salmon,10381,,
+2019,Situk River,Coho Salmon,10381,,Unexpanded
 1972,Tsiu River,Coho Salmon,NA,NA,NA
 1973,Tsiu River,Coho Salmon,30000,,Unexpanded
 1974,Tsiu River,Coho Salmon,15000,,Unexpanded
@@ -622,4 +622,4 @@ Year,River,Species,Escapement_Count,Count_Type,Expansion
 2016,Tsiu River,Coho Salmon,31000,,Unexpanded
 2017,Tsiu River,Coho Salmon,38000,,Unexpanded
 2018,Tsiu River,Coho Salmon,24336,,Unexpanded
-2019,Tsiu River,Coho Salmon,NA,,
+2019,Tsiu River,Coho Salmon,NA,,Unexpanded

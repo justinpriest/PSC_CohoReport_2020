@@ -2,7 +2,7 @@
 
 
 
-##### CUSTOM THEME
+##### CUSTOM THEME #####
 theme_coho <- function(base_size = 12, base_family = "Times New Roman", rotate_text=TRUE){
   require(ggsidekick) # Need package ggsidekick for theme_sleek()
   require(extrafont)  # Need package extrafont for fonts. See pkg docs
@@ -17,4 +17,18 @@ theme_coho <- function(base_size = 12, base_family = "Times New Roman", rotate_t
       theme(axis.text.x = element_text(angle = 0, vjust=0, hjust=0))
     }
 }
+
+
+
+
+##### ASSIGN STAT WEEK #####
+statweek <- function(x) {
+  as.numeric(format(as.Date(x), "%U")) - as.numeric(format(as.Date(cut(x, "year")), "%U")) + 1
+}
+# Function modified from:
+# https://stackoverflow.com/questions/17286983/calculate-statistical-week-starting-1st-january-as-used-in-fisheries-data
+
+
+
+
 
