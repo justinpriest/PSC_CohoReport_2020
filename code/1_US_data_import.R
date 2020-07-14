@@ -52,7 +52,7 @@ SEAK_smolt %>% pivot_longer(-SmoltYear)
 
 ##### US Harvest Totals #####
 
-chilkat_harvest <- read_csv(here::here("data/SEAK_Coho_ChilkatHarvest_INPROGRESS.csv")) %>%
+chilkat_harvest <- read_csv(here::here("data/SEAK_Coho_ChilkatHarvest.csv")) %>%
   dplyr::select(1:4) 
 
 chilkat_harvest
