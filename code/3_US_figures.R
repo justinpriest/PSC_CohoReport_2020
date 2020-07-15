@@ -54,7 +54,8 @@ harvest_historic %>%
 # Need data from Ryan
 
 
-# Figure 4 is Sport harvest over time
+###### Figure 4 ######
+# Sport harvest over time
 SEAK_sport %>%
    ggplot(aes(x = Year, y = Harvest_Count, fill = Fishery)) +
    geom_col(color = "black") + 
@@ -67,7 +68,8 @@ SEAK_sport %>%
          legend.key.size = unit(1,"line"))
 
 
-# Figure 5 is escapement over time
+###### Figure 5 ######
+# Inside rivers escapement
 (Fig5a <- create_figure5("Auke Creek", setbreaks = c(0, 500, 1000, 1500)) + 
    annotate("text", x = 2000, y = 1500, label = "Auke Creek (Weir)", size = 3.5)) 
 
@@ -87,41 +89,45 @@ SEAK_sport %>%
 (Fig5f <- create_figure5("Taku River", setbreaks = c(0, 50000, 100000, 150000, 200000), minyear = 1987, blank_x = FALSE) + 
    annotate("text", x = 2000, y = 230000, label = "Taku River (Mark-recapture)", size = 3.5))
 
-Fig5 <- Fig5a / Fig5b / Fig5c / Fig5d / Fig5e / Fig5f
-ggsave(Fig5, filename = here::here("output/Fig5.png"), width = 6, height = 9, units = "in")
+US_Fig5 <- Fig5a / Fig5b / Fig5c / Fig5d / Fig5e / Fig5f # This is Patchwork notation to make a stacked figure
+#ggsave(US_Fig5, filename = here::here("output/US_Fig5.png"), width = 6, height = 9, units = "in")
+rm(Fig5a, Fig5b, Fig5c, Fig5d, Fig5e, Fig5f)
 
 
-##### KTN & HUGH SMITH INDICES ####
+###### Figure 6 ######
+# Sitka streams escapement
+Fig6a <- create_figure5("Sitka Survey Index", setbreaks = seq(from=0, to=3000, by=500), minyear = 1982) +
+   annotate("text", x = 2000, y = 3000, label = "Sitka Index (Survey)", size = 3.5) + 
+   labs(y = "Spawners")
 
-# Figure 7a
-(Fig7a <- ggplot(data = ktn_index_hist,
-                 aes(x=Year, y = surveycount)) + 
-   geom_bar(stat="identity", fill="lightgray", color="black") +
-   geom_hline(yintercept=c(4250, 8500)) +
-   scale_y_continuous(breaks = seq(from = 0, to = 18000, by = 2000),
-                      labels = scales::comma) +
-   #scale_x_continuous(breaks = seq(from=1982, to=2019, by = 2)) + #rm this to make a whole plot
-   expand_limits(x = c(1982, 2019), y = c(0, 18000)) +
-   labs(y = "Spawners") +
-   annotate("text", x= 2000, y=18000, label = "Ketchikan Index (Survey)", size = 4.5) +
-   theme_coho(base_family = "Arial", rotate_text = TRUE) +
-   theme(axis.text.x = element_blank(), axis.title.x = element_blank()))
+Fig6b <- create_figure5("Ford Arm Lake", setbreaks = seq(from=0, to=8000, by=1000), 
+               minyear = 1982, blank_x = FALSE) +
+   annotate("text", x = 2000, y = 8000, label = "Ford Arm Creek (Weir/Mark-recapture)", size = 3.5) + 
+   labs(y = "Spawners")
 
-# Figure 7b
-(Fig7b <- ggplot(data = hs,
-                 aes(x=Year, y = Escapement_Weir)) + 
-    geom_bar(stat="identity", fill="lightgray", color="black") +
-    geom_hline(yintercept=c(500, 1600)) +
-    scale_y_continuous(breaks = seq(from = 0, to = 4000, by = 500),
-                       labels = scales::comma) +
-    scale_x_continuous(breaks = seq(from=1982, to=2019, by = 2)) +
-    expand_limits(y = c(0, 4150)) +
-    labs(x="Adult Return Year", y = "Spawners") +
-    annotate("text", x= 2000, y=3750, label = 'atop("Hugh Smith Lake","(Weir/Mark-Recapture)")', parse=TRUE, size = 4.5) +
-    theme_coho(base_family = "Arial", rotate_text = TRUE))
+US_Fig6 <- Fig6a / Fig6b
+#ggsave(US_Fig6, filename = here::here("output/US_Fig6.png"), width = 6, height = 6, units = "in")
+rm(Fig6a, Fig6b)
 
-Fig7 <- Fig7a / Fig7b
-ggsave(Fig7, filename = here::here("output/Fig7.png"), width = 6, height = 6, units = "in")
+
+###### Figure 7 ######
+# Ketchikan streams escapement
+Fig7a <- create_figure5("Ketchikan Survey Index", setbreaks = seq(from=0, to=18000, by=2000), minyear = 1987) +
+   annotate("text", x = 2000, y = 16000, label = "Ketchikan Index (Survey)", size = 3.5) + 
+   labs(y = "Spawners")
+
+Fig7b <- create_figure5("Hugh Smith Lake", setbreaks = seq(from=0, to=4000, by=500), 
+                        minyear = 1982, blank_x = FALSE) +
+   annotate("text", x = 2000, y = 4000, label = "Hugh Smith Lake (Weir/Mark-recapture)", size = 3.5) + 
+   labs(y = "Spawners")
+
+US_Fig7 <- Fig7a / Fig7b
+#ggsave(US_Fig7, filename = here::here("output/US_Fig7.png"), width = 6, height = 6, units = "in")
+rm(Fig7a, Fig7b)
+
+
+
+
 
 
 
