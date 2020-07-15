@@ -28,7 +28,7 @@ troll_USboundary <- troll_boundary %>%
   filter(StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>% # exclude terminal harvest areas
   group_by(Year, StatWeek) %>%
   summarise(trollCPUE = mean(CohoCPUE))
-
+#101-40, 101-41, 101-45,
 
 
 # Read in Hugh Smith data
@@ -187,5 +187,9 @@ acf(indices_2000$Tyee_cpue, na.action = na.exclude)
 acf((indices %>% filter(Year > 1990))$trollCPUE, na.action = na.exclude, main = "Autocorr - Troll CPUE")
 
 pacf(indices_2000$trollCPUE, na.action = na.exclude)
+
+
+
+
 
 

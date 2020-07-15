@@ -31,4 +31,28 @@ statweek <- function(x) {
 
 
 
+##### CREATE US FIGURE 5 #####
+create_figure5 <- function(river = "Auke Creek", setbreaks = c(0,500, 1000, 1500), minyear = 1980, blank_x = TRUE) {
+  SEAK_escape %>% 
+    filter(River == river, Year >= minyear) %>%
+    ggplot(aes(x = Year, y = Escapement_Count)) + 
+    geom_col(fill = "gray", color = "black") +
+    geom_line(aes(y=EscapementGoal_Lower), size = 1) +
+    geom_line(aes(y=EscapementGoal_Upper), size = 1) +
+    expand_limits(x = 1980) +
+    scale_x_continuous(breaks = seq(from = 1980, to = 2019, by = 2)) +
+    scale_y_continuous(labels = comma, breaks = setbreaks) +
+    labs(x = "", y = "") + 
+    theme_coho(base_family = "Arial") +
+    if(blank_x==TRUE){
+      theme(axis.text.x = element_blank(), axis.title.x = element_blank())
+    } else{
+      labs(x = "Year")
+    }
+}
+
+
+
+
+
 

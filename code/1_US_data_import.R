@@ -23,31 +23,21 @@ source(here::here("code/functions.R"))
 ###### LOAD DATA ###### 
 
 
-##### SEAK Historical Harvest #####
+##### SEAK Harvest & Escapement #####
 
 harvest_historic <- read_csv(here::here("data/SEAK_Coho_HistoricalCommHarvest.csv")) %>%
-  dplyr::select(Year:CohoTotalCommHarvest_Count)
-
+  dplyr::select(Year:CohoHatcheryOriginHarvest_Count) %>%
+  rename("Hatchery" = "CohoHatcheryOriginHarvest_Count",
+         "Totalcount" = "CohoTotalCommHarvest_Count") %>%
+  mutate(Wild = Totalcount - Hatchery) %>%
+  dplyr::select(Year, Wild, Hatchery)
+harvest_historic
 
 wildproportion <- read_csv(here::here("data/SEAK_Coho_HistoricalCommHarvest.csv")) %>%
-  dplyr::select(1:5) %>%
+  dplyr::select(Year:CohoHatcheryOriginHarvest_Count) %>%
   filter(Year >= 1980) %>%
   mutate(wildpercent = 1 - (CohoHatcheryOriginHarvest_Count / CohoTotalCommHarvest_Count)) %>%
   dplyr::select(Year, wildpercent)
-
-
-
-
-
-
-SEAK_smolt <- read_csv(here::here("data/SEAK_Coho_SmoltProduction_INPROGRESS.csv")) %>%
-  dplyr::select(1:7)
-
-SEAK_smolt %>% pivot_longer(-SmoltYear)
-
-
-
-
 
 
 ##### US Harvest Totals #####
@@ -56,6 +46,27 @@ chilkat_harvest <- read_csv(here::here("data/SEAK_Coho_ChilkatHarvest.csv")) %>%
   dplyr::select(1:4) 
 
 chilkat_harvest
+
+
+
+SEAK_sport <- read_csv(here::here("data/SEAK_Coho_SportHarvest.csv")) %>%
+  dplyr::select(Year:Harvest_Count) 
+
+
+
+SEAK_escape <- read_csv(here::here("data/SEAK_Coho_Escapement_1972-2019.csv")) %>%
+  left_join(read_csv(here::here("data/SEAK_Coho_EscGoals.csv")) %>% 
+              dplyr::select(-CollectionType, -GoalType), by = c("River" = "System"))
+
+
+
+##### Smolt Totals #####
+
+SEAK_smolt <- read_csv(here::here("data/SEAK_Coho_SmoltProduction_INPROGRESS.csv")) %>%
+  dplyr::select(1:7)
+
+SEAK_smolt %>% pivot_longer(-SmoltYear)
+
 
 
 
@@ -124,4 +135,8 @@ NassFW <- read_csv(here::here("data/NBC_Coho_NassRiverFWCatch_2000-2019.csv")) %
 
 
 
-  
+
+
+
+
+
