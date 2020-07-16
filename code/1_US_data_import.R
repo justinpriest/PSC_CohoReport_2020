@@ -35,28 +35,69 @@ harvest_historic
 
 wildproportion <- read_csv(here::here("data/SEAK_Coho_HistoricalCommHarvest.csv")) %>%
   dplyr::select(Year:CohoHatcheryOriginHarvest_Count) %>%
+  rename("Total" = "CohoTotalCommHarvest_Count",
+         "Hatchery" = "CohoHatcheryOriginHarvest_Count") %>%
+  mutate(Wild = Total - Hatchery) %>%
   filter(Year >= 1980) %>%
-  mutate(wildpercent = 1 - (CohoHatcheryOriginHarvest_Count / CohoTotalCommHarvest_Count)) %>%
-  dplyr::select(Year, wildpercent)
+  mutate(wildpercent = Wild / Total) %>%
+  dplyr::select(Year, Wild, Hatchery, wildpercent) 
 
 
-##### US Harvest Totals #####
+SEAK_escgoals <- read_csv(here::here("data/SEAK_Coho_EscGoals.csv")) %>% 
+  dplyr::select(-CollectionType, -GoalType, - Comment)
+
+
+SEAK_escape <- read_csv(here::here("data/SEAK_Coho_Escapement_1972-2019.csv")) %>%
+  left_join(SEAK_escgoals, by = c("River" = "System"))
+
+
+indic_harvest <- read_csv(here::here("data/SEAK_Coho_HarvestSourcesForIndicatorStocks1980-2019.csv")) %>%
+  pivot_wider(names_from= Fishery_Type, values_from = Coho_Harvest_Count) %>%
+  rename("AK_Gillnet" = `AK_Gillnet (Drift & Set)`) %>% 
+  mutate(Other = AK_Gillnet + AK_Other + AK_Seine + AK_Sport + CAN_AllFisheries) %>%
+  dplyr::select(-c(AK_Gillnet, AK_Other, AK_Seine, AK_Sport, CAN_AllFisheries)) 
+
+indic_totalrun <- indic_harvest %>%
+  left_join(SEAK_escape %>% 
+              filter(River %in% c("Auke Creek", "Berners River", "Ford Arm Lake", "Hugh Smith Lake")) %>%
+              dplyr::select(c(Year, River, Escapement_Count)),
+            by = c("Year" = "Year", "River" = "River")) %>%
+  pivot_longer(cols = c(AK_Troll, Other, Escapement_Count), names_to = "Fishery", values_to = "Count") %>%
+  left_join(SEAK_escgoals, by = c("River" = "System")) %>%
+  mutate(Fishery = factor(Fishery, levels = c("AK_Troll", "Other", "Escapement_Count")),
+         Fishery = recode(Fishery, "AK_Troll" = "Alaska Troll"), 
+         Fishery = recode(Fishery, "Escapement_Count" = "Escapement"))
+
+
+
 
 chilkat_harvest <- read_csv(here::here("data/SEAK_Coho_ChilkatHarvest.csv")) %>%
-  dplyr::select(1:4) 
+  dplyr::select(Year:Coho_Harvest_Count) 
 
-chilkat_harvest
 
+taku_harvest <- read_csv(here::here("data/SEAK_Coho_TakuHarvest.csv")) %>%
+  dplyr::select(Year:Canadian) %>%
+  mutate(Other = Seine + Gillnet + Sport + Inriver) %>%
+  rename("Alaska Troll" = Troll) %>%
+  dplyr::select(Year, `Alaska Troll`, Escapement, Other) %>%
+  pivot_longer(cols = c(`Alaska Troll`, Other, Escapement), names_to = "Fishery", values_to = "Count") %>%
+  mutate(Fishery = factor(Fishery, levels = c("Alaska Troll", "Other", "Escapement")))
+taku_harvest
+
+taku_harvest_can <- read_csv(here::here("data/SEAK_Coho_TakuHarvest.csv")) %>%
+  dplyr::select(Year:Canadian) %>%
+  mutate(`Other Alaska` = Seine + Gillnet + Sport + Inriver) %>%
+  rename("Alaska Troll" = Troll,
+         "Canada" = Canadian) %>%
+  dplyr::select(Year, `Alaska Troll`, Escapement, `Other Alaska`, Canada) %>%
+  pivot_longer(cols = c(`Alaska Troll`, `Other Alaska`, Canada, Escapement), 
+               names_to = "Fishery", values_to = "Count") %>%
+  mutate(Fishery = factor(Fishery, levels = c("Alaska Troll", "Canada", "Other Alaska", "Escapement")))
 
 
 SEAK_sport <- read_csv(here::here("data/SEAK_Coho_SportHarvest.csv")) %>%
   dplyr::select(Year:Harvest_Count) 
 
-
-
-SEAK_escape <- read_csv(here::here("data/SEAK_Coho_Escapement_1972-2019.csv")) %>%
-  left_join(read_csv(here::here("data/SEAK_Coho_EscGoals.csv")) %>% 
-              dplyr::select(-CollectionType, -GoalType), by = c("River" = "System"))
 
 
 
@@ -69,6 +110,31 @@ SEAK_smolt %>% pivot_longer(-SmoltYear)
 
 
 
+
+##### Exploitation Rate #####
+trollindex <- indic_totalrun %>%
+  filter( !(River =="Berners River" & Year < 1989)) %>% # These years are incorrect, exclude
+  dplyr::select(-EscapementGoal_Lower, -EscapementGoal_Upper) %>%
+  group_by(Year, River) %>%
+  mutate(freq = Count / sum(Count)) %>%
+  ungroup() %>%
+  filter(Fishery == "Alaska Troll") %>%
+  dplyr::select(-Count) %>%
+  rename("index" = "freq")
+
+globalimpute(trollindex, Year_column="Year", outputprefix = "trollindex", 
+             StreamName_column="River", Count_column = "index")
+# this makes a dataframe called trollindex_imputed
+
+trollindex <- trollindex_imputed %>%
+  dplyr::select(-imputed) %>%
+  pivot_wider(names_from = River, values_from = Count) %>%
+  #calculate troll index from Leon's weighting (differnt weightings pre/post 1989)
+  mutate(trollindex = ifelse(Year < 1989, (`Auke Creek` * 0.4) + (`Ford Arm Lake` * 0.2) + 
+                               (`Hugh Smith Lake` * 0.4), 
+                             (`Berners River` * 0.2) + (`Auke Creek` * 0.2) + (`Ford Arm Lake` * 0.2) + 
+                               (`Hugh Smith Lake` * 0.4))) 
+rm(trollindex_imputed)
 
 
 

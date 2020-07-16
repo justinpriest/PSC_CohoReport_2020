@@ -1,14 +1,14 @@
-System,CollectionType,GoalType,EscapementGoal_Lower,EscapementGoal_Upper
-Hugh Smith Lake ,Weir,BEG,500,1600
-Taku River,MR,BEG,50000,90000
-Auke Creek,Weir,BEG,200,500
-Montana Creek,"FS, IE",SEG,400,1200
-Peterson Creek,"FS, IE",SEG,100,250
-Ketchikan Survey Index,HS,BEG,4250,8500
-Sitka Survey Index,"FS, IE",BEG,400,800
-Ford Arm Lake,Weir,BEG,1300,2900
-Berners River ,MR,BEG,3600,8100
-Chilkat River,MR,BEG,30000,70000
-Tawah Creek (Lost River),"FS,IE",SEG,1400,4200
-Situk River,"BS,IE",BEG,3300,9800
-Tsiu/Tsivat Rivers,"AS,IE",BEG,10000,29000
+System,CollectionType,GoalType,EscapementGoal_Lower,EscapementGoal_Upper,Comment
+Hugh Smith Lake ,Weir,BEG,500,1600,
+Taku River,MR,BEG,50000,90000,
+Auke Creek,Weir,BEG,200,500,
+Montana Creek,"FS, IE",SEG,400,1200,
+Peterson Creek,"FS, IE",SEG,100,250,
+Ketchikan Survey Index,HS,BEG,4250,8500,
+Sitka Survey Index,"FS, IE",BEG,400,800,
+Ford Arm Lake,Weir,BEG,1300,2900,
+Berners River ,MR,BEG,3600,8100,
+Chilkat River,MR,BEG,30000,70000,
+Tawah Creek,"FS,IE",SEG,1400,4200, AKA Lost River
+Situk River,"BS,IE",BEG,3300,9800,
+Tsiu River,"AS,IE",BEG,10000,29000,Same for Tsivat River

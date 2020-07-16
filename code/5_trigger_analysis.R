@@ -141,7 +141,7 @@ tyeelead <- indices_2000 %>%
        title = "Troll CPUE vs following week Tyee CPUE, Stat Weeks 27–30; rho=0.48") +
   theme_coho(base_family = "Arial", rotate_text = FALSE)
 tyeelead
-#ggsave(tyeelead, filename = here::here("output/tyee_corrplot_lead.png"), width = 6.5, height = 4, units = "in")
+#ggsave(tyeelead, filename = here::here("output/TRIGGER_tyee_corrplot_lead.png"), width = 6.5, height = 4, units = "in")
 
 nasslead <- indices_2000 %>%
   ggplot(aes(x = trollCPUE, y = Nass_coho_lead1, color = Year)) +
@@ -152,7 +152,7 @@ nasslead <- indices_2000 %>%
        title = "Troll CPUE vs following week Nass catch, Stat Weeks 27–30; rho=0.53") +
   theme_coho(base_family = "Arial", rotate_text = FALSE)
 nasslead
-#ggsave(nasslead, filename = here::here("output/nass_corrplot_lead.png"), width = 6.5, height = 4, units = "in")
+#ggsave(nasslead, filename = here::here("output/TRIGGER_nass_corrplot_lead.png"), width = 6.5, height = 4, units = "in")
 
 
 
