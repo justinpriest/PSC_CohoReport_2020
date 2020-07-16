@@ -110,6 +110,9 @@ SEAK_smolt %>% pivot_longer(-SmoltYear)
 
 
 
+SEAK_marsurv <- read_csv(here::here("data/SEAK_Coho_SmoltMarineSurvival_INPROGRESS.csv")) %>%
+  pivot_longer(-ReturnYear, names_to = "River", values_to = "Survival") 
+
 
 ##### Exploitation Rate #####
 trollindex <- indic_totalrun %>%

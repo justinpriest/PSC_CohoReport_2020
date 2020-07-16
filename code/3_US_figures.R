@@ -231,6 +231,32 @@ ggsave(US_Fig12, filename = here::here("output/US_Fig12.png"), width = 6.5, heig
 ###### Figure 13 ######
 # Smolt Marine Survival
 
+SEAK_marsurv %>%
+   filter(River %in% c("Auke Creek", "Berners River", "Hugh Smith Lake")) %>%
+   ggplot(aes(x=ReturnYear, y = Survival, color = River, linetype = River)) +
+   geom_line(size = 1.25) +
+   geom_point(size = 2) +
+   scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
+   scale_y_continuous(breaks = seq(from=0, to = 35, by = 5)) +
+   scale_color_manual(values = c("black", "#6b6b6b", "#4fa3bd")) +
+   scale_linetype_manual(values = c("solid", "dashed", "solid")) +
+   labs(x = "Return Year", y = "Survival (%)") +
+   theme_coho(base_family = "Arial") +
+   theme(legend.position=c(.8,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
+         legend.key.size = unit(2,"line")) 
+
+SEAK_marsurv %>%
+   filter(River == "Ford Arm Creek") %>%
+   ggplot(aes(x=ReturnYear, y = Survival)) +
+   geom_line(size = 1.25) +
+   geom_point(size = 2) +
+   scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
+   scale_y_continuous(breaks = seq(from=0, to = 35, by = 5)) +
+   labs(x = "Return Year", y = "Survival (%)") +
+   theme_coho(base_family = "Arial") +
+   theme(legend.position=c(.8,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
+         legend.key.size = unit(2,"line")) 
+
 
 
 ###### Figure 14 ######
