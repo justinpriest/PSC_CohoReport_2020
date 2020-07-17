@@ -211,7 +211,28 @@ rm(Fig10a, Fig10b, Fig10c)
 ###### Figure 11 ######
 # Escapement Correlation
 
+SEAK_escape %>%
+   filter(River %in% c("Berners River", "Chilkat River", "Hugh Smith Lake"), Year >= 1982) %>%
+   dplyr::select(Year, River, Escapement_Count) %>%
+   group_by(River) %>%
+   mutate(Scale = scale(Escapement_Count)) %>%
+   #mutate(Scale = (Escapement_Count - mean(Escapement_Count, na.rm = TRUE)) / sd(Escapement_Count, na.rm = TRUE))
+   ggplot(aes(x = Year, y = Scale, color = River, linetype = River)) +
+   geom_line(size = 1.25) +
+   geom_point(size = 2) +
+   scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
+   scale_color_manual(values = c("#6b6b6b", "#c77512", "black")) +
+   scale_linetype_manual(values = c("longdash", "solid", "solid")) +
+   expand_limits(y = c(-1.7, 3.3)) +
+   labs(y = expression("Scaled Escapement (X-"*mu*" / "*sigma*")")) +
+   theme_coho(base_family = "Arial") +
+   theme(legend.position=c(.5,.06), legend.title = element_blank(), legend.text = element_text(size = 10),
+         legend.key.size = unit(2.5,"line"), legend.direction="horizontal") 
 
+
+# berners gray dashed, Chilkat solid blue, Hugh Smith Black?
+
+?plotmath
 
 ###### Figure 12 ######
 # Taku River Harvest
@@ -225,44 +246,70 @@ US_Fig12 <- taku_harvest_can %>%
    annotate("text", x = 2002, y = 360000, label = "Taku River", size = 3.5) +
    theme(legend.position=c(.85,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line")) 
-ggsave(US_Fig12, filename = here::here("output/US_Fig12.png"), width = 6.5, height = 4, units = "in")
+#ggsave(US_Fig12, filename = here::here("output/US_Fig12.png"), width = 6.5, height = 4, units = "in")
 
 
 ###### Figure 13 ######
 # Smolt Marine Survival
 
-SEAK_marsurv %>%
-   filter(River %in% c("Auke Creek", "Berners River", "Hugh Smith Lake")) %>%
-   ggplot(aes(x=ReturnYear, y = Survival, color = River, linetype = River)) +
-   geom_line(size = 1.25) +
-   geom_point(size = 2) +
-   scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
-   scale_y_continuous(breaks = seq(from=0, to = 35, by = 5)) +
-   scale_color_manual(values = c("black", "#6b6b6b", "#4fa3bd")) +
-   scale_linetype_manual(values = c("solid", "dashed", "solid")) +
-   labs(x = "Return Year", y = "Survival (%)") +
-   theme_coho(base_family = "Arial") +
-   theme(legend.position=c(.8,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
-         legend.key.size = unit(2,"line")) 
 
-SEAK_marsurv %>%
+
+Fig13a <- SEAK_marsurv %>%
    filter(River == "Ford Arm Creek") %>%
    ggplot(aes(x=ReturnYear, y = Survival)) +
    geom_line(size = 1.25) +
    geom_point(size = 2) +
    scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
    scale_y_continuous(breaks = seq(from=0, to = 35, by = 5)) +
+   expand_limits(y = c(0,25)) +
    labs(x = "Return Year", y = "Survival (%)") +
+   annotate("text", x = 2006, y = 24, label = "Outer Coastal System - Ford Arm Lake (Presmolts)", size = 4) +
    theme_coho(base_family = "Arial") +
    theme(legend.position=c(.8,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
-         legend.key.size = unit(2,"line")) 
+         legend.key.size = unit(2,"line"),
+         axis.text.x = element_blank(), axis.title.x = element_blank())
+
+Fig13b <- SEAK_marsurv %>%
+   filter(River %in% c("Auke Creek", "Berners River", "Hugh Smith Lake")) %>%
+   ggplot(aes(x=ReturnYear, y = Survival, color = River, linetype = River)) +
+   geom_line(size = 1.25) +
+   geom_point(size = 2) +
+   scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
+   scale_y_continuous(breaks = seq(from=0, to = 35, by = 5)) +
+   scale_color_manual(values = c( "#4fa3bd", "#6b6b6b","black")) +
+   scale_linetype_manual(values = c("solid", "dashed", "solid")) +
+   expand_limits(y = c(0,35)) +
+   labs(x = "Return Year", y = "Survival (%)") +
+   annotate("text", x = 2006, y = 35, label = "Inside Systems (Smolts)", size = 4) +
+   theme_coho(base_family = "Arial") +
+   theme(legend.position=c(.5,.08), legend.title = element_blank(), legend.text = element_text(size = 10),
+         legend.key.size = unit(2.5,"line"), legend.direction="horizontal") 
+
+US_Fig13 <-(Fig13a / Fig13b) + plot_layout(heights = c(1, 35/25)) # make diff heights so y-axis scales are similar
+#ggsave(US_Fig13, filename = here::here("output/US_Fig13.png"), width = 6.5, height = 6, units = "in")
 
 
 
 ###### Figure 14 ######
 # Auke Marine Survival
+US_Fig14 <- Auke_survival %>%
+   pivot_longer(cols = c("Survival_Adults", "Survival_Jacks"), 
+                names_to = "AdultJack", values_to = "Survival") %>%
+   mutate(AdultJack = replace(AdultJack, AdultJack == "Survival_Adults", "Adult Survival"),
+          AdultJack = replace(AdultJack, AdultJack == "Survival_Jacks", "Jack Survival")) %>%
+   ggplot(aes(x = SmoltYear, y = Survival, fill = AdultJack)) +
+   geom_col(color = "black", width = 0.75) +
+   scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
+   scale_y_continuous(breaks = seq(from=0, to = 45, by = 5)) +
+   scale_fill_manual(values = c( "#4fa3bd", "black")) +
+   labs(x = "Smolt Outmigration Year", y = "Marine Survival (%)") +
+   theme_coho(base_family = "Arial") +
+   theme(legend.position=c(.8,0.8), legend.title = element_blank(), legend.text = element_text(size = 10),
+         legend.key.size = unit(1,"line")) 
+#ggsave(US_Fig14, filename = here::here("output/US_Fig14.png"), width = 6.5, height = 4, units = "in")
 
-
+#cor(Auke_survival$Survival_Adults, Auke_survival$Survival_Jacks)
+   
 ###### Figure 15 ######
 # Troll Exploitation Rate
 
@@ -306,18 +353,38 @@ indic_totalrun %>%
 ###### Figure 17 ######   NEW 16?
 # Hatchery vs Wild
 
-wildproportion %>%
+# All Gear, not just troll
+Fig17a <- wildproportion %>%
    dplyr::select(-wildpercent) %>%
    pivot_longer(-Year, names_to = "Source", values_to = "Count") %>%
    ggplot(aes(x=Year, y =Count, fill = Source)) +
    geom_col(color = "black", width = 0.7, size=0.5) + 
    scale_x_continuous(breaks = seq(from=1980, to=2019, by = 2)) +
-   scale_y_continuous(labels = comma) +
+   scale_y_continuous(labels = comma, breaks = seq(from=0, to=5000000, by = 1000000)) +
    scale_fill_manual(values = c("white", "gray")) + 
    labs(y = "Number of Coho Salmon") + 
+   annotate("text", x = 2000, y = 5750000, label = "All Gear Harvest", size = 4, fontface = "bold") +
    theme_coho(base_family = "Arial") +
    theme(legend.position=c(.85,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
-         legend.key.size = unit(1,"line")) 
+         legend.key.size = unit(1,"line"),
+         axis.text.x = element_blank(), axis.title.x = element_blank()) # remove x axis
+
+# Troll only
+Fig17b <- trollharvest %>%
+   filter(Year >= 1980) %>%
+   ggplot(aes(x=Year, y=Harvest, fill=Source)) +
+   geom_col(color = "black", width = 0.7, size=0.5) + 
+   scale_x_continuous(breaks = seq(from=1980, to=2019, by = 2)) +
+   scale_y_continuous(labels = comma, breaks = seq(from=0, to=5000000, by = 1000000)) +
+   scale_fill_manual(values = c("white", "gray"), guide = FALSE) + 
+   labs(y = "Number of Coho Salmon") + 
+   annotate("text", x = 2000, y = 3600000, label = "Troll Harvest", size = 4, fontface = "bold") +
+   theme_coho(base_family = "Arial") 
+
+US_Fig17 <- Fig17a / Fig17b
+#ggsave(US_Fig17, filename = here::here("output/US_Fig17.png"), width = 6.5, height = 6, units = "in")
+rm(Fig17a, Fig17b)
+
 
 
 ###### Figure XX ######   NEW 17?
@@ -342,20 +409,44 @@ wildproportion %>%
 .###### Figure 18 ######
 ## Troll and Wild abundance
 
-troll_cpue %>% 
-   filter(between(StatWeek, 28, 38)) %>% # only keep 28-38
+# Troll CPUE
+Fig18a <- troll_cpue %>% 
+   filter(between(StatWeek, 28, 38), Year >= 1982) %>% # only keep weeks 28-38
    group_by(Year) %>%
    summarise(meanannualCPUE = mean(CohoCPUE, na.rm = TRUE)) %>%
    left_join(wildproportion) %>%
    mutate(annualwildCPUE = meanannualCPUE * wildpercent) %>%
    ggplot(aes(x=Year, y = annualwildCPUE)) +
-   geom_line() +
-   theme_coho(base_family = "Arial")
+   geom_line(size = 1.25) +
+   scale_x_continuous(breaks = seq(from=1982, to = 2019, by = 2)) +
+   scale_y_continuous(breaks = seq(from=0, to = 90, by = 20)) +
+   expand_limits(y=c(0, 90)) +
+   labs(y = "Catch per Boat Day") +
+   annotate("text", x = 2000, y = 90, label = "Mean Annual Power Troll Wild CPUE", size = 4, fontface = "bold") +   
+   theme_coho(base_family = "Arial") +
+   theme(axis.text.x = element_blank(), axis.title.x = element_blank()) # remove x axis
 
 
+# Wild Harvest by Fishery
+Fig18b <- trollharvest %>%
+   rename("Troll Fishery" = "Harvest") %>%
+   filter(Source == "Wild contribution", Year >= 1982) %>%
+   left_join(harvest_historic) %>%
+   rename("All Gear Fisheries" = "Wild") %>%
+   dplyr::select(Year, `Troll Fishery`, `All Gear Fisheries`) %>%
+   pivot_longer(-Year, names_to = "Fishery", values_to = "Wild_Harvest") %>%
+   mutate(Harvest_mil = Wild_Harvest / 1000000) %>%
+   ggplot(aes(x=Year, y = Harvest_mil, linetype = Fishery)) +
+   geom_line(size = 1.25) +
+   scale_x_continuous(breaks = seq(from=1982, to = 2019, by = 2)) +
+   scale_y_continuous(breaks = seq(from=0, to = 7, by = 1)) +
+   expand_limits(y=c(0, 5.2)) +
+   labs(y = "Number of Coho Salmon (Millions)") +
+   annotate("text", x = 2000, y = 5.1, label = "Wild Harvest by Fishery", size = 4, fontface = "bold") +   
+   theme_coho(base_family = "Arial") +
+   theme(legend.position=c(.85,.8), legend.title = element_blank(), legend.text = element_text(size = 10),
+         legend.key.size = unit(1.5,"line")) 
 
-
-troll_cpue
-
-
-
+US_Fig18 <- Fig18a / Fig18b
+#ggsave(US_Fig18, filename = here::here("output/US_Fig18.png"), width = 6.5, height = 6, units = "in")
+rm(Fig18a, Fig18b)

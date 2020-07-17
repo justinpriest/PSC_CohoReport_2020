@@ -43,6 +43,13 @@ wildproportion <- read_csv(here::here("data/SEAK_Coho_HistoricalCommHarvest.csv"
   dplyr::select(Year, Wild, Hatchery, wildpercent) 
 
 
+trollharvest <- read_csv(here::here("data/SEAK_Coho_TrollHarvest_Wildvshatchery.csv")) %>% 
+  dplyr::select(Year:`Other hatchery`) %>%
+  mutate(Hatchery = `Alaska hatchery` + `Other hatchery`) %>%
+  dplyr::select(-`Alaska hatchery`, -`Other hatchery`) %>%
+  pivot_longer(cols = c(`Wild contribution`, "Hatchery"), names_to = "Source", values_to = "Harvest")
+
+
 SEAK_escgoals <- read_csv(here::here("data/SEAK_Coho_EscGoals.csv")) %>% 
   dplyr::select(-CollectionType, -GoalType, - Comment)
 
@@ -112,6 +119,11 @@ SEAK_smolt %>% pivot_longer(-SmoltYear)
 
 SEAK_marsurv <- read_csv(here::here("data/SEAK_Coho_SmoltMarineSurvival_INPROGRESS.csv")) %>%
   pivot_longer(-ReturnYear, names_to = "River", values_to = "Survival") 
+
+
+
+Auke_survival <- read_csv(here::here("data/SEAK_Coho_AukeCreekSurvival_1980-2018.csv")) %>%
+  dplyr::select(SmoltYear:Survival_Jacks, -SmoltOutmigration)
 
 
 ##### Exploitation Rate #####
