@@ -230,10 +230,6 @@ SEAK_escape %>%
          legend.key.size = unit(2.5,"line"), legend.direction="horizontal") 
 
 
-# berners gray dashed, Chilkat solid blue, Hugh Smith Black?
-
-?plotmath
-
 ###### Figure 12 ######
 # Taku River Harvest
 US_Fig12 <- taku_harvest_can %>%
