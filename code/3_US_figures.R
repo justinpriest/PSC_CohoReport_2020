@@ -35,7 +35,7 @@ troll_cpue
 # Figure 2 is comm harvest over time
 
 
-harvest_historic %>%
+US_Fig2 <- harvest_historic %>%
    filter(Year > 1900) %>%
    pivot_longer(-Year, names_to = "Source", values_to = "Count") %>%
    mutate(Count = Count / 1000000) %>%
@@ -47,7 +47,8 @@ harvest_historic %>%
    labs(y = "Number of fish (Millions)") + 
    theme_coho(base_family = "Arial") + 
    theme(legend.position=c(.2,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
-         legend.key.size = unit(1.5,"line"))
+         legend.key.size = unit(1,"line"))
+#ggsave(US_Fig2, filename = here::here("output/US_Fig2.png"), width = 6.5, height = 4, units = "in")
 
 
 # Figure 3 is CAN comm harvest over time
@@ -56,16 +57,17 @@ harvest_historic %>%
 
 ###### Figure 4 ######
 # Sport harvest over time
-SEAK_sport %>%
+US_Fig4 <- SEAK_sport %>%
    ggplot(aes(x = Year, y = Harvest_Count, fill = Fishery)) +
    geom_col(color = "black") + 
    scale_x_continuous(breaks = seq(from=1977, to=2019, by = 2)) +
    scale_y_continuous(labels = comma) +
    scale_fill_manual(values = c("white", "gray")) + 
-   labs(y = "Number of fish") + 
+   labs(y = "Number of Coho Salmon") + 
    theme_coho(base_family = "Arial") + 
    theme(legend.position=c(.2,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line"))
+#ggsave(US_Fig4, filename = here::here("output/US_Fig4.png"), width = 6.5, height = 4, units = "in")
 
 
 ###### Figure 5 ######
@@ -211,7 +213,7 @@ rm(Fig10a, Fig10b, Fig10c)
 ###### Figure 11 ######
 # Escapement Correlation
 
-SEAK_escape %>%
+US_Fig11 <- SEAK_escape %>%
    filter(River %in% c("Berners River", "Chilkat River", "Hugh Smith Lake"), Year >= 1982) %>%
    dplyr::select(Year, River, Escapement_Count) %>%
    group_by(River) %>%
@@ -228,6 +230,8 @@ SEAK_escape %>%
    theme_coho(base_family = "Arial") +
    theme(legend.position=c(.5,.06), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(2.5,"line"), legend.direction="horizontal") 
+#ggsave(US_Fig11, filename = here::here("output/US_Fig11.png"), width = 6.5, height = 4, units = "in")
+
 
 
 ###### Figure 12 ######
