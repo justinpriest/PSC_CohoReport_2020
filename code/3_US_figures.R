@@ -406,7 +406,7 @@ wildproportion %>%
 
 
 
-.###### Figure 18 ######
+###### Figure 18 ######
 ## Troll and Wild abundance
 
 # Troll CPUE
@@ -450,3 +450,42 @@ Fig18b <- trollharvest %>%
 US_Fig18 <- Fig18a / Fig18b
 #ggsave(US_Fig18, filename = here::here("output/US_Fig18.png"), width = 6.5, height = 6, units = "in")
 rm(Fig18a, Fig18b)
+
+
+
+
+###### Figure XX ######
+## Berners Ricker
+
+US_FigXX <- ggplot() + 
+   geom_line(data = BernersRicker, aes(x=S, y = ricker_fit), color = "black", size = 2) +
+   geom_abline(intercept = 0, lty = 2) +
+   geom_line(data = BernersRicker, aes(x=S, y = hockey), color = "darkgray", size = 2, lty = "longdash") +
+   geom_point(data = Berners_SR, aes(x=Spawners, y = Recruits, fill=Decade), size = 4, shape = 21) +
+   scale_y_continuous(labels = comma, breaks = seq(from=0, to=60000, by=10000)) + 
+   scale_x_continuous(labels = comma, limits = c(0, 30000)) +
+   scale_fill_manual(values = c("#55207d", "#5d7cba", "#0090fc", "#a5e6da")) +
+   labs(x="Spawners", y ="Recruits") + 
+   theme_coho(rotate_text = FALSE, base_family = "Arial") +
+   theme(legend.position=c(.9175,.7875), # c(.9175,.7875) only work with 6.5x4" and legend outlined
+         legend.title = element_blank(), legend.text = element_text(size = 10),
+         legend.key.size = unit(1.5,"line"),
+         legend.background = element_rect(colour = 'darkgray', linetype='solid')) 
+US_FigXX
+#ggsave(US_FigXX, filename = here::here("output/US_FigXX.png"), width = 6.5, height = 4, units = "in")
+
+
+
+# Alternate Version w text labels of year
+ggplot() + 
+   geom_line(data = BernersRicker, aes(x=S, y = ricker_fit), color = "black", size = 2) + 
+   geom_abline(intercept = 0, lty = 2) +
+   geom_line(data = BernersRicker, aes(x=S, y = hockey), color = "darkgray", size = 2, lty = "longdash") +
+   geom_point(data = Berners_SR, aes(x=Spawners, y = Recruits), color="#2a84c9", size = 3) +
+   #geom_text(Berners_SR, mapping=aes(x=Spawners, y = Recruits, label = substr(Year, 3, 4)), vjust =1.5) +
+   ggrepel::geom_text_repel(Berners_SR, mapping=aes(x=Spawners, y = Recruits, label = Year)) +
+   scale_y_continuous(labels = comma, breaks = seq(from=0, to=60000, by=10000)) + 
+   scale_x_continuous(labels = comma, limits = c(0, 30000)) +
+   labs(x="Spawners", y ="Recruits") + 
+   theme_coho(rotate_text = FALSE, base_family = "Arial")
+
