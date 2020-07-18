@@ -155,6 +155,16 @@ rm(trollindex_imputed)
 
 
 
+##### Ricker Model #####
+BernersRicker <- read_csv(here::here("data/SEAK_Coho_Berners_RickerHockeyFit.csv")) %>% 
+  dplyr::select(S:hockey)
+
+Berners_SR <- read_csv(here::here("data/SEAK_Coho_Berners_SpawnerRecruitActual.csv")) %>% 
+  dplyr::select(Year:Recruits) %>%
+  mutate(Decade = if_else(Year < 1990, "1980s", 
+                          if_else(between(Year, 1990, 1999), "1990s",
+                                  if_else(between(Year, 2000, 2010), "2000s","2010s")))) 
+
 
 
 ###### Troll CPUE ######

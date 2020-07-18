@@ -14,7 +14,7 @@ theme_coho <- function(base_size = 12, base_family = "Times New Roman", rotate_t
     if(rotate_text==TRUE){
       theme(axis.text.x = element_text(angle = 45, vjust=1, hjust=1))
     } else{
-      theme(axis.text.x = element_text(angle = 0, vjust=0, hjust=0))
+      theme(axis.text.x = element_text(angle = 0))
     }
 }
 
