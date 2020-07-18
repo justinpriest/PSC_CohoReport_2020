@@ -25,7 +25,7 @@ source(here::here("code/functions.R"))
 
 ##### SEAK Harvest & Escapement #####
 
-harvest_historic <- read_csv(here::here("data/SEAK_Coho_HistoricalCommHarvest.csv")) %>%
+harvest_historic <- read_csv(here::here("data/SEAK_Coho_HistoricalCommHarvest_AllGear.csv")) %>%
   dplyr::select(Year:CohoHatcheryOriginHarvest_Count) %>%
   rename("Hatchery" = "CohoHatcheryOriginHarvest_Count",
          "Totalcount" = "CohoTotalCommHarvest_Count") %>%
@@ -33,14 +33,15 @@ harvest_historic <- read_csv(here::here("data/SEAK_Coho_HistoricalCommHarvest.cs
   dplyr::select(Year, Wild, Hatchery)
 harvest_historic
 
-wildproportion <- read_csv(here::here("data/SEAK_Coho_HistoricalCommHarvest.csv")) %>%
+wildproportion_allgear <- read_csv(here::here("data/SEAK_Coho_HistoricalCommHarvest_AllGear.csv")) %>%
   dplyr::select(Year:CohoHatcheryOriginHarvest_Count) %>%
   rename("Total" = "CohoTotalCommHarvest_Count",
          "Hatchery" = "CohoHatcheryOriginHarvest_Count") %>%
-  mutate(Wild = Total - Hatchery) %>%
+  mutate(Gear = "All Gear Types", 
+         Wild = Total - Hatchery) %>%
   filter(Year >= 1980) %>%
   mutate(wildpercent = Wild / Total) %>%
-  dplyr::select(Year, Wild, Hatchery, wildpercent) 
+  dplyr::select(Year, Gear, Wild, Hatchery, wildpercent) 
 
 
 trollharvest <- read_csv(here::here("data/SEAK_Coho_TrollHarvest_Wildvshatchery.csv")) %>% 

@@ -354,8 +354,8 @@ indic_totalrun %>%
 # Hatchery vs Wild
 
 # All Gear, not just troll
-Fig17a <- wildproportion %>%
-   dplyr::select(-wildpercent) %>%
+Fig17a <- wildproportion_allgear %>%
+   dplyr::select(-wildpercent, -Gear) %>%
    pivot_longer(-Year, names_to = "Source", values_to = "Count") %>%
    ggplot(aes(x=Year, y =Count, fill = Source)) +
    geom_col(color = "black", width = 0.7, size=0.5) + 
@@ -390,7 +390,7 @@ rm(Fig17a, Fig17b)
 ###### Figure XX ######   NEW 17?
 # Troll Exploitation Rate vs Wild
 
-wildproportion %>%
+wildproportion_allgear %>%
    dplyr::select(Year, wildpercent) %>%
    left_join(trollindex %>% dplyr::select(Year, trollindex)) %>%
    rename("Troll Exploitation Rate Index" = "trollindex",
@@ -414,7 +414,7 @@ Fig18a <- troll_cpue %>%
    filter(between(StatWeek, 28, 38), Year >= 1982) %>% # only keep weeks 28-38
    group_by(Year) %>%
    summarise(meanannualCPUE = mean(CohoCPUE, na.rm = TRUE)) %>%
-   left_join(wildproportion) %>%
+   left_join(wildproportion_allgear) %>%
    mutate(annualwildCPUE = meanannualCPUE * wildpercent) %>%
    ggplot(aes(x=Year, y = annualwildCPUE)) +
    geom_line(size = 1.25) +
@@ -483,7 +483,7 @@ ggplot() +
    geom_line(data = BernersRicker, aes(x=S, y = hockey), color = "darkgray", size = 2, lty = "longdash") +
    geom_point(data = Berners_SR, aes(x=Spawners, y = Recruits), color="#2a84c9", size = 3) +
    #geom_text(Berners_SR, mapping=aes(x=Spawners, y = Recruits, label = substr(Year, 3, 4)), vjust =1.5) +
-   ggrepel::geom_text_repel(Berners_SR, mapping=aes(x=Spawners, y = Recruits, label = Year)) +
+   #ggrepel::geom_text_repel(Berners_SR, mapping=aes(x=Spawners, y = Recruits, label = Year)) +
    scale_y_continuous(labels = comma, breaks = seq(from=0, to=60000, by=10000)) + 
    scale_x_continuous(labels = comma, limits = c(0, 30000)) +
    labs(x="Spawners", y ="Recruits") + 
