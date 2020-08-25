@@ -191,5 +191,53 @@ pacf(indices_2000$trollCPUE, na.action = na.exclude)
 
 
 
+################################
+#--- 2020 ---#
+troll_cpue2020 <- read_csv(here::here("data/_PRIVATE_SEAK_Coho_TrollFPD_1981-2020_July20.csv"), 
+                           guess_max = 84000) %>% #increased guess b/c of many blanks 
+  rename("Gear" = `Gear Code`,
+         "SellDate" = `Sell Date`, 
+         "StatWeek" = `Stat Week`, 
+         "TrollArea" = `Troll Area`,
+         "StatArea" = `Stat Area`,
+         "DaysFished" = `FPD-Days Fished`,
+         "HoursPerDay" = `Hours per Day`,
+         "CohoCatch" = "Coho") %>% 
+  filter(District == 101 | District == 102,
+         Gear == 15) %>% # remove hand troll (power troll only)
+  mutate(SellDate = as_date(as.POSIXct(SellDate, format = "%m/%d/%Y", tz = "US/Alaska")),
+         District = as.factor(District),
+         Effort_boatdays = DaysFished * HoursPerDay / 13, # Effort is standardized to a 13 hour boat day
+         CohoCPUE = CohoCatch / Effort_boatdays) %>% 
+  dplyr::select(Year, SellDate, StatWeek, TrollArea, District, StatArea, CohoCatch, Effort_boatdays, CohoCPUE)
+
+allyr_summary <- troll_cpue2020 %>% 
+  filter(StatWeek <= 29, # exclude week 30, based on treaty language
+         StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>%
+  group_by(Year) %>%
+  summarise(meanCPUE = mean(CohoCPUE),
+            totalCaught = sum(CohoCatch),
+            totalEffort = sum(Effort_boatdays),
+            numsamples = length(Effort_boatdays))
+
+
+# Grant's mean of a mean method
+grantmethod <- troll_cpue2020 %>% 
+  filter(StatWeek <= 29, # exclude week 30, based on treaty language
+         StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>%
+  group_by(Year, StatWeek) %>%
+  summarise(meanCPUE = mean(CohoCPUE)) %>%
+  group_by(Year) %>%
+  summarise(meanofmeanCPUE = mean(meanCPUE)) %>% left_join(allyr_summary) %>%
+  mutate(diff = meanofmeanCPUE - meanCPUE)
+sum(grantmethod$diff)
+mean(grantmethod$diff)
+
+
+plot(meanofmeanCPUE ~ meanCPUE, data = grantmethod)            
+abline(a=0, b=1)
+
+
+
 
 

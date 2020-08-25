@@ -244,6 +244,12 @@ US_Fig12 <- taku_harvest_can %>%
    scale_x_continuous(breaks = seq(from=1987, to=2019, by = 2)) +
    scale_fill_manual(values = c("white", "black", "lightblue", "gray")) +
    annotate("text", x = 2002, y = 360000, label = "Taku River", size = 3.5) +
+   annotate(geom = "curve", x = 1988, y = 175000, xend = 1987, yend = 75000, 
+            curvature = 0.1, arrow = arrow(length = unit(2, "mm"))) +
+   annotate(geom = "curve", x = 1990, y = 175000, xend = 1991, yend = 145000, 
+            curvature = -0.1, arrow = arrow(length = unit(2, "mm"))) +
+   annotate(geom = "text", x = 1988.5, y = 230000, 
+            label = "No Alaska \n harvest \n estimates \n 1987–1991", hjust = "center") +
    theme(legend.position=c(.85,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line")) 
 #ggsave(US_Fig12, filename = here::here("output/US_Fig12.png"), width = 6.5, height = 4, units = "in")
