@@ -319,7 +319,7 @@ US_Fig14 <- Auke_survival %>%
 ###### Figure 15 ######
 # Troll Exploitation Rate
 
-indic_totalrun %>%
+US_Fig15 <- indic_totalrun %>%
    filter( !(River =="Berners River" & Year < 1989)) %>% # These years are incorrect, exclude
    dplyr::select(-EscapementGoal_Lower, -EscapementGoal_Upper) %>%
    group_by(Year, River) %>%
@@ -330,9 +330,9 @@ indic_totalrun %>%
                           ifelse(Fishery == "Alaska Troll", freq, NA))) %>%
    filter(Fishery != "Other") %>%
    mutate(Fishery = recode(Fishery, "Escapement" = "All Gear Exploitation",
-                           "Alaska Troll" = "Troll Exploitation")) %>%
+                           "Alaska Troll" = "Troll Exploitation"),
+          Fishery = fct_relevel(Fishery, "All Gear Exploitation", "Troll Exploitation")) %>%
    dplyr::select(-Count, -freq, -total) %>%
-   
    ggplot(aes(x=Year, y = index, linetype = Fishery)) + 
    geom_line() +
    scale_x_continuous(breaks = seq(from=1980, to=2019, by = 3)) +
@@ -340,11 +340,12 @@ indic_totalrun %>%
    expand_limits(y= c(0,1)) +
    labs(y = "Exploitation Rate") + 
    theme_coho(base_family = "Arial") + 
-   theme(legend.position=c(.35,.9), legend.title = element_blank(), legend.text = element_text(size = 10),
+   theme(legend.position=c(.33,.9), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1.5,"line")) +
    facet_wrap(~River)
 
 
+#ggsave(US_Fig15, filename = here::here("output/US_Fig15.png"), width = 6.5, height = 6, units = "in")
 
 
 
@@ -354,6 +355,23 @@ indic_totalrun %>%
 # All Exploitation Rate
 
 #COMBINE WITH 15!
+
+
+US_Fig16 <- trollindex %>%
+   filter(Year >= 1982) %>% # remove the blank, Auke-only years
+   ggplot(aes(x=Year, y = trollindex)) +
+   geom_line(size = 1.25) + 
+   geom_smooth(method = "lm", se=FALSE, linetype = "dashed", color = "black") +
+   scale_x_continuous(breaks = seq(from=1982, to=2019, by=3)) +
+   scale_y_continuous(labels = scales::percent, breaks = seq(from=0, to=0.6, by=0.1)) +
+   expand_limits(x = 1983, y = c(0, 0.6)) +
+   labs(x = "", y = "Troll Exploitation Rate Index") + 
+   theme_coho(base_family = "Arial")
+US_Fig16
+
+#ggsave(US_Fig16, filename = here::here("output/US_Fig16.png"), width = 6.5, height = 4, units = "in")
+
+summary(lm(trollindex ~ Year, data = trollindex %>% filter(Year >= 1982)))
 
 
 ###### Figure 17 ######   NEW 16?
@@ -400,7 +418,7 @@ wildproportion_allgear %>%
    dplyr::select(Year, wildpercent) %>%
    left_join(trollindex %>% dplyr::select(Year, trollindex)) %>%
    rename("Troll Exploitation Rate Index" = "trollindex",
-          "Proportion of wild harvest" = "wildpercent") %>%
+          "Wild proportion of total harvest" = "wildpercent") %>%
    pivot_longer(-Year, "Source") %>%
    ggplot(aes(x = Year, y = value, linetype = Source)) +
    geom_line() + 
@@ -458,6 +476,12 @@ US_Fig18 <- Fig18a / Fig18b
 rm(Fig18a, Fig18b)
 
 
+trollharvest %>% 
+   filter(Source == "Wild contribution", Year >= 1982) %>%
+   rename("Wildharvest" = "Harvest") %>%
+   dplyr::select(-Fishery, -Source) %>%
+   left_join(trollindex %>% dplyr::select(Year, trollindex)) %>%
+   mutate(EstTotalWildAbund = Wildharvest / trollindex) 
 
 
 ###### Figure XX ######
