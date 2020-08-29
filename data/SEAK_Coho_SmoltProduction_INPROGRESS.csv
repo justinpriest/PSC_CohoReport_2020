@@ -1,15 +1,15 @@
 SmoltYear, Auke Creek , Berners River , Chilkat River , Taku River , Hugh Smith Lake , Ford Arm Creek ,,,
 1980,"8,789",NA,NA,NA,NA,NA,,,
 1981,"10,714",NA,NA,NA,NA,"79,059",,,
-1982,"6,967",NA,NA,NA,NA,"63,686",,,
-1983,"6,849",NA,NA,NA,NA,NA,,,
-1984,"6,901",NA,NA,NA,"29,117","38,509",,,
-1985,"6,838",NA,NA,NA,"53,227","45,748",,,Taku <92 from Leon
-1986,"5,852",NA,NA,NA,"32,283","70,322",,,Taku 92-19 from Jeff
-1987,"5,617",NA,NA,NA,"23,572","88,983",,,Berners all calc'd by JTP; excluded 1989 b/c it disagreed with Leon's estimate
-1988,"7,014",NA,NA,NA,"21,878","51,658",,,Hugh Smith 91-19 calc'd by JTP
-1989,"7,685",NA,NA,NA,"36,218","54,851",,,Hugh Smith <91 from Leon
-1990,"7,011","131,831",NA,NA,"27,904","56,284",,,Form Arm data all from Leon
+1982,"6,967",NA,NA,NA,"29,117","63,686",,,
+1983,"6,849",NA,NA,NA,"53,227",NA,,,
+1984,"6,901",NA,NA,NA,"32,283","38,509",,,
+1985,"6,838",NA,NA,NA,"23,572","45,748",,,Taku <92 from Leon
+1986,"5,852",NA,NA,NA,"21,878","70,322",,,Taku 92-19 from Jeff
+1987,"5,617",NA,NA,NA,"36,218","88,983",,,Berners all calc'd by JTP; excluded 1989 b/c it disagreed with Leon's estimate
+1988,"7,014",NA,NA,NA,"27,904","51,658",,,Hugh Smith 91-19 calc'd by JTP
+1989,"7,685",NA,NA,NA,26620,"54,851",,,"Hugh Smith <91 from Leon file ""RunGraphs"" MasterSmolts tab, Return Year -1 =Smolt Year"
+1990,"7,011","131,831",NA,NA,33101,"56,284",,,Form Arm data all from Leon
 1991,"5,137","169,823",NA,"1,080,551","23,580","61,728",,,Chilkat data were emailed B. Elliott 26 Aug 2020
 1992,"5,690","326,369",NA,"1,510,032","33,231","57,401",,,
 1993,"6,596","255,431",NA,"1,475,874","48,624","82,893",,,

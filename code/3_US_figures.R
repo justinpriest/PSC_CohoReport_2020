@@ -441,47 +441,54 @@ Fig18a <- troll_cpue %>%
    left_join(wildproportion_allgear) %>%
    mutate(annualwildCPUE = meanannualCPUE * wildpercent) %>%
    ggplot(aes(x=Year, y = annualwildCPUE)) +
-   geom_line(size = 1.25) +
+   geom_line(size = 1.125) +
    scale_x_continuous(breaks = seq(from=1982, to = 2019, by = 2)) +
    scale_y_continuous(breaks = seq(from=0, to = 90, by = 20)) +
    expand_limits(y=c(0, 90)) +
    labs(y = "Catch per Boat Day") +
-   annotate("text", x = 2000, y = 90, label = "Mean Annual Power Troll Wild CPUE", size = 4, fontface = "bold") +   
+   annotate("text", x = 2001, y = 90, label = "Mean Annual Power Troll Wild CPUE", size = 4, fontface = "bold") +   
    theme_coho(base_family = "Arial") +
    theme(axis.text.x = element_blank(), axis.title.x = element_blank()) # remove x axis
 
 
 # Wild Harvest by Fishery
 Fig18b <- trollharvest %>%
-   rename("Troll Fishery" = "Harvest") %>%
+   rename("Harvest: Troll Fishery" = "Harvest") %>%
    filter(Source == "Wild contribution", Year >= 1982) %>%
    left_join(harvest_historic) %>%
-   rename("All Gear Fisheries" = "Wild") %>%
-   dplyr::select(Year, `Troll Fishery`, `All Gear Fisheries`) %>%
-   pivot_longer(-Year, names_to = "Fishery", values_to = "Wild_Harvest") %>%
-   mutate(Harvest_mil = Wild_Harvest / 1000000) %>%
-   ggplot(aes(x=Year, y = Harvest_mil, linetype = Fishery)) +
-   geom_line(size = 1.25) +
+   rename("Harvest: All Gear" = "Wild") %>%
+   dplyr::select(Year, `Harvest: Troll Fishery`, `Harvest: All Gear`) %>%
+   left_join(wildabundance %>% dplyr::select(Year, EstTotalWildAbund)) %>%
+   rename("Regional Wild Abundance" = "EstTotalWildAbund") %>%
+   pivot_longer(-Year, names_to = "Fishery", values_to = "Wild_count") %>%
+   mutate(Count_mil = Wild_count / 1000000, 
+          Fishery = fct_relevel(Fishery, "Regional Wild Abundance", "Harvest: All Gear",
+                                "Harvest: Troll Fishery")) %>%
+   ggplot(aes(x=Year, y = Count_mil, linetype = Fishery, color = Fishery)) +
+   geom_line(size = 1.125) +
    scale_x_continuous(breaks = seq(from=1982, to = 2019, by = 2)) +
    scale_y_continuous(breaks = seq(from=0, to = 7, by = 1)) +
-   expand_limits(y=c(0, 5.2)) +
-   labs(y = "Number of Coho Salmon (Millions)") +
-   annotate("text", x = 2000, y = 5.1, label = "Wild Harvest by Fishery", size = 4, fontface = "bold") +   
+   scale_color_manual(values = c("black", "darkgray", "black")) + 
+   scale_linetype_manual(values = c("solid", "solid", "dashed")) +
+   expand_limits(y=c(0, 7)) +
+   labs(y = "Number of Coho Salmon (Millions)") + 
+   annotate("text", x = 2001, y = 7, label = "Wild Abundance and Harvest", size = 4, fontface = "bold") +   
    theme_coho(base_family = "Arial") +
-   theme(legend.position=c(.85,.8), legend.title = element_blank(), legend.text = element_text(size = 10),
-         legend.key.size = unit(1.5,"line")) 
+   theme(legend.position=c(0.5, 0.05), legend.title = element_blank(), legend.text = element_text(size = 10),
+         legend.key.size = unit(2.0,"line"), legend.direction="horizontal") 
+
+
+
 
 US_Fig18 <- Fig18a / Fig18b
 #ggsave(US_Fig18, filename = here::here("output/US_Fig18.png"), width = 6.5, height = 6, units = "in")
 rm(Fig18a, Fig18b)
 
-
-trollharvest %>% 
-   filter(Source == "Wild contribution", Year >= 1982) %>%
-   rename("Wildharvest" = "Harvest") %>%
-   dplyr::select(-Fishery, -Source) %>%
-   left_join(trollindex %>% dplyr::select(Year, trollindex)) %>%
-   mutate(EstTotalWildAbund = Wildharvest / trollindex) 
+# Is wild abundance increasing? Yes, with caveats that come with using troll index. 
+# The increase is driven mainly by increases in the index (increases in troll efficiency)
+summary(lm(EstTotalWildAbund ~ Year, data = wildabundance))
+summary(lm(trollindex ~ Year, data = wildabundance))
+summary(lm(Wildharvest ~ Year, data = wildabundance))
 
 
 ###### Figure XX ######

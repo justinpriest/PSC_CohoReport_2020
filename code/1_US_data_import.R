@@ -73,8 +73,8 @@ indic_totalrun <- indic_harvest %>%
   pivot_longer(cols = c(AK_Troll, Other, Escapement_Count), names_to = "Fishery", values_to = "Count") %>%
   left_join(SEAK_escgoals, by = c("River" = "System")) %>%
   mutate(Fishery = factor(Fishery, levels = c("AK_Troll", "Other", "Escapement_Count")),
-         Fishery = recode(Fishery, "AK_Troll" = "Alaska Troll"), 
-         Fishery = recode(Fishery, "Escapement_Count" = "Escapement"))
+         Fishery = recode(Fishery, "AK_Troll" = "Alaska Troll", "Other" = "Other Harvest",
+                          "Escapement_Count" = "Escapement"))
 
 
 
@@ -151,6 +151,15 @@ trollindex <- trollindex_imputed %>%
                              (`Berners River` * 0.2) + (`Auke Creek` * 0.2) + (`Ford Arm Lake` * 0.2) + 
                                (`Hugh Smith Lake` * 0.4))) 
 rm(trollindex_imputed)
+
+
+##### Wild Abundance #####
+wildabundance <- trollharvest %>% 
+  filter(Source == "Wild contribution", Year >= 1982) %>%
+  rename("Wildharvest" = "Harvest") %>%
+  dplyr::select(-Fishery, -Source) %>%
+  left_join(trollindex %>% dplyr::select(Year, trollindex)) %>%
+  mutate(EstTotalWildAbund = Wildharvest / trollindex) 
 
 
 
