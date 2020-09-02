@@ -307,7 +307,7 @@ US_Fig14 <- Auke_survival %>%
    geom_col(color = "black", width = 0.75) +
    scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
    scale_y_continuous(breaks = seq(from=0, to = 45, by = 5)) +
-   scale_fill_manual(values = c( "#4fa3bd", "black")) +
+   scale_fill_manual(values = c("#4fa3bd", "black")) +
    labs(x = "Smolt Outmigration Year", y = "Marine Survival (%)") +
    theme_coho(base_family = "Arial") +
    theme(legend.position=c(.8,0.8), legend.title = element_blank(), legend.text = element_text(size = 10),
@@ -525,4 +525,32 @@ ggplot() +
    scale_x_continuous(labels = comma, limits = c(0, 30000)) +
    labs(x="Spawners", y ="Recruits") + 
    theme_coho(rotate_text = FALSE, base_family = "Arial")
+
+
+###### Figure XX ######
+## Smolt Production
+US_FigXX_smolt <- SEAK_smolt %>%
+   pivot_longer(cols = `Auke Creek`:`Ford Arm Creek`, names_to = "River", values_to = "Count") %>%
+   ggplot(aes(x=SmoltYear, y = Count, color = River)) +
+   geom_line(size = 1.25) +
+   scale_x_continuous(breaks = seq(from = 1980, to = 2020, by = 3)) +
+   scale_y_log10(labels = comma, breaks = c(0, 10000, 100000, 1000000)) + 
+   scale_color_manual(values = c("#4fa3bd", "black", "#c77512", "#5d8c77", "#6b6b6b", "#66437d")) + 
+   #geom_dl(aes(label=River),method="last.points") +
+   annotate("text", x = 2016, y = 12000, label= "Auke Creek") + 
+   annotate("text", x = 2016, y = 26000, label = "Hugh Smith Lake") + 
+   annotate("text", x = 2016, y = 80000, label= "Ford Arm Lake") + 
+   annotate("text", x = 2011.5, y = 275000, label = "Berners River") + 
+   annotate("text", x = 2014, y = 550000, label= "Chilkat River") + 
+   annotate("text", x = 2016, y = 2500000, label = "Taku River") + 
+   annotation_logticks() +
+   labs(x = "", y = "Number of Smolt") + 
+   theme_coho() +
+   theme(legend.position="none") 
+US_FigXX_smolt
+#ggsave(US_FigXX_smolt, filename = here::here("output/US_FigXX_smolt.png"), width = 6.5, height = 4, units = "in")
+
+
+
+
 

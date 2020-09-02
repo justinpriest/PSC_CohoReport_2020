@@ -60,6 +60,7 @@ SEAK_escape <- read_csv(here::here("data/SEAK_Coho_Escapement_1972-2019.csv")) %
 
 
 indic_harvest <- read_csv(here::here("data/SEAK_Coho_HarvestSourcesForIndicatorStocks1980-2019.csv")) %>%
+  filter(Year >= 1980) %>% # theres a few early estimates for Berners, exclude these
   pivot_wider(names_from= Fishery_Type, values_from = Coho_Harvest_Count) %>%
   rename("AK_Gillnet" = `AK_Gillnet (Drift & Set)`) %>% 
   mutate(Other = AK_Gillnet + AK_Other + AK_Seine + AK_Sport + CAN_AllFisheries) %>%
