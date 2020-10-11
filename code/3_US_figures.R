@@ -553,4 +553,36 @@ US_FigXX_smolt
 
 
 
+###### Figure XX3 ######
+## Change in total production ##
+baseline_esc <- indic_totalrun %>%
+   dplyr::select(Year, River, Fishery, Count) %>%
+   group_by(River, Year) %>%
+   summarise(totalcount = sum(Count)) %>%
+   filter(between(Year, 1985, 2009)) %>%
+   group_by(River) %>%
+   summarise(meancount1990_2009 = round(mean(totalcount), 0)) 
+
+
+indic_totalrun %>%
+   dplyr::select(Year, River, Fishery, Count) %>%
+   group_by(River, Year) %>%
+   summarise(totalcount = sum(Count)) %>%
+   filter(between(Year, 2010, 2019)) %>%
+   left_join(baseline_esc, by =  c("River" = "River")) %>%
+   mutate(baselinediff = (totalcount - meancount1990_2009) / meancount1990_2009,
+          posneg = ifelse(baselinediff > 0, "positive", "negative"),
+          Year = as.integer(Year)) %>%
+   ggplot(aes(x = Year, y = baselinediff, fill = posneg)) +
+   geom_col(alpha = 0.75) + 
+   geom_hline(yintercept = 0) +
+   scale_x_continuous(breaks = seq(from=2010, to=2019, by = 1)) +
+   scale_y_continuous(labels = scales::percent) + 
+   scale_fill_manual(values = c("red4", "darkgreen")) +
+   labs(y = "Relative change of total return compared to 1985–2009 baseline") +
+   facet_wrap(~River, nrow = 4) +
+   theme_coho(rotate_text = TRUE) +
+   theme(legend.position = "none")
+rm(baseline_esc)
+
 

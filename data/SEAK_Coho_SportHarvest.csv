@@ -41,6 +41,7 @@ Year,Region,Species,Fishery,Harvest_Count,,,* Sport Harvest data are from: http:
 2016,SEAK,Coho Salmon,Freshwater Sport,"27,711",,,
 2017,SEAK,Coho Salmon,Freshwater Sport,"30,385",,,
 2018,SEAK,Coho Salmon,Freshwater Sport,"27,908",,,
+2019,SEAK,Coho Salmon,Freshwater Sport,"28,536",,,
 1977,SEAK,Coho Salmon,Saltwater Sport,"31,822",,,
 1978,SEAK,Coho Salmon,Saltwater Sport,"42,675",,,
 1979,SEAK,Coho Salmon,Saltwater Sport,"18,887",,,
@@ -83,3 +84,4 @@ Year,Region,Species,Fishery,Harvest_Count,,,* Sport Harvest data are from: http:
 2016,SEAK,Coho Salmon,Saltwater Sport,"204,946",,,
 2017,SEAK,Coho Salmon,Saltwater Sport,"301,002",,,
 2018,SEAK,Coho Salmon,Saltwater Sport,"183,340",,,
+2019,SEAK,Coho Salmon,Saltwater Sport,"208,244",,,
