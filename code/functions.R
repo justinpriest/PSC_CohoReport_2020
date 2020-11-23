@@ -70,7 +70,7 @@ globalimpute <- function(dfname, Year_column="Year", StreamName_column="River",
 
 
 ##### CREATE US FIGURE 5 #####
-create_figure5 <- function(river = "Auke Creek", setbreaks = c(0,500, 1000, 1500), minyear = 1980, blank_x = TRUE) {
+create_figure5 <- function(river = "Auke Creek", setbreaks = c(0,500, 1000, 1500), minyear = 1980, blank_x = TRUE, ...) {
   SEAK_escape %>% 
     filter(River == river, Year >= minyear) %>%
     ggplot(aes(x = Year, y = Escapement_Count)) + 
@@ -111,6 +111,42 @@ create_harvestfig <- function(dataframe = indic_totalrun, river = "Auke Creek",
     }
 }
 
+############################
+##### UNUSED FUNCTIONS #####
 
+##### DUPLICATE ROWS IF THEY ARE ALREADY SUMMARIZED #####
+duplicaterows <- function(dataframename, duplicatecolname = "specimen_count", replacenaswithone = FALSE){
+  require(tidyverse)
+  
+  # Make an index of which rows will be repeated, and how many times
+  .dupcount <- dataframename %>% dplyr::select(duplicatecolname) %>% tibble::deframe()
+  
+  # NAs will normally make this fail. We can replace NAs though
+  # This replaces NAs with 1. THIS IS A LARGE ASSUMPTION SO BE CAREFUL
+  if(sum(is.na(.dupcount) > 0) && replacenaswithone == TRUE){
+    .dupcount <- replace_na(.dupcount, 1)
+  }
+  
+  # Now repeat this for every row to duplicate. 
+  # A specimen count of 1 will mean the row isn't duplicated; a count of 5, repeats the row 5 times 
+  dataframename[rep(1:nrow(dataframename), .dupcount), ] %>%
+    dplyr::select(-duplicatecolname) # Removes the count row now that it is incorrect!
+  
+  # Use like so: duplicaterows(dataframename = newdf, duplicatecolname = "Number.of.Specimens")
+  
+  # Thanks to: https://stackoverflow.com/questions/29743691/duplicate-rows-in-a-data-frame-in-r
+}
+
+
+
+##### SUMMARIZE PROPORTION #####
+# https://stackoverflow.com/questions/24576515/relative-frequencies-proportions-with-dplyr
+count_pct <- function(df) {
+  return(
+    df %>%
+      tally %>% 
+      mutate(n_pct = 100*n/sum(n))
+  )
+}
 
 
