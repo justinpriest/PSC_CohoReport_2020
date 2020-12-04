@@ -153,38 +153,41 @@ rm(Fig8a, Fig8b, Fig8c)
 Fig9a <- create_harvestfig(river = "Auke Creek", blank_x = TRUE, setbreaks = seq(from=0, to=3000, by=500)) + 
    annotate("text", x = 2000, y = 3300, label = "Auke Creek", size = 3.5) + 
    labs(y = "") +
-   theme(legend.position=c(.7,.8), legend.title = element_blank(), legend.text = element_text(size = 10),
+   theme(legend.position=c(.88,.82), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line")) 
 
-Fig9b <- create_harvestfig(river = "Berners River", blank_x = TRUE, setbreaks = seq(from=0, to=75000, by=10000)) + 
-   labs(y = "") +
-   annotate("text", x = 2000, y = 75000, label = "Berners River", size = 3.5) 
+# Changed to remove this. Dec 2020
+#Fig9b <- create_harvestfig(river = "Berners River", blank_x = TRUE, setbreaks = seq(from=0, to=75000, by=10000)) + 
+#   labs(y = "") +
+#   annotate("text", x = 2000, y = 75000, label = "Berners River", size = 3.5) 
 
-Fig9c <- create_harvestfig(river = "Ford Arm Lake", blank_x = TRUE, setbreaks = seq(from=0, to=16000, by=2000)) + 
+Fig9b <- create_harvestfig(river = "Ford Arm Lake", blank_x = TRUE, setbreaks = seq(from=0, to=16000, by=2000)) + 
    annotate("text", x = 2000, y = 17000, label = "Ford Arm Creek", size = 3.5) 
 
-Fig9d <- create_harvestfig(river = "Hugh Smith Lake", blank_x = FALSE, setbreaks = seq(from=0, to=9000, by=1000)) + 
+Fig9c <- create_harvestfig(river = "Hugh Smith Lake", blank_x = FALSE, setbreaks = seq(from=0, to=9000, by=1000)) + 
    labs(y = "") +
    annotate("text", x = 2000, y = 10000, label = "Hugh Smith Lake", size = 3.5) 
 
-US_Fig9 <- Fig9a / Fig9b / Fig9c / Fig9d
+US_Fig9 <- Fig9a / Fig9b / Fig9c 
 #ggsave(US_Fig9, filename = here::here("output/US_Fig9.png"), width = 6.5, height = 8, units = "in")
-rm(Fig9a, Fig9b, Fig9c, Fig9d)
+rm(Fig9a, Fig9b, Fig9c)
 
 
 
 ###### Figure 10 ######
 # Northern Rivers Run Reconstruction
-Fig10a <- taku_harvest %>% 
-   mutate(River = "Taku River") %>%
-   left_join(SEAK_escgoals, by = c("River" = "System")) %>%
-   create_harvestfig(river = "Taku River", setbreaks = seq(from=0, to=400000, by=100000), minyear = 1987) +
-   expand_limits(x=1987) +
-   labs(y = "") +
-   annotate("text", x = 2002, y = 400000, label = "Taku River", size = 3.5) 
+
+# Removed because this doesn't have Can harvest and is duplicated in other figure
+# Fig10a <- taku_harvest %>% 
+#    mutate(River = "Taku River") %>%
+#    left_join(SEAK_escgoals, by = c("River" = "System")) %>%
+#    create_harvestfig(river = "Taku River", setbreaks = seq(from=0, to=400000, by=100000), minyear = 1987) +
+#    expand_limits(x=1987) +
+#    labs(y = "") +
+#    annotate("text", x = 2002, y = 400000, label = "Taku River", size = 3.5) 
 
 
-Fig10b <- SEAK_escape %>% filter(River == "Chilkat River", Year >= 1987) %>% 
+Fig10a <- SEAK_escape %>% filter(River == "Chilkat River", Year >= 1987) %>% 
    dplyr::select(-c(Count_Type, Expansion, EscapementGoal_Lower, EscapementGoal_Upper)) %>%
    left_join(chilkat_harvest %>%
                 pivot_wider(names_from= Fishery_Type, values_from = Coho_Harvest_Count) %>%
@@ -196,18 +199,17 @@ Fig10b <- SEAK_escape %>% filter(River == "Chilkat River", Year >= 1987) %>%
    mutate(Fishery = factor(Fishery, levels = c("Alaska Troll", "Other", "Escapement"))) %>%
    left_join(SEAK_escgoals, by = c("River" = "System")) %>%
    create_harvestfig(river = "Chilkat River", setbreaks = seq(from=0, to=400000, by=100000)) +
-   annotate("text", x = 2002, y = 400000, label = "Chilkat River", size = 3.5) 
-
-Fig10c <- create_harvestfig(river = "Berners River", 
-                  setbreaks = seq(from=0, to=60000, by=20000), blank_x = FALSE, minyear = 1987) +
-   labs(y = "") +
-   annotate("text", x = 2002, y = 75000, label = "Berners River", size = 3.5) +
-   theme(legend.position=c(.8,.75), legend.title = element_blank(), legend.text = element_text(size = 10),
+   annotate("text", x = 2002, y = 400000, label = "Chilkat River", size = 3.5) +
+   theme(legend.position=c(0.88, 0.82), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line")) 
 
-US_Fig10 <- Fig10a / Fig10b / Fig10c
-#ggsave(US_Fig10, filename = here::here("output/US_Fig10.png"), width = 6.5, height = 8, units = "in")
-rm(Fig10a, Fig10b, Fig10c)
+
+Fig10b <- create_harvestfig(river = "Berners River", 
+                  setbreaks = seq(from=0, to=60000, by=20000), blank_x = FALSE, minyear = 1987) +
+   annotate("text", x = 2002, y = 75000, label = "Berners River", size = 3.5) 
+US_Fig10 <- Fig10a / Fig10b 
+#ggsave(US_Fig10, filename = here::here("output/US_Fig10.png"), width = 6.5, height = 6, units = "in")
+rm(Fig10a, Fig10b)
 
 
 ###### Figure 11 ######
@@ -224,7 +226,7 @@ US_Fig11 <- SEAK_escape %>%
    geom_point(size = 2) +
    scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
    scale_color_manual(values = c("#6b6b6b", "#c77512", "black")) +
-   scale_linetype_manual(values = c("longdash", "solid", "solid")) +
+   scale_linetype_manual(values = c("solid", "solid", "solid")) + # Berners used to be dashed
    expand_limits(y = c(-1.7, 3.3)) +
    labs(y = expression("Scaled Escapement (X-"*mu*" / "*sigma*")")) +
    theme_coho(base_family = "Arial") +

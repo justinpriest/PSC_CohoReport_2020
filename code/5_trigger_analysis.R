@@ -1,7 +1,7 @@
 # Boundary Area Closure Trigger Analysis
 
 # Justin Priest & Ryan Whitmore
-# July 2020
+# December 2020
 # justin.priest@alaska.gov
 # Ryan.Whitmore@dfo-mpo.gc.ca
 

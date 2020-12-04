@@ -121,6 +121,8 @@ exploitrate <- indic_totalrun %>%
   dplyr::select(-Count, -freq, -total) %>% 
   filter(Fishery != "Other Harvest")
 
+
+
 summary(lm(index ~ Year, data = exploitrate %>% 
              filter(Fishery == "All Gear Exploitation", River == "Auke Creek")))
 summary(lm(index ~ Year, data = exploitrate %>% 
@@ -142,10 +144,41 @@ summary(lm(index ~ Year, data = exploitrate %>%
              filter(Fishery == "Troll Exploitation", River == "Hugh Smith Lake")))
 # Signif decrease in troll exploitation for Auke, Berners, Hugh Smith. No change Ford Arm
 
-exploitrate %>% filter(Fishery == "Troll Exploitation") %>% View()
+exploitrate %>% filter(Fishery == "Troll Exploitation") %>% 
   group_by(River) %>%
   summarise(mean = mean(index, na.rm = TRUE),
             range = range(index, na.rm = TRUE))
+  
+
+# Does exploitation rate of Berners River fish increase in odd years?  (1999 onward)
+bernersexp <- exploitrate %>% pivot_wider(values_from = "index", names_from = "Fishery") %>%
+    filter(River == "Berners River", Year >= 1999) %>%
+    rename("trollexp" = `Troll Exploitation`)
+
+bernodd <- temp3 %>%
+  filter(Year %% 2 == 1)
+
+berneven <- temp3 %>%
+  filter(Year %% 2 == 0) %>% 
+  ungroup() %>%
+  dplyr::select("trollexp") %>% rename("trollexpeven" = "trollexp") %>%
+  add_row(trollexpeven = NA) # uneven lengths of even/odd years
+
+combined <- bernodd %>%
+  ungroup() %>%
+  dplyr::select("trollexp") %>% rename("trollexpodd" = "trollexp") %>%
+  add_column(berneven)
+
+summary(aov(data = combined, trollexpodd ~ trollexpeven))
+summary(lm(trollexpodd ~ trollexpeven, data = combined))
+t.test(combined$trollexpodd, combined$trollexpeven)
+
+mean(combined$trollexpodd)
+mean(combined$trollexpeven, na.rm = TRUE)
+
+rm(bernodd, berneven, combined)
+
+
 
 
 
@@ -253,7 +286,7 @@ summary(lm(`Hugh Smith Lake` ~ Year, data = trollindex))
 summary(lm(`Ford Arm Lake` ~ Year, data = trollindex))
 
 
-  
+
   
   
   
