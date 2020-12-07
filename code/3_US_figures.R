@@ -14,6 +14,7 @@ source(here::here("code/1_US_data_import.R"))
 troll_cpue <- read_csv(here::here("data/SEAK_Coho_TrollFPD_1981-2019.csv"), 
                        guess_max = 84000) %>% #increased guess b/c of many blanks 
    rename("Gear" = `Gear Code`,
+          "TripNum" = `Trip No`,
           "SellDate" = `Sell Date`, 
           "StatWeek" = `Stat Week`, 
           "TrollArea" = `Troll Area`,
@@ -25,8 +26,10 @@ troll_cpue <- read_csv(here::here("data/SEAK_Coho_TrollFPD_1981-2019.csv"),
    mutate(SellDate = as_date(as.POSIXct(SellDate, format = "%m/%d/%Y", tz = "US/Alaska")),
           District = as.factor(District),
           Effort_boatdays = DaysFished * HoursPerDay / 13, # Effort is standardized to a 13 hour boat day
-          CohoCPUE = CohoCatch / Effort_boatdays) %>% 
-   dplyr::select(Year, SellDate, StatWeek, TrollArea, District, StatArea, CohoCatch, Effort_boatdays, CohoCPUE)
+          CohoCPUE = CohoCatch / Effort_boatdays,
+          TripNumber = paste0(Year, "-", TripNum)) %>% 
+   dplyr::select(Year, TripNumber, SellDate, StatWeek, TrollArea, District, 
+                 StatArea, CohoCatch, Effort_boatdays, CohoCPUE)
 
 troll_cpue
 

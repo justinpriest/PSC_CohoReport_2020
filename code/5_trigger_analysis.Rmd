@@ -1,0 +1,569 @@
+---
+title: "Boundary Area Closure Trigger Assessment"
+author: "Justin Priest"
+date: "12/6/2020"
+output: 
+  html_document:
+    code_folding: "hide"
+    toc: true
+    toc_float: true
+    toc_depth: 2
+    theme: lumen
+    highlight: tango
+---
+
+# Overview & Background
+The [2019 PSC Treaty](https://www.psc.org/publications/pacific-salmon-treaty/) Attachment B states that
+"If the Alaska Fisheries Performance District (“FPD”) Area 6 troll fishery statistical week 27, 28 and 29 average catch per boat day is" less than 22, there will be closures in both Alaskan and Canadian waters of varying duration and geographical range, depending on CPUE (0-10; 10-14; 15-22).  
+
+That is, inseason management of the Boundary Area Coho fishery for both US and Canada is guided by US Troll fishermen in US Districts 101 and 102 ("Area 6"). This was based on observations that historically, US Troll CPUE was correlated to fishery wild abundance.  
+
+However, in recent years, fishery participation has decreased and there have been worries that low CPUE may not be indicative of low abundance per se. Thus, low US participation has potentially adversely affected Canadian harvest. To rectify this, alternatives to the using the troll fishery as a trigger are considered below.  
+
+For the analyses here, we have used US Troll CPUE as a response variable. Currently, there is no way to identify wild coho salmon abundance inseason. The first and most pressing issue is identifying a response variable; until this has happened, we will use Troll CPUE.  
+All troll data analysed and presented in here only includes Districts 101 and 102 and excludes terminal harvest areas (e.g., 101-85, 101-90, 101-95).  
+
+<br>  
+**Remaining Data Needs**  
+- Canadian Index of Wild Abundance (escapements or regional index)
+- Canadian Troll CPUE (can then evaluate its value in complementing US troll data)
+
+
+```{r dataimport, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Libraries
+library("correlation")
+library("lme4")
+library("forecast")
+library("kableExtra")
+library("broom")
+
+
+source(here::here("code/1_US_data_import.R"))
+
+
+##### DATA WEEKLY #####
+tyee_weekly <- tyeecpue %>%
+  mutate(week = statweek(Date)) %>%
+  group_by(Year, week) %>%
+  summarise(Tyee_cpue = mean(CohoCPUE)) %>% ungroup()
+
+NassFW_weekly <- NassFW %>% 
+  group_by(Year, week) %>% 
+  summarise(Nass_coho = sum(CohoCatchDaily)) %>% ungroup()
+
+troll_USboundary <- troll_boundary %>%
+  filter(between(StatWeek, 27, 29),
+    StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>% # exclude terminal harvest areas
+  group_by(Year, StatWeek) %>%
+  summarise(trollCPUE = mean(CohoCPUE))
+#101-40, 101-41, 101-45,
+
+
+# Read in Hugh Smith data
+# JTP: This ends up not helping at all. Consider removing 
+hughsmith_esc <- read_csv(here::here("data/SEAK_Coho_HughSmithDailyEscapement_1982-2019.csv")) %>% 
+  rename("Date" = `Obs Date`) %>% 
+  mutate(Date = as_date(as.POSIXct(Date, format = "%m/%d/%Y", tz = "US/Alaska")),
+         week = statweek(Date)) %>%
+  group_by(Year, week) %>%
+  summarise(HS_count = sum(Count))
+  
+
+
+# Put these indices  together  
+indices <- tyee_weekly %>% 
+  left_join(NassFW_weekly) %>% 
+  left_join(troll_USboundary, by = c("Year" = "Year", "week" = "StatWeek")) %>%
+  left_join(hughsmith_esc)
+# Originally the FPD data 1981-2019 but this was restricted. May see vestigial references to pre-2000 data
+
+
+indices_2000 <- indices %>% 
+  filter(Year >= 2000, between(week, 27, 29)) %>% 
+  group_by(Year) %>% # Need this so that NAs appear when you lead (can't use next week's info this week!)
+  mutate(Tyee_cpue_lead1 = lead(Tyee_cpue, 1),
+         Nass_coho_lead1 = lead(Nass_coho, 1)) %>% 
+  ungroup() 
+
+
+
+# This is the 1981-2019 data which will be used to show the relationship between CPUE early vs late
+troll_cpue <- read_csv(here::here("data/SEAK_Coho_TrollFPD_1981-2019.csv"), 
+                       guess_max = 84000) %>% #increased guess b/c of many blanks 
+   rename("Gear" = `Gear Code`,
+          "TripNum" = `Trip No`,
+          "SellDate" = `Sell Date`, 
+          "StatWeek" = `Stat Week`, 
+          "TrollArea" = `Troll Area`,
+          "StatArea" = `Stat Area`,
+          "DaysFished" = `FPD-Days Fished`,
+          "HoursPerDay" = `Hours per Day`,
+          "CohoCatch" = "Coho") %>% 
+   filter(Gear == 15, Year < 2020) %>% # remove hand troll (power troll only)
+   mutate(SellDate = as_date(as.POSIXct(SellDate, format = "%m/%d/%Y", tz = "US/Alaska")),
+          District = as.factor(District),
+          Effort_boatdays = DaysFished * HoursPerDay / 13, # Effort is standardized to a 13 hour boat day
+          CohoCPUE = CohoCatch / Effort_boatdays,
+          TripNumber = paste0(Year, "-", TripNum)) %>% 
+   dplyr::select(Year, TripNumber, SellDate, StatWeek, TrollArea, District, 
+                 StatArea, CohoCatch, Effort_boatdays, CohoCPUE)
+
+```
+
+<br>  
+
+## Troll CPUE: Early vs all weeks
+Does troll CPUE in early weeks predict the CPUE for the rest of the season?
+```{r trollbackground, message=FALSE, warning=FALSE, fig.height=3}
+# same as above but this includes 1981-2000 data
+troll81to19 <- troll_cpue %>%
+  filter(District == "101" | District == "102",
+         StatWeek <= 29) %>%
+  filter(StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>% # exclude terminal harvest areas
+  group_by(Year) %>%
+  summarise(trollCPUE = mean(CohoCPUE),
+            numtrips = n_distinct(TripNumber)) 
+
+troll81to19allweeks <- troll_cpue %>%
+  filter(District == "101" | District == "102") %>% 
+  filter(StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>% # exclude terminal harvest areas
+  group_by(Year) %>%
+  summarise(trollCPUEallwk = mean(CohoCPUE),
+            numtripsallwk = n_distinct(TripNumber)) 
+
+# Does troll CPUE in early weeks predict the CPUE for the rest of the season?
+troll81to19 %>% 
+  left_join(troll81to19allweeks) %>% 
+  ggplot(aes(x=trollCPUE, y=trollCPUEallwk, color=Year)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(x = "Troll CPUE (Weeks 27-29)", y = "Troll CPUE (All Weeks)", title = "Troll CPUE: Early vs All Season")  +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+
+troll81to19 %>% 
+  left_join(troll81to19allweeks) %>%
+  lm(trollCPUEallwk ~ trollCPUE, data = .) %>% broom::tidy()
+
+```
+Yes. They are significantly positively associated  
+
+<br>
+
+
+## Troll CPUE vs US wild abundance
+
+As can be seen from the following plot and linear model, the US troll fishery CPUE data from weeks 27-29 is marginally predictive (but insignificantly associated) of the annual wild coho abundance. This was modeled as WildAbundance ~ trollCPUE, weighted for the number of unique trips in a given year (to account for varying sample size). The p-value for this term was 0.140. If using weeks weeks 27-30, the relationship improves substantially (p-value=0.0435).  
+Note that this is wild coho abundance for all of Southeast Alaska, not just the boundary area.  
+```{r trollwildrelationship, warning=FALSE, message=FALSE, fig.height=3}
+
+# Not currently used (this is only 2000-2019 data!)
+troll_boundannual <- troll_boundary %>%
+  filter(StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>% # exclude terminal harvest areas
+  group_by(Year) %>%
+  summarise(trollCPUE = mean(CohoCPUE))
+
+trollcpue_wildabund <- wildabundance %>%
+  #filter(Year >= 2000) %>% # uncomment this for final
+  filter(Year < 2020) %>%
+  left_join(troll81to19) # replace with troll_boundannual for final
+
+
+ggplot(trollcpue_wildabund, aes(x=trollCPUE, y = EstTotalWildAbund, color = numtrips)) +
+  #geom_text(aes(label = Year)) +
+  geom_smooth(method = "lm") +
+  geom_point() +
+  geom_point(data = trollcpue_wildabund %>% filter(Year == 2019), aes(x=trollCPUE, y = EstTotalWildAbund), color = "red") +
+  geom_point(data = trollcpue_wildabund %>% filter(Year == 2018), aes(x=trollCPUE, y = EstTotalWildAbund), color = "orange") +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x = "Troll CPUE (Weeks 27-29)", y = "Estimated SEAK Wild Coho Abundance", 
+       title = "Relationship between US troll CPUE and wild coho abundance",
+       subtitle = "2018 is orange, 2019 is red",
+       caption = "Early season US troll CPUE is mildly reflective of overall SEAK wild coho abundance",
+       color = "Number of unique trips")  +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+
+lm(EstTotalWildAbund ~ trollCPUE, weights = numtrips, data = trollcpue_wildabund) %>% broom::tidy()
+
+
+```
+
+<br>   
+  
+___    
+   
+
+
+# Prelim Background Charts 
+Here we explore the background of some alternative sources of inseason coho salmon indicators. We have three alternative projects: the Tyee Test Fishery (Canada), the Nass River Fishwheels (Canada), and the Hugh Smith Lake weir (Alaska). Of these, Hugh Smith Lake was found early on to not be useful for predicting troll CPUE; background plots will not be shown for Hugh Smith Lake. 
+```{r prelimplots, warning=FALSE, message=FALSE, fig.height=3}
+# I had this in there and it's a great viz but is duplicative
+# ggplot(tyeecpue, aes(x = Std_date, y = CohoCPUE, color = Year, group = Year)) +
+#   geom_smooth(se = F) +
+#   scale_y_continuous(limits = c(0, 10)) +
+#   labs(title = "Tyee CPUE over time, smoothed", x = "", y = "Coho CPUE")
+
+ggplot(tyee_weekly, aes(x = week, y = Tyee_cpue, color = Year, group = Year)) +
+  geom_line() +
+  scale_y_continuous(limits = c(0, 11)) +
+  labs(title = "Tyee CPUE by stat week", x = "Stat Week", y = "Coho CPUE") +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+
+ggplot(NassFW_weekly, aes(x=week, y = Nass_coho, group = Year, color = Year)) + 
+  geom_line() +
+  labs(title = "Nass FW Catch by stat week", x = "Stat Week", y = "Coho Count") +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+
+ggplot(troll_USboundary %>% filter(StatWeek <40, Year > 1999), 
+       aes(x=StatWeek, y = trollCPUE, group = Year, color = Year)) +
+  geom_point() + 
+  geom_line() +
+  labs(title = "US Boundary Area Troll CPUE by Stat Week", x = "Stat Week", y = "Troll Coho CPUE") +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+
+
+```
+
+
+<br>   
+  
+___    
+   
+
+# Troll Summary Table
+Look at whether the effort, totals, or samples have changed over time
+
+```{r trollchangetrend,  warning=FALSE, message=FALSE}
+troll_boundarysummary <- troll_boundary %>%
+#  mutate(stddate = as_date(paste0("2020/", month(SellDate), "/", day(SellDate))),
+#         preJuly25 = stddate <= as_date("2020-07-25")) %>% # This section can set up filter to exclude >7/25
+  filter(StatWeek <= 29, # exclude week 30, based on treaty language
+         StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>%
+  group_by(Year) %>%
+  summarise(meanTrollCPUE = round(mean(CohoCPUE), 1),
+            totalTrollEffort = round(sum(Effort_boatdays), 1),
+            totalTrollCaught = sum(CohoCatch),
+            numsamples = length(Effort_boatdays))
+
+troll_boundarysummary %>%
+  knitr::kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  kable_paper() %>%
+  #scroll_box(width = "100%", height = "400px") %>%
+  column_spec(2, color = spec_color(troll_boundarysummary$meanTrollCPUE[1:20], option = "plasma", end = 0.95, direction = -1))
+```
+
+
+<br>   
+  
+___    
+   
+
+# Indices Correlations
+```{r indicescorr, echo=FALSE, warning=FALSE}
+
+nasstyeecor <- cor(indices$Nass_coho, indices$Tyee_cpue, use="complete.obs")
+
+# Tyee: This is ALL Weeks and ALL years
+trolltyeecor <- cor(indices$trollCPUE, indices$Tyee_cpue, use="complete.obs")
+trolltyeelead1cor <- cor(indices$trollCPUE, lead(indices$Tyee_cpue, 1), use="complete.obs")
+trolltyeelead2cor <- cor(indices$trollCPUE, lead(indices$Tyee_cpue, 2), use="complete.obs")
+
+# Tyee: This is only weeks 27-29 and years 2000-2019
+trolltyeecorpost2000 <- cor(indices_2000$trollCPUE, indices_2000$Tyee_cpue, use="complete.obs")
+trolltyeelead1corpost2000 <- cor(indices_2000$trollCPUE, lead(indices_2000$Tyee_cpue, 1), use="complete.obs")
+trolltyeelead2corpost2000 <- cor(indices_2000$trollCPUE, lead(indices_2000$Tyee_cpue, 2), use="complete.obs")
+
+
+
+# Nass: This is only weeks 27-29 and years 2000-2019
+trollnasscorpost2000 <- cor(indices_2000$trollCPUE, indices_2000$Nass_coho, use="complete.obs")
+trollnasslead1corpost2000 <- cor(indices_2000$trollCPUE, lead(indices_2000$Nass_coho, 1), use="complete.obs")
+trollnasslead2corpost2000 <- cor(indices_2000$trollCPUE, lead(indices_2000$Nass_coho, 2), use="complete.obs")
+```
+The Tyee Test Fishery has existed since 1956; Nass fishwheel data goes back to 2000. Looking at overlapping years (2000-2019), the all-week correlation between Nass and Tyee is `r round(nasstyeecor, 2)`. This shows that these two systems track each other pretty well!
+
+**Tyee Test Fishery**  
+The Tyee Test Fishery has a moderate correlation with the SEAK FPD data (Districts 101/102). The all-years, all-weeks correlation between the troll data and the Tyee is `r round(trolltyeecor, 2)`. Because there is a lagged effect between troll and Tyee catches, we also looked at lagged data of 1 week (correlation = `r round(trolltyeelead1cor, 2)`) and 2 weeks (correlation = `r round(trolltyeelead2cor, 2)`).  
+There is a noticeable difference in the correlation between earlier years (<2000) and the 2000-2019 data. The correlation has increased over time. All Tyee analysis only looked at 2000-2019 data and Stat Weeks 27-29.  
+
+**Nass Fishwheels**  
+The Nass Fishwheels have a moderate correlation with the SEAK FPD data (Districts 101/102). The correlation between the troll data and the Nass is `r round(trollnasscorpost2000, 2)`. Because there is a lagged effect between troll and Tyee catches, we also looked at lagged data of 1 week (correlation = `r round(trollnasslead1corpost2000, 2)`) and 2 weeks (correlation = `r round(trollnasslead2corpost2000, 2)`).  
+
+_Using the post 2000 data, using a lag of 1 week is optimal_
+
+<br>
+
+## Correlation Table
+The correlation btwn Tyee & SEAK troll changed pre- & post 2000. These data aren't shown here but were found using FPD 1981-2000 and 2000-2019. 
+```{r morecorr, echo=FALSE, warning=FALSE}
+
+indices_2000 %>%
+  dplyr::select(-Year, -week) %>%
+  correlation() %>% 
+  mutate_at(c("r", "CI_low",	"CI_high",	"t"), round, 2) %>%
+  knitr::kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  kable_paper() 
+
+
+```
+Correlation of rho=0.87 between troll CPUE & Nass FW (lead one week; i.e., next week's Nass catch)
+Correlation of rho=0.67 between troll CPUE & Tyee Test fishery (lead one week; i.e., next week's Tyee CPUE)  
+Why compare to next week's catch? We want to first be sure that the abundance in the troll fishery is correlated to the inriver abundance, but lagged for travel time. Thus, these are good indicators that reflect the US troll fishery.  
+<br>
+More important for a treaty trigger assessment is evaluating same week comparisons (e.g., we can't use Stat Week 31 Nass FW catches to make a decision in Stat Week 30).  
+The top model is Tyee CPUE.  
+
+
+<br>   
+  
+___    
+   
+
+# Indices Plots
+```{r indicesplots, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3}
+
+
+tyeetroll <- indices_2000 %>%
+  ggplot(aes(x = trollCPUE, y = Tyee_cpue, color = Year)) +
+  geom_smooth(method = "lm", color = "black") + 
+  geom_point(size = 2) +
+  labs(x = "Troll FPD CPUE", y = "Tyee CPUE, same weeks", 
+       title = "Troll CPUE vs Tyee CPUE, Stat Weeks 27–29") +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+tyeetroll
+
+tyeelead <- indices_2000 %>%
+  ggplot(aes(x = trollCPUE, y = Tyee_cpue_lead1, color = Year)) +
+  geom_smooth(method = "lm", color = "black") + 
+  geom_point(size = 2) +
+  labs(x = "Troll FPD CPUE (Districts 101/102)", y = "Tyee CPUE, one week lead", 
+       title = "Troll CPUE vs following week Tyee CPUE, Stat Weeks 27–29") +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+tyeelead
+#ggsave(tyeelead, filename = here::here("output/TRIGGER_tyee_corrplot_lead.png"), width = 6.5, height = 4, units = "in")
+
+
+nasstroll <- indices_2000 %>%
+  ggplot(aes(x = trollCPUE, y = Nass_coho, color = Year)) +
+  geom_smooth(method = "lm", color = "black") + 
+  geom_point(size = 2) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x = "Troll FPD CPUE", y = "Nass Catch, same weeks", 
+       title = "Troll CPUE vs Nass catch, Stat Weeks 27–29") +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+nasstroll
+
+
+nasslead <- indices_2000 %>%
+  ggplot(aes(x = trollCPUE, y = Nass_coho_lead1, color = Year)) +
+  geom_smooth(method = "lm", color = "black") + 
+  geom_point(size = 2) +
+  scale_y_continuous(labels = scales::comma) +
+  labs(x = "Troll FPD CPUE", y = "Nass Catch, one week lead", 
+       title = "Troll CPUE vs following week Nass catch, Stat Weeks 27–29") +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+nasslead
+#ggsave(nasslead, filename = here::here("output/TRIGGER_nass_corrplot_lead.png"), width = 6.5, height = 4, units = "in")
+
+```
+
+For the following week plots, we see that several data points have very high influence. Excluding those points, e.g., `filter(trollCPUE < 70)` makes the model fit decrease.  
+
+
+<br>   
+  
+___    
+   
+
+# Modeling
+```{r modeling, warning=FALSE, message=FALSE, fig.height=3}
+
+mod_HS <- lm(trollCPUE ~ HS_count, data = indices_2000)
+mod_nass <- lm(trollCPUE ~ Nass_coho, data = indices_2000)
+mod_tyee <- lm(trollCPUE ~ Tyee_cpue, data = indices_2000)
+mod_nasstyee <- lm(trollCPUE ~ Nass_coho + Tyee_cpue, data = indices_2000)
+mod_nasslead <- lm(trollCPUE ~ Nass_coho_lead1, data = indices_2000)
+mod_tyeelead <- lm(trollCPUE ~ Tyee_cpue_lead1, data = indices_2000)
+mod_nasswk <- lm(trollCPUE ~ Nass_coho_lead1 + week, data = indices_2000)
+mod_tyeewk <- lm(trollCPUE ~ Tyee_cpue_lead1 + week, data = indices_2000)
+
+
+#summary(mod_HS) # Hugh Smith isn't a sig indicator of troll CPUE
+#summary(mod_nass) # 
+#summary(mod_tyee) # 
+#summary(mod_nasstyee) # much collinearity, but improves fit
+#summary(mod_nasslead) # fairly good indicator
+#summary(mod_tyeelead) # not as good as Nass lead1
+#summary(mod_nasswk)
+#summary(mod_tyeewk)
+
+modelcomparisons <- tibble(`Model Formula` = 
+           c(paste0(mod_HS$call)[2],
+             paste0(mod_nass$call)[2],
+             paste0(mod_tyee$call)[2],
+             paste0(mod_nasstyee$call)[2],
+             paste0(mod_nasslead$call)[2],
+             paste0(mod_tyeelead$call)[2],
+             paste0(mod_nasswk$call)[2],
+             paste0(mod_tyeewk$call)[2])) %>%
+  add_column(
+rbind(broom::glance(mod_HS) %>% dplyr::select(AIC, adj.r.squared, p.value),
+      broom::glance(mod_nass) %>% dplyr::select(AIC, adj.r.squared, p.value),
+      broom::glance(mod_tyee) %>% dplyr::select(AIC, adj.r.squared, p.value),
+      broom::glance(mod_nasstyee) %>% dplyr::select(AIC, adj.r.squared, p.value),
+      broom::glance(mod_nasslead) %>% dplyr::select(AIC, adj.r.squared, p.value),
+      broom::glance(mod_tyeelead) %>% dplyr::select(AIC, adj.r.squared, p.value),
+      broom::glance(mod_nasswk) %>% dplyr::select(AIC, adj.r.squared, p.value),
+      broom::glance(mod_tyeewk) %>% dplyr::select(AIC, adj.r.squared, p.value))) %>%
+  mutate(p.value = round(p.value, 3),
+         p.value = ifelse(p.value < 0.001, "<0.001", p.value)) # For presentation purposes turn to char
+
+
+modelcomparisons %>%
+  knitr::kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  kable_paper() %>% kableExtra::kable_styling(full_width = F)
+```
+
+<br> 
+
+  
+## Top Model   
+
+The top model using no lag included only the variable Tyee Fishery data. Below are some summary output and diagnostics from the top model: 
+```{r topmodel, warning=FALSE, message=FALSE, fig.height=3}
+topmod <- mod_tyee
+summary(topmod) 
+plot(residuals(topmod))
+qqnorm(indices_2000$trollCPUE)
+qqline(indices_2000$trollCPUE)
+checkresiduals(topmod) # from package "forecast"
+```
+
+
+<br>   
+  
+___    
+   
+
+# RECOMMENDATIONS
+Below we present several options from which to base future boundary area closure triggers. The Tyee data was the top performing modelin terms of correlation with US troll CPUE, In addition to model perfomance, we recommend using Tyee data given the longer time-series, ability to operate in high-water events, and standardization of methods. 
+
+_**Option 1 - Status Quo**_  
+While there is some validity to the fear that low fishery participation (and thus low sample sizes) might not represent the true CPUE, in general, we find that low troll CPUE corresponds to low US wild coho abundance. Notably, 2018 and 2019 are both within the standard error of the linear model. However, this relationship might change in the future.   
+
+_**Option 2 - Replace US Troll CPUE with Tyee Fishery CPUE**_  
+If US troll fishery participation in Districts 101 and 102 continues to worsen, there might not be enough effort to accurately reflect true CPUE. In this case, we could use the Tyee Test Fishery data inseason. There exists a moderate-strong correlation between Tyee and US Troll CPUE. Alternatively, using the Nass River Fishwheel catches is also strong indicator.  
+
+_**Option 3 - Create an inseason index composed of US Troll CPUE & Tyee Fishery CPUE**_  
+A cross-border option of creating an inseason index of both US Troll CPUE and Tyee Test Fishery CPUE would compensate for declining US effort and allow an equitable solution to the issue of the US troll fleet affecting closures in the Canadian fleet. If selected, further modeling would be required to determine equivalent cutoff levels. 
+
+_**Option 4 - Create an inseason index composed of US and Canadian Troll CPUE**_  
+A fishery-dependent, cross-border data series composed of CPUE from both US and Canadian fishermen would allow for wider geographical representation of the stock. It is unknown whether Canadian managers collect, process, and distribute such data inseason.  
+
+<br>  
+ 
+Based on the previous assessments, it is our recommendation that boundary area closures are based upon data from both sides of the border. If suitable Canadian troll CPUE data can be used, that is preferable. However, given the dearth of transparency in the Canadian troll CPUE, we recommend Option 3. In such a scenario, we would likely weight both US and Canadian data equally.   
+
+We also are supportive of including data through Stat Week 30; this allows more data to be incorporated in inseason assessments. Moving the deadline for data cutoff does not appear to adversely affect conservation given observed timing of harvest and movement into the Nass and Skeena rivers.   
+
+<br>   
+  
+___    
+
+
+# Appendix 1 - Autocorrelation
+```{r autocorr1, warning=FALSE, fig.height=3}
+acf(indices_2000$trollCPUE, na.action = na.exclude, main = "Autocorr - Troll CPUE - 2000-2019")
+acf(indices_2000$Nass_coho, na.action = na.exclude, main = "Autocorr - Nass FW - 2000-2019")
+acf(indices_2000$Tyee_cpue, na.action = na.exclude, main = "Autocorr - Tyee Fishery - 2000-2019")
+
+pacf(indices_2000$trollCPUE, na.action = na.exclude, main = "Partial autocorr - Troll CPUE - 2000-2019")
+```
+
+<br>
+Just to check. This includes all stat weeks but for a longer time frame
+```{r autocorr2,  warning=FALSE, fig.height=3}
+acf((indices %>% filter(Year > 1990))$trollCPUE, na.action = na.exclude, main = "Autocorr - Troll CPUE - 1990-2019")
+
+```
+Summary: There is very little autocorrelation. It doesn't appear to be substantial and we will ignore it.  
+
+
+<br>   
+  
+___    
+   
+
+# Appendix 2 - 2020 Troll Table 
+Below is the same table as presented earlier but updated with 2020 numbers:
+```{r troll2020, echo=FALSE, warning=FALSE, message=FALSE,}
+troll_cpue2020 <- read_csv(here::here("data/_PRIVATE_SEAK_Coho_TrollFPD_1981-2020_July20.csv"), 
+                           guess_max = 84000) %>% #increased guess b/c of many blanks 
+  rename("Gear" = `Gear Code`,
+         "SellDate" = `Sell Date`, 
+         "StatWeek" = `Stat Week`, 
+         "TrollArea" = `Troll Area`,
+         "StatArea" = `Stat Area`,
+         "DaysFished" = `FPD-Days Fished`,
+         "HoursPerDay" = `Hours per Day`,
+         "CohoCatch" = "Coho") %>% 
+  filter(District == 101 | District == 102,
+         Gear == 15) %>% # remove hand troll (power troll only)
+  mutate(SellDate = as_date(as.POSIXct(SellDate, format = "%m/%d/%Y", tz = "US/Alaska")),
+         District = as.factor(District),
+         Effort_boatdays = DaysFished * HoursPerDay / 13, # Effort is standardized to a 13 hour boat day
+         CohoCPUE = CohoCatch / Effort_boatdays) %>% 
+  dplyr::select(Year, SellDate, StatWeek, TrollArea, District, StatArea, CohoCatch, Effort_boatdays, CohoCPUE)
+
+allyr_summary <- troll_cpue2020 %>% 
+  filter(StatWeek <= 29, # exclude week 30, based on treaty language
+         StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>%
+  group_by(Year) %>%
+  summarise(meanCPUE = mean(CohoCPUE),
+            totalCaught = sum(CohoCatch),
+            totalEffort = sum(Effort_boatdays),
+            numsamples = length(Effort_boatdays))
+
+allyr_summary %>%
+  knitr::kable() %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed")) %>%
+  kable_paper() %>%
+  scroll_box(width = "100%", height = "400px") 
+```
+
+<br>   
+  
+___    
+   
+
+# Appendix 3 - Troll mean of a mean method summary
+```{r meanofamean, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3}
+meanofmean <- troll_cpue2020 %>% 
+  filter(StatWeek <= 29, # exclude week 30, based on treaty language
+         StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>%
+  group_by(Year, StatWeek) %>%
+  summarise(meanCPUE = mean(CohoCPUE)) %>%
+  group_by(Year) %>%
+  summarise(meanofmeanCPUE = mean(meanCPUE)) %>% left_join(allyr_summary) %>%
+  mutate(diff = meanofmeanCPUE - meanCPUE)
+
+
+```
+Often, troll data are summarized to mean weekly CPUE, then annual summaries are averaged based off these weekly averages. This ("mean of a mean") will produce an estimate that typically skews higher than just taking the average of all data.  
+The sum of the differences of "mean of a mean" method vs total season method was `r round(sum(meanofmean$diff), 1)`. (If there were no difference, this value should be close to zero). On average, the "mean of a mean" was `r round(mean(meanofmean$diff), 2)` units of CPUE higher.  
+Thus, if producing an annual estimate, basing it on the overall harvest will given a truer representation of the season's harvest. Avoid taking the mean of a mean.  
+
+This is further shown in this plot showing two methods to summarizing the troll CPUE. Most of the points are above the 1:1 line, indicating that the "mean of a mean" is higher than the overall mean. 
+```{r meanofameanplot, echo=FALSE, warning=FALSE, message=FALSE, fig.height=3}
+plot(meanofmeanCPUE ~ meanCPUE, data = meanofmean)            
+abline(a=0, b=1)
+```
+
+___  
+
+
+
