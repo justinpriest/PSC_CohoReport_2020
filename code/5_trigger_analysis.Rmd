@@ -118,7 +118,8 @@ troll_cpue <- read_csv(here::here("data/SEAK_Coho_TrollFPD_1981-2019.csv"),
 <br>  
 
 ## Troll CPUE: Early vs all weeks
-Does troll CPUE in early weeks predict the CPUE for the rest of the season?
+Does troll CPUE in early weeks predict the CPUE for the rest of the season?  
+
 ```{r trollbackground, message=FALSE, warning=FALSE, fig.height=3}
 # same as above but this includes 1981-2000 data
 troll81to19 <- troll_cpue %>%
@@ -527,8 +528,10 @@ acf(indices_2000$Tyee_cpue, na.action = na.exclude, main = "Autocorr - Tyee Fish
 pacf(indices_2000$trollCPUE, na.action = na.exclude, main = "Partial autocorr - Troll CPUE - 2000-2019")
 ```
 
-<br>
-Just to check. This includes all stat weeks but for a longer time frame
+<br>  
+
+Just to check. This includes all stat weeks but for a longer time frame  
+
 ```{r autocorr2,  warning=FALSE, fig.height=3}
 acf((indices %>% filter(Year > 1990))$trollCPUE, na.action = na.exclude, main = "Autocorr - Troll CPUE - 1990-2019")
 
@@ -543,7 +546,7 @@ ___
    
 
 # Appendix 2 - 2020 Troll Table 
-Below is the same table as presented earlier but updated with 2020 numbers:
+Below is the same table as presented earlier but updated with 2020 numbers:  
 ```{r troll2020, warning=FALSE, message=FALSE}
 troll_cpue2020 <- read_csv(here::here("data/_PRIVATE_SEAK_Coho_TrollFPD_1981-2020_July20.csv"), 
                            guess_max = 84000) %>% #increased guess b/c of many blanks 
