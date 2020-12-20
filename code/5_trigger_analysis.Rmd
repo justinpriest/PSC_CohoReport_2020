@@ -35,12 +35,13 @@ _Note: Canada has just sent some troll data. It is summarized by month week (NOT
 knitr::opts_chunk$set(echo = TRUE)
 
 # Libraries
-library("correlation")
-library("lme4")
-library("forecast")
-library("kableExtra")
-library("broom")
-library("adfgcolors") # remotes::install_github("justinpriest/adfgcolors")
+library(correlation)
+library(lme4)
+library(forecast)
+library(kableExtra)
+library(broom)
+library(adfgcolors) # remotes::install_github("justinpriest/adfgcolors")
+library(janitor)
 
 
 source(here::here("code/1_US_data_import.R"))
@@ -60,7 +61,7 @@ troll_USboundary <- troll_boundary %>%
   filter(between(StatWeek, 27, 29),
     StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>% # exclude terminal harvest areas
   group_by(Year, StatWeek) %>%
-  summarise(trollCPUE = mean(CohoCPUE))
+  summarise(UStrollCPUE = mean(CohoCPUE))
 #101-40, 101-41, 101-45,
 
 
@@ -72,14 +73,29 @@ hughsmith_esc <- read_csv(here::here("data/SEAK_Coho_HughSmithDailyEscapement_19
          week = statweek(Date)) %>%
   group_by(Year, week) %>%
   summarise(HS_count = sum(Count))
-  
+
+
+# NBC Troll 
+nbctroll <- read_csv(here::here("data/_PRIVATE_NBC_Coho_TrollHarvest2001-2019.csv")) %>%
+  janitor::clean_names() %>%
+  rename("Can_week" = "stat_week",
+         "Year" = "year") %>%
+  mutate(harvestdate = as_date(as.POSIXct(fishing_date, format = "%m/%d/%Y", tz = "America/Vancouver")),
+         StatWeek = statweek(harvestdate),
+         cohototal = coho_kept + coho_reld) %>% 
+  filter(mgmt_area == 101 | mgmt_area == 1) %>%
+  dplyr::select(Year, mgmt_area, harvestdate, StatWeek, subarea, 
+                fe_effort, fe_hrs_fished, fe_set_no, cohototal) %>%
+  group_by(Year, StatWeek) %>%
+  summarise(NBCtrollcoho = sum(cohototal))
 
 
 # Put these indices  together  
 indices <- tyee_weekly %>% 
   left_join(NassFW_weekly) %>% 
   left_join(troll_USboundary, by = c("Year" = "Year", "week" = "StatWeek")) %>%
-  left_join(hughsmith_esc)
+  left_join(hughsmith_esc) %>% 
+  left_join(nbctroll, by = c("Year" = "Year", "week" = "StatWeek"))
 # Originally the FPD data 1981-2019 but this was restricted. May see vestigial references to pre-2000 data
 
 
@@ -93,7 +109,7 @@ indices_2000 <- indices %>%
 
 
 # This is the 1981-2019 data which will be used to show the relationship between CPUE early vs late
-troll_cpue <- read_csv(here::here("data/SEAK_Coho_TrollFPD_1981-2019.csv"), 
+UStroll_cpue <- read_csv(here::here("data/SEAK_Coho_TrollFPD_1981-2019.csv"), 
                        guess_max = 84000) %>% #increased guess b/c of many blanks 
    rename("Gear" = `Gear Code`,
           "TripNum" = `Trip No`,
@@ -117,39 +133,40 @@ troll_cpue <- read_csv(here::here("data/SEAK_Coho_TrollFPD_1981-2019.csv"),
 
 <br>  
 
-## Troll CPUE: Early vs all weeks
-Does troll CPUE in early weeks predict the CPUE for the rest of the season?  
+## US Troll CPUE: Early vs all weeks
+Does US troll CPUE in early weeks predict the CPUE for the rest of the season?  
 
-```{r trollbackground, message=FALSE, warning=FALSE, fig.height=3}
+```{r UStrollbackground, message=FALSE, warning=FALSE, fig.height=3}
 # same as above but this includes 1981-2000 data
-troll81to19 <- troll_cpue %>%
+troll81to19 <- UStroll_cpue %>%
   filter(District == "101" | District == "102",
          StatWeek <= 29) %>%
   filter(StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>% # exclude terminal harvest areas
   group_by(Year) %>%
-  summarise(trollCPUE = mean(CohoCPUE),
+  summarise(UStrollCPUE = mean(CohoCPUE),
             numtrips = n_distinct(TripNumber)) 
 
-troll81to19allweeks <- troll_cpue %>%
+troll81to19allweeks <- UStroll_cpue %>%
   filter(District == "101" | District == "102") %>% 
   filter(StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>% # exclude terminal harvest areas
   group_by(Year) %>%
-  summarise(trollCPUEallwk = mean(CohoCPUE),
-            numtripsallwk = n_distinct(TripNumber)) 
+  summarise(UStrollCPUEallwk = mean(CohoCPUE),
+            USnumtripsallwk = n_distinct(TripNumber)) 
 
 # Does troll CPUE in early weeks predict the CPUE for the rest of the season?
 troll81to19 %>% 
   left_join(troll81to19allweeks) %>% 
-  ggplot(aes(x=trollCPUE, y=trollCPUEallwk, fill=Year)) +
+  ggplot(aes(x=UStrollCPUE, y=UStrollCPUEallwk, fill=Year)) +
   geom_point(pch = 21, color="black", size = 3) +
   geom_smooth(method = "lm") +
   scale_fill_adfg("glacier", discrete = FALSE) +
-  labs(x = "Troll CPUE (Weeks 27-29)", y = "Troll CPUE (All Weeks)", title = "Troll CPUE: Early vs All Season")  +
+  labs(x = "US Troll CPUE (Weeks 27-29)", y = "Troll CPUE (All Weeks)", 
+       title = "US Troll CPUE: Early vs All Season")  +
   theme_coho(base_family = "Arial", rotate_text = FALSE)
 
 troll81to19 %>% 
   left_join(troll81to19allweeks) %>%
-  lm(trollCPUEallwk ~ trollCPUE, data = .) %>% broom::tidy()
+  lm(UStrollCPUEallwk ~ UStrollCPUE, data = .) %>% broom::tidy()
 
 
 ```
@@ -158,9 +175,9 @@ Yes. They are significantly positively associated
 <br>
 
 
-## Troll CPUE vs US wild abundance
+## US Troll CPUE vs US wild abundance
 
-As can be seen from the following plot and linear model, the US troll fishery CPUE data from weeks 27--29 is marginally predictive (but insignificantly associated) of the annual wild coho abundance. This was modeled as WildAbundance ~ trollCPUE, weighted for the number of unique trips in a given year (to account for varying sample size). The p-value for this term was 0.140. If using weeks weeks 27-30, the relationship improves substantially (p-value=0.0435).  
+As can be seen from the following plot and linear model, the US troll fishery CPUE data from weeks 27--29 is marginally predictive (but insignificantly associated) of the annual wild coho abundance. This was modeled as WildAbundance ~ UStrollCPUE, weighted for the number of unique trips in a given year (to account for varying sample size). The p-value for this term was 0.140. If using weeks weeks 27--30, the relationship improves substantially (p-value=0.0435).  
 Note that this is wild coho abundance for all of Southeast Alaska, not just the boundary area.  
 ```{r trollwildrelationship, warning=FALSE, message=FALSE, fig.height=3}
 
@@ -168,22 +185,22 @@ Note that this is wild coho abundance for all of Southeast Alaska, not just the 
 troll_boundannual <- troll_boundary %>%
   filter(StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>% # exclude terminal harvest areas
   group_by(Year) %>%
-  summarise(trollCPUE = mean(CohoCPUE))
+  summarise(UStrollCPUE = mean(CohoCPUE))
 
-trollcpue_wildabund <- wildabundance %>%
+UStrollcpue_wildabund <- wildabundance %>%
   #filter(Year >= 2000) %>% # uncomment this for final
   filter(Year < 2020) %>%
   left_join(troll81to19) # replace with troll_boundannual for final
 
 
-ggplot(trollcpue_wildabund, aes(x=trollCPUE, y = EstTotalWildAbund, fill = numtrips)) +
+ggplot(UStrollcpue_wildabund, aes(x=UStrollCPUE, y = EstTotalWildAbund, fill = numtrips)) +
   #geom_text(aes(label = Year)) +
   geom_smooth(method = "lm") +
   geom_point(size = 3, pch = 21, color = "black") +
-  geom_point(data = trollcpue_wildabund %>% filter(Year == 2019), 
-             aes(x=trollCPUE, y = EstTotalWildAbund), pch = 21, size = 3, color = "black", fill = "red") +
-  geom_point(data = trollcpue_wildabund %>% filter(Year == 2018), 
-             aes(x=trollCPUE, y = EstTotalWildAbund), pch = 21, size = 3, color = "black", fill = "orange") +
+  geom_point(data = UStrollcpue_wildabund %>% filter(Year == 2019), 
+             aes(x=UStrollCPUE, y = EstTotalWildAbund), pch = 21, size = 3, color = "black", fill = "red") +
+  geom_point(data = UStrollcpue_wildabund %>% filter(Year == 2018), 
+             aes(x=UStrollCPUE, y = EstTotalWildAbund), pch = 21, size = 3, color = "black", fill = "orange") +
   scale_y_continuous(labels = scales::comma) +
   scale_fill_adfg("aurora", discrete = FALSE) +
   labs(x = "Troll CPUE (Weeks 27-29)", y = "Est. SEAK Wild Coho Abundance", 
@@ -193,7 +210,7 @@ ggplot(trollcpue_wildabund, aes(x=trollCPUE, y = EstTotalWildAbund, fill = numtr
        fill = "Unique trips")  +
   theme_coho(base_family = "Arial", rotate_text = FALSE)
 
-lm(EstTotalWildAbund ~ trollCPUE, weights = numtrips, data = trollcpue_wildabund) %>% broom::tidy()
+lm(EstTotalWildAbund ~ UStrollCPUE, weights = numtrips, data = UStrollcpue_wildabund) %>% broom::tidy()
 
 
 ```
@@ -225,7 +242,7 @@ ggplot(NassFW_weekly, aes(x=week, y = Nass_coho, group = Year, color = Year)) +
   theme_coho(base_family = "Arial", rotate_text = FALSE)
 
 ggplot(troll_USboundary %>% filter(StatWeek <40, Year > 1999), 
-       aes(x=StatWeek, y = trollCPUE, group = Year, color = Year)) +
+       aes(x=StatWeek, y = UStrollCPUE, group = Year, color = Year)) +
   geom_point() + 
   geom_line() +
   labs(title = "US Boundary Area Troll CPUE by Stat Week", x = "Stat Week", y = "Troll Coho CPUE") +
@@ -243,7 +260,7 @@ ___
 # Troll Summary Table
 Look at whether the effort, totals, or samples have changed over time
 
-```{r trollchangetrend,  warning=FALSE, message=FALSE}
+```{r trollchangetrend, warning=FALSE, message=FALSE}
 troll_boundarysummary <- troll_boundary %>%
 #  mutate(stddate = as_date(paste0("2020/", month(SellDate), "/", day(SellDate))),
 #         preJuly25 = stddate <= as_date("2020-07-25")) %>% # This section can set up filter to exclude >7/25
@@ -275,21 +292,21 @@ ___
 nasstyeecor <- cor(indices$Nass_coho, indices$Tyee_cpue, use="complete.obs")
 
 # Tyee: This is ALL Weeks and ALL years
-trolltyeecor <- cor(indices$trollCPUE, indices$Tyee_cpue, use="complete.obs")
-trolltyeelead1cor <- cor(indices$trollCPUE, lead(indices$Tyee_cpue, 1), use="complete.obs")
-trolltyeelead2cor <- cor(indices$trollCPUE, lead(indices$Tyee_cpue, 2), use="complete.obs")
+trolltyeecor <- cor(indices$UStrollCPUE, indices$Tyee_cpue, use="complete.obs")
+trolltyeelead1cor <- cor(indices$UStrollCPUE, lead(indices$Tyee_cpue, 1), use="complete.obs")
+trolltyeelead2cor <- cor(indices$UStrollCPUE, lead(indices$Tyee_cpue, 2), use="complete.obs")
 
 # Tyee: This is only weeks 27-29 and years 2000-2019
-trolltyeecorpost2000 <- cor(indices_2000$trollCPUE, indices_2000$Tyee_cpue, use="complete.obs")
-trolltyeelead1corpost2000 <- cor(indices_2000$trollCPUE, lead(indices_2000$Tyee_cpue, 1), use="complete.obs")
-trolltyeelead2corpost2000 <- cor(indices_2000$trollCPUE, lead(indices_2000$Tyee_cpue, 2), use="complete.obs")
+trolltyeecorpost2000 <- cor(indices_2000$UStrollCPUE, indices_2000$Tyee_cpue, use="complete.obs")
+trolltyeelead1corpost2000 <- cor(indices_2000$UStrollCPUE, lead(indices_2000$Tyee_cpue, 1), use="complete.obs")
+trolltyeelead2corpost2000 <- cor(indices_2000$UStrollCPUE, lead(indices_2000$Tyee_cpue, 2), use="complete.obs")
 
 
 
 # Nass: This is only weeks 27-29 and years 2000-2019
-trollnasscorpost2000 <- cor(indices_2000$trollCPUE, indices_2000$Nass_coho, use="complete.obs")
-trollnasslead1corpost2000 <- cor(indices_2000$trollCPUE, lead(indices_2000$Nass_coho, 1), use="complete.obs")
-trollnasslead2corpost2000 <- cor(indices_2000$trollCPUE, lead(indices_2000$Nass_coho, 2), use="complete.obs")
+trollnasscorpost2000 <- cor(indices_2000$UStrollCPUE, indices_2000$Nass_coho, use="complete.obs")
+trollnasslead1corpost2000 <- cor(indices_2000$UStrollCPUE, lead(indices_2000$Nass_coho, 1), use="complete.obs")
+trollnasslead2corpost2000 <- cor(indices_2000$UStrollCPUE, lead(indices_2000$Nass_coho, 2), use="complete.obs")
 ```
 The Tyee Test Fishery has existed since 1956; Nass fishwheel data goes back to 2000. Looking at overlapping years (2000-2019), the all-week correlation between Nass and Tyee is `r round(nasstyeecor, 2)`. This shows that these two systems track each other pretty well!
 
@@ -311,7 +328,7 @@ The correlation between Tyee & SEAK troll changed pre- & post 2000. These data a
 ```{r corrlead, echo=FALSE, warning=FALSE}
 
 indices_2000 %>%
-  dplyr::select(trollCPUE, Tyee_cpue_lead1, Nass_coho_lead1) %>%
+  dplyr::select(UStrollCPUE, Tyee_cpue_lead1, Nass_coho_lead1) %>%
   correlation() %>% 
   mutate_at(c("r", "CI_low",	"CI_high",	"t"), round, 2) %>%
   knitr::kable() %>%
@@ -328,7 +345,7 @@ Why compare to next week's catch? We want to first be sure that the abundance in
 ### Correlation with same week data  
 ```{r corrsameweek, echo=FALSE, warning=FALSE}
 indices_2000 %>%
-  dplyr::select(trollCPUE,Tyee_cpue, Nass_coho, HS_count) %>%
+  dplyr::select(UStrollCPUE, NBCtrollcoho, Tyee_cpue, Nass_coho, HS_count) %>%
   correlation() %>% 
   mutate_at(c("r", "CI_low",	"CI_high",	"t"), round, 2) %>%
   knitr::kable() %>%
@@ -353,22 +370,22 @@ ___
 
 
 tyeetroll <- indices_2000 %>%
-  ggplot(aes(x = trollCPUE, y = Tyee_cpue, fill = Year)) +
+  ggplot(aes(x = UStrollCPUE, y = Tyee_cpue, fill = Year)) +
   geom_smooth(method = "lm", color = "black") + 
   geom_point(pch = 21, color="black", size = 3) +
   scale_fill_adfg("glacier", discrete = FALSE) +
-  labs(x = "Troll FPD CPUE", y = "Tyee CPUE, same weeks", 
-       title = "Troll CPUE vs Tyee CPUE, Stat Weeks 27–29") +
+  labs(x = "US Troll FPD CPUE", y = "Tyee CPUE, same weeks", 
+       title = "US Troll CPUE vs Tyee CPUE, Stat Weeks 27–29") +
   theme_coho(base_family = "Arial", rotate_text = FALSE)
 tyeetroll
 
 tyeelead <- indices_2000 %>%
-  ggplot(aes(x = trollCPUE, y = Tyee_cpue_lead1, fill = Year)) +
+  ggplot(aes(x = UStrollCPUE, y = Tyee_cpue_lead1, fill = Year)) +
   geom_smooth(method = "lm", color = "black") + 
   geom_point(pch = 21, color="black", size = 3) +
   scale_fill_adfg("glacier", discrete = FALSE) +
-  labs(x = "Troll FPD CPUE (Districts 101/102)", y = "Tyee CPUE, one week lead", 
-       title = "Troll CPUE vs following week Tyee CPUE, Stat Weeks 27–29") +
+  labs(x = "US Troll FPD CPUE (Districts 101/102)", y = "Tyee CPUE, one week lead", 
+       title = "US Troll CPUE vs following week Tyee CPUE, Stat Weeks 27–29") +
   theme_coho(base_family = "Arial", rotate_text = FALSE) +
   annotate(geom = "curve", x = 140, y = 0.1, xend = 115, yend = 0.232, 
             curvature = -0.2, arrow = arrow(length = unit(2, "mm"))) +
@@ -381,25 +398,25 @@ tyeelead
 
 
 nasstroll <- indices_2000 %>%
-  ggplot(aes(x = trollCPUE, y = Nass_coho, fill = Year)) +
+  ggplot(aes(x = UStrollCPUE, y = Nass_coho, fill = Year)) +
   geom_smooth(method = "lm", color = "black") + 
   geom_point(pch = 21, color="black", size = 3) +
   scale_fill_adfg("glacier", discrete = FALSE) +
   scale_y_continuous(labels = scales::comma) +
-  labs(x = "Troll FPD CPUE", y = "Nass Catch, same weeks", 
-       title = "Troll CPUE vs Nass catch, Stat Weeks 27–29") +
+  labs(x = "US Troll FPD CPUE", y = "Nass Catch, same weeks", 
+       title = "US Troll CPUE vs Nass catch, Stat Weeks 27–29") +
   theme_coho(base_family = "Arial", rotate_text = FALSE)
 nasstroll
 
 
 nasslead <- indices_2000 %>%
-  ggplot(aes(x = trollCPUE, y = Nass_coho_lead1, fill = Year)) +
+  ggplot(aes(x = UStrollCPUE, y = Nass_coho_lead1, fill = Year)) +
   geom_smooth(method = "lm", color = "black") + 
   geom_point(pch = 21, color="black", size = 3) +
   scale_fill_adfg("glacier", discrete = FALSE) +
   scale_y_continuous(labels = scales::comma) +
-  labs(x = "Troll FPD CPUE", y = "Nass Catch, one week lead", 
-       title = "Troll CPUE vs following week Nass catch, Stat Weeks 27–29") +
+  labs(x = "US Troll FPD CPUE", y = "Nass Catch, one week lead", 
+       title = "US Troll CPUE vs following week Nass catch, Stat Weeks 27–29") +
   theme_coho(base_family = "Arial", rotate_text = FALSE) +
   annotate(geom = "curve", x = 140, y = 470, xend = 116, yend = 1100, 
             curvature = -0.15, arrow = arrow(length = unit(2, "mm"))) +
@@ -412,7 +429,7 @@ nasslead
 
 ```
 
-For the "following week" plots, we see that several data points have very high influence. Excluding those points, e.g., `filter(trollCPUE < 70)` makes the model fit decrease.  
+For the "following week" plots, we see that several data points have very high influence. Excluding those points, e.g., `filter(UStrollCPUE < 70)` makes the model fit decrease.  
 
 
 <br>   
@@ -423,16 +440,16 @@ ___
 # Modeling
 ```{r modeling, warning=FALSE, message=FALSE, fig.height=3}
 
-mod_HS <- lm(trollCPUE ~ HS_count, data = indices_2000)
-mod_nass <- lm(trollCPUE ~ Nass_coho, data = indices_2000)
-mod_tyee <- lm(trollCPUE ~ Tyee_cpue, data = indices_2000)
-mod_nasswk <- lm(trollCPUE ~ Nass_coho + week, data = indices_2000)
-mod_tyeewk <- lm(trollCPUE ~ Tyee_cpue + week, data = indices_2000)
-mod_nasstyee <- lm(trollCPUE ~ Nass_coho + Tyee_cpue, data = indices_2000)
+mod_HS <- lm(UStrollCPUE ~ HS_count, data = indices_2000)
+mod_nass <- lm(UStrollCPUE ~ Nass_coho, data = indices_2000)
+mod_tyee <- lm(UStrollCPUE ~ Tyee_cpue, data = indices_2000)
+mod_nasswk <- lm(UStrollCPUE ~ Nass_coho + week, data = indices_2000)
+mod_tyeewk <- lm(UStrollCPUE ~ Tyee_cpue + week, data = indices_2000)
+mod_nasstyee <- lm(UStrollCPUE ~ Nass_coho + Tyee_cpue, data = indices_2000)
 
 # Dec 7 Update: Remove the lead1 variables as they're confusing
-# mod_nasslead <- lm(trollCPUE ~ Nass_coho_lead1, data = indices_2000)
-# mod_tyeelead <- lm(trollCPUE ~ Tyee_cpue_lead1, data = indices_2000)
+# mod_nasslead <- lm(UStrollCPUE ~ Nass_coho_lead1, data = indices_2000)
+# mod_tyeelead <- lm(UStrollCPUE ~ Tyee_cpue_lead1, data = indices_2000)
 
 
 
@@ -482,8 +499,8 @@ The top single variable model using no lag was the model with the Tyee Fishery d
 topmod <- mod_tyee
 summary(topmod) 
 plot(residuals(topmod))
-qqnorm(indices_2000$trollCPUE)
-qqline(indices_2000$trollCPUE)
+qqnorm(indices_2000$UStrollCPUE)
+qqline(indices_2000$UStrollCPUE)
 checkresiduals(topmod) # from package "forecast"
 ```
 
@@ -521,11 +538,11 @@ ___
 
 # Appendix 1 - Autocorrelation
 ```{r autocorr1, warning=FALSE, fig.height=3}
-acf(indices_2000$trollCPUE, na.action = na.exclude, main = "Autocorr - Troll CPUE - 2000-2019")
+acf(indices_2000$UStrollCPUE, na.action = na.exclude, main = "Autocorr - Troll CPUE - 2000-2019")
 acf(indices_2000$Nass_coho, na.action = na.exclude, main = "Autocorr - Nass FW - 2000-2019")
 acf(indices_2000$Tyee_cpue, na.action = na.exclude, main = "Autocorr - Tyee Fishery - 2000-2019")
 
-pacf(indices_2000$trollCPUE, na.action = na.exclude, main = "Partial autocorr - Troll CPUE - 2000-2019")
+pacf(indices_2000$UStrollCPUE, na.action = na.exclude, main = "Partial autocorr - Troll CPUE - 2000-2019")
 ```
 
 <br>  
@@ -533,7 +550,7 @@ pacf(indices_2000$trollCPUE, na.action = na.exclude, main = "Partial autocorr - 
 Just to check. This includes all stat weeks but for a longer time frame  
 
 ```{r autocorr2,  warning=FALSE, fig.height=3}
-acf((indices %>% filter(Year > 1990))$trollCPUE, na.action = na.exclude, main = "Autocorr - Troll CPUE - 1990-2019")
+acf((indices %>% filter(Year > 1990))$UStrollCPUE, na.action = na.exclude, main = "Autocorr - Troll CPUE - 1990-2019")
 
 ```
  
@@ -548,7 +565,7 @@ ___
 # Appendix 2 - 2020 Troll Table 
 Below is the same table as presented earlier but updated with 2020 numbers:  
 ```{r troll2020, warning=FALSE, message=FALSE}
-troll_cpue2020 <- read_csv(here::here("data/_PRIVATE_SEAK_Coho_TrollFPD_1981-2020_July20.csv"), 
+UStroll_cpue2020 <- read_csv(here::here("data/_PRIVATE_SEAK_Coho_TrollFPD_1981-2020_July20.csv"), 
                            guess_max = 84000) %>% #increased guess b/c of many blanks 
   rename("Gear" = `Gear Code`,
          "SellDate" = `Sell Date`, 
@@ -566,7 +583,7 @@ troll_cpue2020 <- read_csv(here::here("data/_PRIVATE_SEAK_Coho_TrollFPD_1981-202
          CohoCPUE = CohoCatch / Effort_boatdays) %>% 
   dplyr::select(Year, SellDate, StatWeek, TrollArea, District, StatArea, CohoCatch, Effort_boatdays, CohoCPUE)
 
-allyr_summary <- troll_cpue2020 %>% 
+allyr_summary <- UStroll_cpue2020 %>% 
   filter(StatWeek <= 29, # exclude week 30, based on treaty language
          StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>%
   group_by(Year) %>%
@@ -589,7 +606,7 @@ ___
 
 # Appendix 3 - Troll mean of a mean method summary
 ```{r meanofamean, warning=FALSE, message=FALSE, fig.height=3}
-meanofmean <- troll_cpue2020 %>% 
+meanofmean <- UStroll_cpue2020 %>% 
   filter(StatWeek <= 29, # exclude week 30, based on treaty language
          StatArea != 101-85, StatArea != 101-90, StatArea != 101-95) %>%
   group_by(Year, StatWeek) %>%

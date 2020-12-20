@@ -91,7 +91,8 @@ US_Fig4 <- SEAK_sport %>%
 (Fig5e <- create_figure5("Chilkat River", setbreaks = c(0, 50000, 100000, 150000, 200000), minyear = 1987) + 
    annotate("text", x = 2000, y = 210000, label = "Chilkat River (Mark-recapture / Expanded Survey)", size = 3.5))
 
-(Fig5f <- create_figure5("Taku River", setbreaks = c(0, 50000, 100000, 150000, 200000), minyear = 1987, blank_x = FALSE) + 
+(Fig5f <- create_figure5("Taku River", setbreaks = c(0, 50000, 100000, 150000, 200000), 
+                         minyear = 1987, blank_x = FALSE) + 
    annotate("text", x = 2000, y = 230000, label = "Taku River (Mark-recapture)", size = 3.5))
 
 US_Fig5 <- Fig5a / Fig5b / Fig5c / Fig5d / Fig5e / Fig5f # This is Patchwork notation to make a stacked figure
@@ -274,7 +275,7 @@ Fig13a <- SEAK_marsurv %>%
    scale_y_continuous(breaks = seq(from=0, to = 35, by = 5)) +
    expand_limits(y = c(0,25)) +
    labs(x = "Return Year", y = "Survival (%)") +
-   annotate("text", x = 2006, y = 24, label = "Outer Coastal System - Ford Arm Lake (Presmolts)", size = 4) +
+   annotate("text", x = 2006, y = 24, label = "Outer Coastal System - Ford Arm Creek (Presmolts)", size = 4) +
    theme_coho(base_family = "Arial") +
    theme(legend.position=c(.8,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(2,"line"),
@@ -336,7 +337,8 @@ US_Fig15 <- indic_totalrun %>%
    filter(Fishery != "Other") %>%
    mutate(Fishery = recode(Fishery, "Escapement" = "All Gear Exploitation",
                            "Alaska Troll" = "Troll Exploitation"),
-          Fishery = fct_relevel(Fishery, "All Gear Exploitation", "Troll Exploitation")) %>%
+          Fishery = fct_relevel(Fishery, "All Gear Exploitation", "Troll Exploitation"),
+          River = recode(River, "Ford Arm Lake" = "Ford Arm Creek")) %>%
    dplyr::select(-Count, -freq, -total) %>%
    ggplot(aes(x=Year, y = index, linetype = Fishery)) + 
    geom_line() +
@@ -348,7 +350,7 @@ US_Fig15 <- indic_totalrun %>%
    theme(legend.position=c(.33,.9), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1.5,"line")) +
    facet_wrap(~River)
-
+US_Fig15
 
 #ggsave(US_Fig15, filename = here::here("output/US_Fig15.png"), width = 6.5, height = 6, units = "in")
 
@@ -499,7 +501,7 @@ summary(lm(Wildharvest ~ Year, data = wildabundance))
 ###### Figure XX ######
 ## Berners Ricker
 
-US_FigXX <- ggplot() + 
+US_FigXX_rick <- ggplot() + 
    geom_line(data = BernersRicker, aes(x=S, y = ricker_fit), color = "black", size = 2) +
    geom_abline(intercept = 0, lty = 2) +
    geom_line(data = BernersRicker, aes(x=S, y = hockey), color = "darkgray", size = 2, lty = "longdash") +
@@ -513,8 +515,8 @@ US_FigXX <- ggplot() +
          legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1.5,"line"),
          legend.background = element_rect(colour = 'darkgray', linetype='solid')) 
-US_FigXX
-#ggsave(US_FigXX, filename = here::here("output/US_FigXX.png"), width = 6.5, height = 4, units = "in")
+US_FigXX_rick
+#ggsave(US_FigXX_rick, filename = here::here("output/US_FigXX_rick.png"), width = 6.5, height = 4, units = "in")
 
 
 
@@ -544,7 +546,7 @@ US_FigXX_smolt <- SEAK_smolt %>%
    #geom_dl(aes(label=River),method="last.points") +
    annotate("text", x = 2016, y = 12000, label= "Auke Creek") + 
    annotate("text", x = 2016, y = 26000, label = "Hugh Smith Lake") + 
-   annotate("text", x = 2016, y = 80000, label= "Ford Arm Lake") + 
+   annotate("text", x = 2016, y = 80000, label= "Ford Arm Creek") + 
    annotate("text", x = 2011.5, y = 275000, label = "Berners River") + 
    annotate("text", x = 2014, y = 550000, label= "Chilkat River") + 
    annotate("text", x = 2016, y = 2500000, label = "Taku River") + 
@@ -553,7 +555,8 @@ US_FigXX_smolt <- SEAK_smolt %>%
    theme_coho() +
    theme(legend.position="none") 
 US_FigXX_smolt
-#ggsave(US_FigXX_smolt, filename = here::here("output/US_FigXX_smolt.png"), width = 6.5, height = 4, units = "in")
+# ggsave(US_FigXX_smolt, filename = here::here("output/US_FigXX_smolt.png"),
+#       width = 6.5, height = 4, units = "in")
 
 
 
@@ -569,7 +572,7 @@ baseline_esc <- indic_totalrun %>%
    summarise(meancount1990_2009 = round(mean(totalcount), 0)) 
 
 
-indic_totalrun %>%
+US_FigXX_relchange <- indic_totalrun %>%
    dplyr::select(Year, River, Fishery, Count) %>%
    group_by(River, Year) %>%
    summarise(totalcount = sum(Count)) %>%
@@ -577,17 +580,25 @@ indic_totalrun %>%
    left_join(baseline_esc, by =  c("River" = "River")) %>%
    mutate(baselinediff = (totalcount - meancount1990_2009) / meancount1990_2009,
           posneg = ifelse(baselinediff > 0, "positive", "negative"),
-          Year = as.integer(Year)) %>%
+          Year = as.integer(Year),
+          River = recode(River, "Ford Arm Lake" = "Ford Arm Creek")) %>%
    ggplot(aes(x = Year, y = baselinediff, fill = posneg)) +
-   geom_col(alpha = 0.75) + 
+   geom_col(alpha = 0.75, color = "black") + 
    geom_hline(yintercept = 0) +
    scale_x_continuous(breaks = seq(from=2010, to=2019, by = 1)) +
    scale_y_continuous(labels = scales::percent) + 
-   scale_fill_manual(values = c("red4", "darkgreen")) +
+   #scale_fill_manual(values = c("red4", "darkgreen")) +
+   scale_fill_manual(values = c("#8f3622", "#548768")) +
+   #scale_fill_manual(values = c("#2e586b", "#0888c2")) +
+   #scale_fill_manual(values = c("gray90", "gray30")) +
    labs(y = "Relative change of total return compared to 1985–2009 baseline") +
    facet_wrap(~River, nrow = 4) +
-   theme_coho(rotate_text = TRUE) +
+   theme_coho(rotate_text = FALSE) +
    theme(legend.position = "none")
+US_FigXX_relchange
+# ggsave(US_FigXX_relchange, filename = here::here("output/US_FigXX_relchange.png"),
+#       width = 6.5, height = 8, units = "in")
+
 rm(baseline_esc)
 
 
