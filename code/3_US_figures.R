@@ -8,6 +8,16 @@
 # Load cleaned up data and import US only data
 source(here::here("code/1_US_data_import.R"))
 
+# Load additional mapping libraries
+library(rnaturalearth)
+library(rnaturalearthhires)
+library(USAboundaries)
+library(sp)
+library(sf)
+library(ggspatial)
+
+
+
 
 # Unfortunately the 1981-2019 file is confidential and cannot be shared
 # Read it in here to prevent sourcing issues in the main data import file
@@ -32,6 +42,37 @@ troll_cpue <- read_csv(here::here("data/SEAK_Coho_TrollFPD_1981-2019.csv"),
                  StatArea, CohoCatch, Effort_boatdays, CohoCPUE)
 
 troll_cpue
+
+
+
+#### FIGURE 1 - MAP - IN PROGRESS! ####
+ak <- us_states(states = "AK", resolution = "high")
+ak_projection <- state_plane("AK")
+ak <- sf::st_transform(ak, ak_projection)
+
+plot(ne_countries(country = 'canada', scale = 'medium', type='map_units'))
+canmap <- ne_states(country = "canada")
+#canmap <- sf::st_transform(canmap, state_plane("AK"))
+plot(canmap)
+canmap <- sf::st_as_sf(canmap)
+
+
+
+ggplot() +
+   geom_sf(data = canmap) +
+   geom_sf(data = ak) +
+   coord_sf(xlim = c(-150, -120), ylim = c(51, 62))
+
+
+ggplot() +
+   geom_sf(data = canmap, fill = "gray85") + 
+   geom_sf(data = ak, fill = "gray95", lwd = 0.25) +
+   coord_sf(xlim = c(-142, -127), ylim = c(53.5, 61), expand = FALSE) + 
+   ggspatial::annotation_scale(location = "bl", width_hint = 0.3) +
+   theme_bw() +
+   theme(panel.grid.major = element_line(colour = 'transparent'))
+
+
 
 
 
@@ -544,6 +585,14 @@ US_FigXX_smolt <- SEAK_smolt %>%
    scale_y_log10(labels = comma, breaks = c(0, 10000, 100000, 1000000)) + 
    scale_color_manual(values = c("#4fa3bd", "black", "#c77512", "#5d8c77", "#6b6b6b", "#66437d")) + 
    #geom_dl(aes(label=River),method="last.points") +
+   geom_smooth(data = SEAK_smolt %>% dplyr::select(SmoltYear, `Ford Arm Creek`) %>%
+               rename("Count" = `Ford Arm Creek`) %>%
+               mutate(River = "Ford Arm Creek"),
+               method = "lm", se = FALSE, linetype = 2) +
+   geom_smooth(data = SEAK_smolt %>% dplyr::select(SmoltYear, `Chilkat River`) %>%
+                     rename("Count" = `Chilkat River`) %>%
+                     mutate(River = "Chilkat River"),
+               method = "lm", se = FALSE, linetype = 2) +
    annotate("text", x = 2016, y = 12000, label= "Auke Creek") + 
    annotate("text", x = 2016, y = 26000, label = "Hugh Smith Lake") + 
    annotate("text", x = 2016, y = 80000, label= "Ford Arm Creek") + 
@@ -557,6 +606,7 @@ US_FigXX_smolt <- SEAK_smolt %>%
 US_FigXX_smolt
 # ggsave(US_FigXX_smolt, filename = here::here("output/US_FigXX_smolt.png"),
 #       width = 6.5, height = 4, units = "in")
+
 
 
 
