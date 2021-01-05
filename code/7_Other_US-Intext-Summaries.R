@@ -29,27 +29,6 @@ totalrun <- indic_totalrun %>%
   dplyr::select(-EscapementGoal_Lower, -EscapementGoal_Upper) %>%
   group_by(River, Year) %>%
   summarise(totalrun = sum(Count)) 
-  #lm(totalrun ~ Year, data = .) %>% summary()
-summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Auke Creek")))
-summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Berners River")))
-summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Ford Arm Lake")))
-summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Hugh Smith Lake")))
-# Summary: Auke & Berners have declined, Ford Arm increased, HS no change
-
-
-chilkat_harvest_esc <- chilkat_harvest %>%
-  pivot_wider(names_from = Fishery_Type, values_from = Coho_Harvest_Count) %>%
-  mutate(Harvest = Troll+Seine+`Drift Gillnet`+`Sport (marine)`+`Sport (freshwater)`+Subsistence) %>%
-  dplyr::select(Year, Harvest) %>%
-  left_join(SEAK_escape %>% 
-              filter(River == "Chilkat River") %>% 
-              dplyr::select(Year, Escapement_Count)) # We'll use this variable later, save it
-
-totalrun_chilkat <- chilkat_harvest_esc %>% 
-  mutate(River = "Chilkat River", 
-         totalrun = Harvest + Escapement_Count) %>%
-  dplyr::select(River, Year, totalrun) 
-totalrun_chilkat %>% lm(totalrun ~ Year, data = .) %>% summary()
 
 totalrun_taku <- taku_harvest_can %>%
   pivot_wider(names_from = Fishery, values_from = Count) %>%
@@ -58,16 +37,57 @@ totalrun_taku <- taku_harvest_can %>%
   mutate(River = "Taku River", 
          totalrun = Harvest + Escapement) %>%
   dplyr::select(River, Year, totalrun) 
-totalrun_taku %>% lm(totalrun ~ Year, data = .) %>% summary()
+
+totalrun_chilkat <- chilkat_harvest %>%
+  group_by(Year) %>%
+  summarise(Harvest = sum(Coho_Harvest_Count)) %>%
+  left_join(SEAK_escape %>% 
+              filter(River == "Chilkat River") %>%
+              dplyr::select(Year, Escapement_Count),
+            by = c("Year" = "Year")) %>%
+  mutate(totalrun = Harvest + Escapement_Count,
+         River = "Chilkat River") %>%
+  dplyr::select(Year, River, everything())
 
 totalrun <- rbind(totalrun, totalrun_chilkat, totalrun_taku)
+rm(totalrun_chilkat, totalrun_taku)
+
+
+summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Auke Creek")))
+summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Berners River")))
+summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Ford Arm Lake")))
+summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Hugh Smith Lake")))
+summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Taku River")))
+summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Chilkat River")))
+
+# Summary: Auke, Berners, Chilkat have declined, Ford Arm increased, HS/Taku no change
+# but note diff time frame for Chilkat & Ford Arm
+
+
+
+
+# chilkat_harvest_esc <- chilkat_harvest %>%
+#   pivot_wider(names_from = Fishery_Type, values_from = Coho_Harvest_Count) %>%
+#   mutate(Harvest = Troll+Seine+`Drift Gillnet`+`Sport (marine)`+`Sport (freshwater)`+Subsistence) %>%
+#   dplyr::select(Year, Harvest) %>%
+#   left_join(SEAK_escape %>% 
+#               filter(River == "Chilkat River") %>% 
+#               dplyr::select(Year, Escapement_Count)) # We'll use this variable later, save it
+# 
+# totalrun_chilkat <- chilkat_harvest_esc %>% 
+#   mutate(River = "Chilkat River", 
+#          totalrun = Harvest + Escapement_Count) %>%
+#   dplyr::select(River, Year, totalrun) 
+
+
 
 totalrun %>%
   pivot_wider(names_from = River, values_from = totalrun) %>%
   corrr::correlate(use="pairwise.complete.obs", method = "spearman")
 # Berners:Chilkat highly corr, 
 
-rm(totalrun, totalrun_chilkat, totalrun_taku)
+
+
 
 
 ## STOCK STATUS - Smolt and Presmolt production 
