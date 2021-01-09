@@ -1,14 +1,14 @@
 # Figures for US Part of Report
 
 # Justin Priest
-# December 2020
+# January 2021
 # justin.priest@alaska.gov
 
 
 # Load cleaned up data and import US only data
 source(here::here("code/1_US_data_import.R"))
 
-# Load additional mapping libraries
+# Load additional mapping libraries. This is preliminary and not needed!
 library(rnaturalearth)
 library(rnaturalearthhires)
 library(USAboundaries)
@@ -375,7 +375,7 @@ US_Fig15 <- indic_totalrun %>%
           total = if_else(Fishery == "Escapement", 1-freq, 0),
           index = if_else(Fishery == "Escapement", total,
                           ifelse(Fishery == "Alaska Troll", freq, NA))) %>%
-   filter(Fishery != "Other") %>%
+   filter(Fishery != "Other Harvest") %>%
    mutate(Fishery = recode(Fishery, "Escapement" = "All Gear Exploitation",
                            "Alaska Troll" = "Troll Exploitation"),
           Fishery = fct_relevel(Fishery, "All Gear Exploitation", "Troll Exploitation"),
@@ -395,6 +395,8 @@ US_Fig15
 
 #ggsave(US_Fig15, filename = here::here("output/US_Fig15.png"), width = 6.5, height = 6, units = "in")
 
+
+ggsave(US_Fig15, filename = here::here("output/US_Fig15_pres.png"), width = 10, height = 6, units = "in")
 
 
 

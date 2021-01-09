@@ -1,7 +1,7 @@
 # Data Import - Alaska
 
 # Justin Priest & Ryan Whitmore
-# December 2020
+# January 2021
 # justin.priest@alaska.gov
 # Ryan.Whitmore@dfo-mpo.gc.ca
 
@@ -10,7 +10,6 @@ library(tidyverse)
 library(lubridate)
 library(here)
 library(scales)
-library(ggsidekick)
 library(patchwork)
 library(extrafont)
 # font_import()  #this only needs to be run once

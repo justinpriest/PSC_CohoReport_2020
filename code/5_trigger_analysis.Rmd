@@ -107,7 +107,8 @@ indices_2000 <- indices %>%
   filter(Year >= 2000, between(week, 27, 29)) %>% 
   group_by(Year) %>% # Need this so that NAs appear when you lead (can't use next week's info this week!)
   mutate(Tyee_cpue_lead1 = lead(Tyee_cpue, 1),
-         Nass_coho_lead1 = lead(Nass_coho, 1)) %>% 
+         Nass_coho_lead1 = lead(Nass_coho, 1),
+         NBCtrollCPUElead1 = lead(NBCtrollCPUE, 1)) %>% 
   ungroup() 
 
 
@@ -405,7 +406,7 @@ The correlation between Tyee & SEAK troll changed pre- & post 2000. These data a
 ```{r corrlead, echo=FALSE, warning=FALSE}
 
 indices_2000 %>%
-  dplyr::select(UStrollCPUE, Tyee_cpue_lead1, Nass_coho_lead1) %>%
+  dplyr::select(UStrollCPUE, Tyee_cpue_lead1, Nass_coho_lead1, NBCtrollCPUElead1) %>%
   correlation() %>% 
   mutate_at(c("r", "CI_low",	"CI_high",	"t"), round, 2) %>%
   knitr::kable() %>%
