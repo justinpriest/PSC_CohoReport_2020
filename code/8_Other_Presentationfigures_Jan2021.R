@@ -28,6 +28,18 @@ troll_USboundary <- troll_boundary %>%
   summarise(UStrollCPUE = mean(CohoCPUE))
 #101-40, 101-41, 101-45,
 
+treepointharvest <- read_csv(here::here("data/SEAK_Coho_HarvestTreePoint_2000-2019.csv")) %>% 
+  rename("Year" = `DOL Year`,
+         "StatArea" = `Stat Area`,
+         "GearCodeName" = `Gear Code and Name`,
+         "StatWeek" = `Stat Week`,
+         "TreePtHarv" = `Number Of Animals (sum)`) %>%
+  mutate(Species = "coho salmon") %>%
+  dplyr::select(Year, StatArea, GearCodeName, Species, StatWeek, TreePtHarv) %>%
+  filter(between(StatWeek, 27, 29))
+
+
+
 
 # Read in Hugh Smith data
 # JTP: This ends up not helping at all. Consider removing 
@@ -63,7 +75,10 @@ indices <- tyee_weekly %>%
   left_join(NassFW_weekly) %>% 
   left_join(troll_USboundary, by = c("Year" = "Year", "week" = "StatWeek")) %>%
   left_join(hughsmith_esc) %>% 
-  left_join(nbctroll, by = c("Year" = "Year", "week" = "StatWeek"))
+  left_join(nbctroll, by = c("Year" = "Year", "week" = "StatWeek")) %>%
+  left_join(treepointharvest, by = c("Year" = "Year", "week" = "StatWeek"))
+
+
 
 
 indices_2000 <- indices %>% 
@@ -172,7 +187,7 @@ nbctrollbgplot <- ggplot(nbctroll %>% filter(between(StatWeek, 27, 30)),
 # CORRELATION PLOTS
 
 indices_2000 %>%
-  dplyr::select(UStrollCPUE, NBCtrollCPUE, Tyee_cpue, Nass_coho, HS_count) %>%
+  dplyr::select(UStrollCPUE, NBCtrollCPUE, Tyee_cpue, Nass_coho, HS_count, TreePtHarv) %>%
   correlation() %>%
   summary(redundant = TRUE) %>% #redundant = TRUE
   plot(type = "tile", show_values = TRUE, digits = 2, show_p = TRUE) + 
@@ -195,6 +210,34 @@ indices_2000 %>%
 
 
 
+mod_tyee_linear <- lm(UStrollCPUE ~ Tyee_cpue, data = indices_2000)
+summary(mod_tyee_linear)
+
+tyeetroll <- indices_2000 %>%
+  ggplot(aes(x = Tyee_cpue, y = UStrollCPUE, fill = Year)) +
+  geom_smooth(method = "lm", color = "black") + 
+  geom_point(pch = 21, color="black", size = 4) +
+  scale_fill_adfg("glacier", discrete = FALSE) +
+  labs(x = "Tyee CPUE", y = "US Troll FPD CPUE", 
+       title = "Tyee CPUE vs US Troll CPUE, Stat Weeks 27–29") +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+tyeetroll
+
+
+tyeetroll_alt <- indices_2000 %>%
+  ggplot(aes(x = Tyee_cpue, y = UStrollCPUE, fill = week)) +
+  geom_smooth(method = "lm", color = "black") + 
+  geom_point(pch = 21, color="black", size = 4) +
+  scale_fill_adfg("sitkasunset", discrete = FALSE) +
+  labs(x = "Tyee CPUE", y = "US Troll FPD CPUE", 
+       title = "Tyee CPUE vs US Troll CPUE, Stat Weeks 27–29") +
+  theme_coho(base_family = "Arial", rotate_text = FALSE)
+tyeetroll_alt
+
+#ggsave(tyeetroll, filename = here::here("output/pres_tyeemodel.png"), width = 5, height = 4, units = "in")
+#ggsave(tyeetroll_alt, filename = here::here("output/pres_tyeemodel_alt.png"), width = 5, height = 4, units = "in")
+
+
 
 
 # Not included but this shows us the mean cumulative CPUE by week
@@ -206,3 +249,29 @@ tyee_weekly %>%
   group_by(week) %>%
   summarise(meancumm = mean(cumsum, na.rm = TRUE)) %>%
   mutate(weeklymean = lead(meancumm, 1) - meancumm) 
+
+
+
+
+# Tried a negative binomial model but doesn't really work well yet
+tyeemod <- mgcv::gam(UStrollCPUE ~ Tyee_cpue + week + s(Year, bs="re"), family = "nb", link = "log", 
+                     data = indices_2000) 
+summary(tyeemod)
+
+new.df <- crossing(week = c(27), Year = 2018, Tyee_cpue = seq(from=0, to = 200))
+predtyeenb <- predict(tyeemod, newdata=new.df, se=T, type="link") # Std. error on log-scale
+predtyeenbdf <- data.frame(Tyee_cpue = seq(from = 0, to = 0.3, length=nrow(new.df)), 
+                           lwr = (predtyeenb$fit - 1.96*predtyeenb$se.fit),  # Back-transformed lower confidence limit, 
+                           predval = (predtyeenb$fit), 
+                           upr = (predtyeenb$fit + 1.96*predtyeenb$se.fit))  # Back-transformed upper confidence limit
+
+ggplot(predtyeenbdf, aes(x=Tyee_cpue, y = predval)) + 
+  geom_line() + 
+  theme_minimal()
+
+
+
+
+
+
+

@@ -20,6 +20,49 @@ theme_coho <- function(base_size = 12, base_family = "Times New Roman", rotate_t
 
 
 
+# A better version of theme_coho() is theme_crisp() which doesn't require ggsidekick
+theme_crisp <- function(base_size = 12, base_family = "Arial", rotate_text=TRUE, rmborder=FALSE) {
+  # This is based heavily on Sean Anderson's theme_sleek from ggsidekick
+  # https://github.com/seananderson/ggsidekick
+  
+  require(extrafont)  # Need package extrafont for fonts. See pkg docs
+  
+  half_line <- base_size/2
+  theme_light(base_size = base_size, base_family = base_family) +
+    theme(
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      axis.ticks.length = unit(half_line / 2.2, "pt"),
+      strip.background = element_rect(fill = NA, color = NA),
+      strip.text.x = element_text(color = "gray30"),
+      strip.text.y = element_text(color = "gray30"),
+      axis.text = element_text(color = "gray30"),
+      axis.title = element_text(color = "gray30"),
+      legend.title = element_text(color = "gray30", size = rel(0.9)),
+      panel.border = element_rect(fill = NA, color = "gray70", size = 1),
+      legend.key.size = unit(0.9, "lines"),
+      legend.text = element_text(size = rel(0.7), color = "gray30"),
+      legend.key = element_rect(color = NA, fill = NA),
+      legend.background = element_rect(color = NA, fill = NA),
+      plot.title = element_text(color = "gray30", size = rel(1)),
+      plot.subtitle = element_text(color = "gray30", size = rel(.85))
+    ) +
+    {if(rmborder==TRUE){
+      theme(axis.line = element_line(size = 0.5, color = "gray70"),
+            panel.border = element_blank())
+    }
+      else{
+        theme()
+      }} + # If modifying in future, need {} around entire if statement
+    if(rotate_text==TRUE){
+      theme(axis.text.x = element_text(angle = 45, vjust=1, hjust=1))
+    } else{
+      theme(axis.text.x = element_text(angle = 0))
+    }
+}
+
+
+
 
 ##### ASSIGN STAT WEEK #####
 statweek <- function(x) {

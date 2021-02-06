@@ -8,15 +8,6 @@
 # Load cleaned up data and import US only data
 source(here::here("code/1_US_data_import.R"))
 
-# Load additional mapping libraries. This is preliminary and not needed!
-library(rnaturalearth)
-library(rnaturalearthhires)
-library(USAboundaries)
-library(sp)
-library(sf)
-library(ggspatial)
-
-
 
 
 # Unfortunately the 1981-2019 file is confidential and cannot be shared
@@ -45,39 +36,13 @@ troll_cpue
 
 
 
-#### FIGURE 1 - MAP - IN PROGRESS! ####
-ak <- us_states(states = "AK", resolution = "high")
-ak_projection <- state_plane("AK")
-ak <- sf::st_transform(ak, ak_projection)
-
-plot(ne_countries(country = 'canada', scale = 'medium', type='map_units'))
-canmap <- ne_states(country = "canada")
-#canmap <- sf::st_transform(canmap, state_plane("AK"))
-plot(canmap)
-canmap <- sf::st_as_sf(canmap)
-
-
-
-ggplot() +
-   geom_sf(data = canmap) +
-   geom_sf(data = ak) +
-   coord_sf(xlim = c(-150, -120), ylim = c(51, 62))
-
-
-ggplot() +
-   geom_sf(data = canmap, fill = "gray85") + 
-   geom_sf(data = ak, fill = "gray95", lwd = 0.25) +
-   coord_sf(xlim = c(-142, -127), ylim = c(53.5, 61), expand = FALSE) + 
-   ggspatial::annotation_scale(location = "bl", width_hint = 0.3) +
-   theme_bw() +
-   theme(panel.grid.major = element_line(colour = 'transparent'))
-
-
+#### FIGURE 1 - MAP - Not created here ####
+# The basemap was created in the RProject "GIS_Shapefiles" using shapefiles from Canada GeoBase
+# This was then finalized and touched up in PowerPoint for final, manual label placement
 
 
 
 # Figure 2 is comm harvest over time
-
 
 US_Fig2 <- harvest_historic %>%
    filter(Year > 1900) %>%
@@ -364,7 +329,7 @@ US_Fig14 <- Auke_survival %>%
 #cor(Auke_survival$Survival_Adults, Auke_survival$Survival_Jacks)
    
 ###### Figure 15 ######
-# Troll Exploitation Rate
+# All-Gear & Troll Exploitation Rate
 
 US_Fig15 <- indic_totalrun %>%
    filter( !(River =="Berners River" & Year < 1989)) %>% # These years are incorrect, exclude
@@ -396,7 +361,7 @@ US_Fig15
 #ggsave(US_Fig15, filename = here::here("output/US_Fig15.png"), width = 6.5, height = 6, units = "in")
 
 
-ggsave(US_Fig15, filename = here::here("output/US_Fig15_pres.png"), width = 10, height = 6, units = "in")
+#ggsave(US_Fig15, filename = here::here("output/US_Fig15_pres.png"), width = 10, height = 6, units = "in")
 
 
 
@@ -603,17 +568,17 @@ US_FigXX_smolt <- SEAK_smolt %>%
    annotate("text", x = 2016, y = 2500000, label = "Taku River") + 
    annotation_logticks() +
    labs(x = "", y = "Number of Smolt") + 
-   theme_coho() +
+   theme_crisp(rotate_text = TRUE) +
    theme(legend.position="none") 
 US_FigXX_smolt
 # ggsave(US_FigXX_smolt, filename = here::here("output/US_FigXX_smolt.png"),
-#       width = 6.5, height = 4, units = "in")
+#        width = 6.5, height = 4, units = "in")
 
 
 
 
 
-###### Figure XX3 ######
+###### Figure XX3 ###### NEW FIGURE 11
 ## Change in total production ##
 baseline_esc <- indic_totalrun %>%
    dplyr::select(Year, River, Fishery, Count) %>%
@@ -624,7 +589,11 @@ baseline_esc <- indic_totalrun %>%
    summarise(meancount1990_2009 = round(mean(totalcount), 0)) 
 
 
-US_FigXX_relchange <- indic_totalrun %>%
+rivernames <- data.frame(River = c("Auke Creek", "Berners River", "Ford Arm Creek", "Hugh Smith Lake"),
+                         Year = c(2016, 2016, 2016, 2016), baselinediff = rep(0.9, 4))
+
+
+totalchange <- indic_totalrun %>%
    dplyr::select(Year, River, Fishery, Count) %>%
    group_by(River, Year) %>%
    summarise(totalcount = sum(Count)) %>%
@@ -633,24 +602,28 @@ US_FigXX_relchange <- indic_totalrun %>%
    mutate(baselinediff = (totalcount - meancount1990_2009) / meancount1990_2009,
           posneg = ifelse(baselinediff > 0, "positive", "negative"),
           Year = as.integer(Year),
-          River = recode(River, "Ford Arm Lake" = "Ford Arm Creek")) %>%
-   ggplot(aes(x = Year, y = baselinediff, fill = posneg)) +
+          River = recode(River, "Ford Arm Lake" = "Ford Arm Creek"))
+
+US_FigXX_relchange <- ggplot(totalchange, aes(x = Year, y = baselinediff, fill = posneg)) +
    geom_col(alpha = 0.75, color = "black") + 
    geom_hline(yintercept = 0) +
    scale_x_continuous(breaks = seq(from=2010, to=2019, by = 1)) +
    scale_y_continuous(labels = scales::percent) + 
+   geom_text(data = rivernames, aes(x = Year,  y = baselinediff, label = River, fill = NA))+
    #scale_fill_manual(values = c("red4", "darkgreen")) +
-   scale_fill_manual(values = c("#8f3622", "#548768")) +
+   #scale_fill_manual(values = c("#8f3622", "#548768")) +
    #scale_fill_manual(values = c("#2e586b", "#0888c2")) +
-   #scale_fill_manual(values = c("gray90", "gray30")) +
-   labs(y = "Relative change of total return compared to 1985–2009 baseline") +
+   scale_fill_manual(values = c("gray90", "gray10")) +
+   labs(y = "Relative change of total return compared to 1985–2009 baseline", title = "") +
    facet_wrap(~River, nrow = 4) +
-   theme_coho(rotate_text = FALSE) +
-   theme(legend.position = "none")
+   theme_crisp(rotate_text = FALSE) +
+   theme(legend.position = "none",
+         strip.text.x = element_blank(), panel.spacing = unit(1.25, "lines")) # remove facet title and add more spacing
 US_FigXX_relchange
-# ggsave(US_FigXX_relchange, filename = here::here("output/US_FigXX_relchange.png"),
-#       width = 6.5, height = 8, units = "in")
+# ggsave(US_FigXX_relchange, filename = here::here("output/US_FigXX_relchange_V2.png"),
+#        width = 6.5, height = 8, units = "in")
 
-rm(baseline_esc)
+rm(baseline_esc, totalchange, rivernames)
+
 
 

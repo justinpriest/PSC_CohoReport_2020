@@ -175,10 +175,10 @@ bernersexp <- exploitrate %>% pivot_wider(values_from = "index", names_from = "F
     filter(River == "Berners River", Year >= 1999) %>%
     rename("trollexp" = `Troll Exploitation`)
 
-bernodd <- temp3 %>%
+bernodd <- bernersexp %>%
   filter(Year %% 2 == 1)
 
-berneven <- temp3 %>%
+berneven <- bernersexp %>%
   filter(Year %% 2 == 0) %>% 
   ungroup() %>%
   dplyr::select("trollexp") %>% rename("trollexpeven" = "trollexp") %>%
