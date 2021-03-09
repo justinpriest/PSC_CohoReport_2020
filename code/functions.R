@@ -124,7 +124,7 @@ create_figure5 <- function(river = "Auke Creek", setbreaks = c(0,500, 1000, 1500
     scale_x_continuous(breaks = seq(from = 1980, to = 2019, by = 2)) +
     scale_y_continuous(labels = comma, breaks = setbreaks) +
     labs(x = "", y = "") + 
-    theme_coho(base_family = "Arial") +
+    theme_crisp(base_family = "Arial") +
     if(blank_x==TRUE){
       theme(axis.text.x = element_blank(), axis.title.x = element_blank())
     } else{
@@ -145,7 +145,7 @@ create_harvestfig <- function(dataframe = indic_totalrun, river = "Auke Creek",
     scale_y_continuous(labels = comma, breaks = setbreaks) +
     scale_fill_manual(values = c("white", "black", "gray")) + 
     labs(y = "Number of Coho Salmon") + 
-    theme_coho(base_family = "Arial") + 
+    theme_crisp(base_family = "Arial") + 
     theme(legend.position="none") +
     if(blank_x==TRUE){
       theme(axis.text.x = element_blank(), axis.title.x = element_blank())

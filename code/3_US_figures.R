@@ -54,7 +54,7 @@ US_Fig2 <- harvest_historic %>%
    scale_y_continuous(breaks = seq(from=0, to=5.5, by = 0.5)) +
    scale_fill_manual(values = c("white", "gray")) + 
    labs(y = "Number of fish (Millions)") + 
-   theme_coho(base_family = "Arial") + 
+   theme_crisp(base_family = "Arial") + 
    theme(legend.position=c(.2,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line"))
 #ggsave(US_Fig2, filename = here::here("output/US_Fig2.png"), width = 6.5, height = 4, units = "in")
@@ -73,7 +73,7 @@ US_Fig4 <- SEAK_sport %>%
    scale_y_continuous(labels = comma) +
    scale_fill_manual(values = c("white", "gray")) + 
    labs(y = "Number of Coho Salmon") + 
-   theme_coho(base_family = "Arial") + 
+   theme_crisp(base_family = "Arial") + 
    theme(legend.position=c(.2,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line"))
 #ggsave(US_Fig4, filename = here::here("output/US_Fig4.png"), width = 6.5, height = 4, units = "in")
@@ -239,7 +239,7 @@ US_Fig11 <- SEAK_escape %>%
    scale_linetype_manual(values = c("solid", "solid", "solid")) + # Berners used to be dashed
    expand_limits(y = c(-1.7, 3.3)) +
    labs(y = expression("Scaled Escapement (X-"*mu*" / "*sigma*")")) +
-   theme_coho(base_family = "Arial") +
+   theme_crisp(base_family = "Arial") +
    theme(legend.position=c(.5,.06), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(2.5,"line"), legend.direction="horizontal") 
 #ggsave(US_Fig11, filename = here::here("output/US_Fig11.png"), width = 6.5, height = 4, units = "in")
@@ -282,7 +282,7 @@ Fig13a <- SEAK_marsurv %>%
    expand_limits(y = c(0,25)) +
    labs(x = "Return Year", y = "Survival (%)") +
    annotate("text", x = 2006, y = 24, label = "Outer Coastal System - Ford Arm Creek (Presmolts)", size = 4) +
-   theme_coho(base_family = "Arial") +
+   theme_crisp(base_family = "Arial") +
    theme(legend.position=c(.8,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(2,"line"),
          axis.text.x = element_blank(), axis.title.x = element_blank())
@@ -299,7 +299,7 @@ Fig13b <- SEAK_marsurv %>%
    expand_limits(y = c(0,35)) +
    labs(x = "Return Year", y = "Survival (%)") +
    annotate("text", x = 2006, y = 35, label = "Inside Systems (Smolts)", size = 4) +
-   theme_coho(base_family = "Arial") +
+   theme_crisp(base_family = "Arial") +
    theme(legend.position=c(.5,.08), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(2.5,"line"), legend.direction="horizontal") 
 
@@ -321,7 +321,7 @@ US_Fig14 <- Auke_survival %>%
    scale_y_continuous(breaks = seq(from=0, to = 45, by = 5)) +
    scale_fill_manual(values = c("#4fa3bd", "black")) +
    labs(x = "Smolt Outmigration Year", y = "Marine Survival (%)") +
-   theme_coho(base_family = "Arial") +
+   theme_crisp(base_family = "Arial") +
    theme(legend.position=c(.8,0.8), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line")) 
 #ggsave(US_Fig14, filename = here::here("output/US_Fig14.png"), width = 6.5, height = 4, units = "in")
@@ -329,7 +329,7 @@ US_Fig14 <- Auke_survival %>%
 #cor(Auke_survival$Survival_Adults, Auke_survival$Survival_Jacks)
    
 ###### Figure 15 ######
-# All-Gear & Troll Exploitation Rate
+# All-Gear & Troll Harvest Rate
 
 US_Fig15 <- indic_totalrun %>%
    filter( !(River =="Berners River" & Year < 1989)) %>% # These years are incorrect, exclude
@@ -341,9 +341,9 @@ US_Fig15 <- indic_totalrun %>%
           index = if_else(Fishery == "Escapement", total,
                           ifelse(Fishery == "Alaska Troll", freq, NA))) %>%
    filter(Fishery != "Other Harvest") %>%
-   mutate(Fishery = recode(Fishery, "Escapement" = "All Gear Exploitation",
-                           "Alaska Troll" = "Troll Exploitation"),
-          Fishery = fct_relevel(Fishery, "All Gear Exploitation", "Troll Exploitation"),
+   mutate(Fishery = recode(Fishery, "Escapement" = "All Gear Harvest",
+                           "Alaska Troll" = "Troll Harvest"),
+          Fishery = fct_relevel(Fishery, "All Gear Harvest", "Troll Harvest"),
           River = recode(River, "Ford Arm Lake" = "Ford Arm Creek")) %>%
    dplyr::select(-Count, -freq, -total) %>%
    ggplot(aes(x=Year, y = index, linetype = Fishery)) + 
@@ -351,8 +351,8 @@ US_Fig15 <- indic_totalrun %>%
    scale_x_continuous(breaks = seq(from=1980, to=2019, by = 3)) +
    scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1)) +
    expand_limits(y= c(0,1)) +
-   labs(y = "Exploitation Rate") + 
-   theme_coho(base_family = "Arial") + 
+   labs(y = "Harvest Rate") + 
+   theme_crisp(base_family = "Arial") + 
    theme(legend.position=c(.33,.9), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1.5,"line")) +
    facet_wrap(~River)
@@ -367,10 +367,7 @@ US_Fig15
 
 
 ###### Figure 16 ######
-# All Exploitation Rate
-
-#COMBINE WITH 15!
-
+# All Harvest Rate
 
 US_Fig16 <- trollindex %>%
    filter(Year >= 1982) %>% # remove the blank, Auke-only years
@@ -380,8 +377,8 @@ US_Fig16 <- trollindex %>%
    scale_x_continuous(breaks = seq(from=1982, to=2019, by=3)) +
    scale_y_continuous(labels = scales::percent, breaks = seq(from=0, to=0.6, by=0.1)) +
    expand_limits(x = 1983, y = c(0, 0.6)) +
-   labs(x = "", y = "Troll Exploitation Rate Index") + 
-   theme_coho(base_family = "Arial")
+   labs(x = "", y = "Troll Harvest Rate Index") + 
+   theme_crisp(base_family = "Arial")
 US_Fig16
 
 #ggsave(US_Fig16, filename = here::here("output/US_Fig16.png"), width = 6.5, height = 4, units = "in")
@@ -403,7 +400,7 @@ Fig17a <- wildproportion_allgear %>%
    scale_fill_manual(values = c("white", "gray")) + 
    labs(y = "Number of Coho Salmon") + 
    annotate("text", x = 2000, y = 5750000, label = "All Gear Harvest", size = 4, fontface = "bold") +
-   theme_coho(base_family = "Arial") +
+   theme_crisp(base_family = "Arial") +
    theme(legend.position=c(.85,.85), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line"),
          axis.text.x = element_blank(), axis.title.x = element_blank()) # remove x axis
@@ -418,7 +415,7 @@ Fig17b <- trollharvest %>%
    scale_fill_manual(values = c("white", "gray"), guide = FALSE) + 
    labs(y = "Number of Coho Salmon") + 
    annotate("text", x = 2000, y = 3600000, label = "Troll Harvest", size = 4, fontface = "bold") +
-   theme_coho(base_family = "Arial") 
+   theme_crisp(base_family = "Arial") 
 
 US_Fig17 <- Fig17a / Fig17b
 #ggsave(US_Fig17, filename = here::here("output/US_Fig17.png"), width = 6.5, height = 6, units = "in")
@@ -439,7 +436,7 @@ wildproportion_allgear %>%
    geom_line() + 
    scale_x_continuous(breaks = seq(from = 1980, to = 2019, by = 2)) +
    labs(y= "Proportion") +
-   theme_coho(base_family = "Arial") +
+   theme_crisp(base_family = "Arial") +
    theme(legend.position=c(.65,.95), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line")) 
 
@@ -462,7 +459,7 @@ Fig18a <- troll_cpue %>%
    expand_limits(y=c(0, 90)) +
    labs(y = "Catch per Boat Day") +
    annotate("text", x = 2001, y = 90, label = "Mean Annual Power Troll Wild CPUE", size = 4, fontface = "bold") +   
-   theme_coho(base_family = "Arial") +
+   theme_crisp(base_family = "Arial") +
    theme(axis.text.x = element_blank(), axis.title.x = element_blank()) # remove x axis
 
 
@@ -488,7 +485,7 @@ Fig18b <- trollharvest %>%
    expand_limits(y=c(0, 7)) +
    labs(y = "Number of Coho Salmon (Millions)") + 
    annotate("text", x = 2001, y = 7, label = "Wild Abundance and Harvest", size = 4, fontface = "bold") +   
-   theme_coho(base_family = "Arial") +
+   theme_crisp(base_family = "Arial") +
    theme(legend.position=c(0.5, 0.05), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(2.0,"line"), legend.direction="horizontal") 
 
@@ -518,7 +515,7 @@ US_FigXX_rick <- ggplot() +
    scale_x_continuous(labels = comma, limits = c(0, 30000)) +
    scale_fill_manual(values = c("#55207d", "#5d7cba", "#0090fc", "#a5e6da")) +
    labs(x="Spawners", y ="Recruits") + 
-   theme_coho(rotate_text = FALSE, base_family = "Arial") +
+   theme_crisp(rotate_text = FALSE, base_family = "Arial") +
    theme(legend.position=c(.9175,.7875), # c(.9175,.7875) only work with 6.5x4" and legend outlined
          legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1.5,"line"),
@@ -539,7 +536,7 @@ ggplot() +
    scale_y_continuous(labels = comma, breaks = seq(from=0, to=60000, by=10000)) + 
    scale_x_continuous(labels = comma, limits = c(0, 30000)) +
    labs(x="Spawners", y ="Recruits") + 
-   theme_coho(rotate_text = FALSE, base_family = "Arial")
+   theme_crisp(rotate_text = FALSE, base_family = "Arial")
 
 
 ###### Figure XX ######
@@ -614,14 +611,15 @@ US_FigXX_relchange <- ggplot(totalchange, aes(x = Year, y = baselinediff, fill =
    #scale_fill_manual(values = c("#8f3622", "#548768")) +
    #scale_fill_manual(values = c("#2e586b", "#0888c2")) +
    scale_fill_manual(values = c("gray90", "gray10")) +
-   labs(y = "Relative change of total return compared to 1985–2009 baseline", title = "") +
+   labs(y = "Relative change of total return compared to 1985–2009 average", title = "") +
    facet_wrap(~River, nrow = 4) +
    theme_crisp(rotate_text = FALSE) +
    theme(legend.position = "none",
          strip.text.x = element_blank(), panel.spacing = unit(1.25, "lines")) # remove facet title and add more spacing
 US_FigXX_relchange
+
 # ggsave(US_FigXX_relchange, filename = here::here("output/US_FigXX_relchange_V2.png"),
-#        width = 6.5, height = 8, units = "in")
+#         width = 6.5, height = 8, units = "in")
 
 rm(baseline_esc, totalchange, rivernames)
 
