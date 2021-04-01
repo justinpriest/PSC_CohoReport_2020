@@ -81,13 +81,15 @@ summary(lm(totalrun ~ Year, data = totalrun %>% filter(River == "Chilkat River")
 
 
 
-totalrun %>%
-  pivot_wider(names_from = River, values_from = totalrun) %>%
+totalrun_wide <- totalrun %>%
+  pivot_wider(Year, names_from = River, values_from = totalrun) 
+totalrun_wide %>%
   corrr::correlate(use="pairwise.complete.obs", method = "spearman")
-# Berners:Chilkat highly corr, 
 
 
-
+cor.test(totalrun_wide$`Berners River`, totalrun_wide$`Chilkat River`, 
+    use = "pairwise.complete.obs", method =  "spearman")
+# Berners:Chilkat highly corr, p < 0.001
 
 
 ## STOCK STATUS - Smolt and Presmolt production 

@@ -82,23 +82,29 @@ US_Fig3 <- SEAK_sport %>%
    annotate("text", x = 2000, y = 1500, label = "Auke Creek (Weir)", size = 3.5)) 
 
 (Fig4b <- create_figure5("Montana Creek", setbreaks = c(0, 500, 1000, 1500, 2000, 2500), minyear = 1981) + 
-   annotate("text", x = 2000, y = 2550, label = "Montana Creek (Survey)", size = 3.5))
+      expand_limits(y = c(0, 2650)) +
+      annotate("text", x = 2000, y = 2600, label = "Montana Creek (Survey)", size = 3.5))
 
 (Fig4c <- create_figure5("Peterson Creek", setbreaks = c(0, 200, 400, 600), minyear = 1981) + 
    annotate("text", x = 2000, y = 630, label = "Peterson Creek (Survey)", size = 3.5))
 
-(Fig4d <- create_figure5("Berners River", setbreaks = c(0, 5000, 10000, 15000, 20000, 25000), minyear = 1982) + 
-   annotate("text", x = 2000, y = 26000, label = "Berners River (Survey)", size = 3.5) + 
+(Fig4d <- create_figure5("Berners River", setbreaks = c(0, 5000, 10000, 15000, 20000, 25000), 
+                         minyear = 1982) + 
+      expand_limits(y = c(0, 30500)) +
+      annotate("text", x = 2000, y = 30500, label = "Berners River (Survey)", size = 3.5) + 
    labs(y = "Spawners"))
 
 (Fig4e <- create_figure5("Chilkat River", setbreaks = c(0, 50000, 100000, 150000, 200000), minyear = 1987) + 
-   annotate("text", x = 2000, y = 210000, label = "Chilkat River (Mark-recapture / Expanded Survey)", size = 3.5))
+      expand_limits(y = c(0, 220000)) +
+      annotate("text", x = 2000, y = 220000, label = "Chilkat River (Mark-recapture / Expanded Survey)", size = 3.5))
 
 (Fig4f <- create_figure5("Taku River", setbreaks = c(0, 50000, 100000, 150000, 200000), 
                          minyear = 1987, blank_x = FALSE) + 
-   annotate("text", x = 2000, y = 230000, label = "Taku River (Mark-recapture)", size = 3.5))
+      expand_limits(y = c(0, 240000)) +
+   annotate("text", x = 2000, y = 240000, label = "Taku River (Mark-recapture)", size = 3.5))
 
 US_Fig4 <- Fig4a / Fig4b / Fig4c / Fig4d / Fig4e / Fig4f # This is Patchwork notation to make a stacked figure
+US_Fig4
 #ggsave(US_Fig4, filename = here::here("output/US_Fig4.png"), width = 6, height = 9, units = "in")
 rm(Fig4a, Fig4b, Fig4c, Fig4d, Fig4e, Fig4f)
 
@@ -147,7 +153,7 @@ Fig7b <- create_figure5("Situk River", setbreaks = seq(from=0, to=40000, by=1000
    labs(y = "Spawners")
 
 Fig7c <- create_figure5("Tsiu River", setbreaks = seq(from=0, to=60000, by=20000), minyear = 1972, blank_x = FALSE) +
-   annotate("text", x = 1995, y = 60000, label = "Tsiu River", size = 3.5) +
+   annotate("text", x = 1995, y = 60000, label = "Tsiu-Tsivat River", size = 3.5) +
    scale_x_continuous(breaks = seq(from = 1972, to = 2019, by = 2)) 
 
 US_Fig7 <- Fig7a / Fig7b / Fig7c
@@ -157,10 +163,12 @@ rm(Fig7a, Fig7b, Fig7c)
 
 ###### Figure 8 ######
 # Indicator Stock Run Reconstruction
-Fig8a <- create_harvestfig(river = "Auke Creek", blank_x = TRUE, setbreaks = seq(from=0, to=3000, by=500)) + 
+Fig8a <- indic_totalrun %>%
+   mutate(Fishery = recode(Fishery, "Alaska Troll" = "Alaska Troll Harvest")) %>% # needed to rename this 
+   create_harvestfig(river = "Auke Creek", blank_x = TRUE, setbreaks = seq(from=0, to=3000, by=500)) + 
    annotate("text", x = 2000, y = 3300, label = "Auke Creek", size = 3.5) + 
    labs(y = "") +
-   theme(legend.position=c(.88,.82), legend.title = element_blank(), legend.text = element_text(size = 10),
+   theme(legend.position=c(.84,.82), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line")) 
 
 Fig8b <- create_harvestfig(river = "Ford Arm Lake", blank_x = TRUE, setbreaks = seq(from=0, to=16000, by=2000)) + 
@@ -194,18 +202,21 @@ Fig9a <- SEAK_escape %>% filter(River == "Chilkat River", Year >= 1987) %>%
                 mutate(Other = Seine + `Drift Gillnet` + `Sport (marine)` + `Sport (freshwater)` + Subsistence) %>%
                 dplyr::select(Year, River, Troll, Other)) %>%
    rename("Escapement" = "Escapement_Count",
-          "Alaska Troll" = "Troll") %>%
-   pivot_longer(cols = c(Escapement, `Alaska Troll`, Other), names_to = "Fishery", values_to = "Count") %>%
-   mutate(Fishery = factor(Fishery, levels = c("Alaska Troll", "Other", "Escapement"))) %>%
+          "Alaska Troll Harvest" = "Troll",
+          "Other Harvest" = "Other") %>%
+   pivot_longer(cols = c(Escapement, `Alaska Troll Harvest`, `Other Harvest`), names_to = "Fishery", values_to = "Count") %>%
+   mutate(Fishery = factor(Fishery, levels = c("Alaska Troll Harvest", "Other Harvest", "Escapement"))) %>%
    left_join(SEAK_escgoals, by = c("River" = "System")) %>%
-   create_harvestfig(river = "Chilkat River", setbreaks = seq(from=0, to=400000, by=100000)) +
+   create_harvestfig(river = "Chilkat River", minyear = 1987, setbreaks = seq(from=0, to=400000, by=100000)) +
    annotate("text", x = 2002, y = 400000, label = "Chilkat River", size = 3.5) +
-   theme(legend.position=c(0.88, 0.82), legend.title = element_blank(), legend.text = element_text(size = 10),
+   scale_x_continuous(breaks = seq(from=1987, to=2019, by = 2)) + # manually set the x axis to start at 1987
+   theme(legend.position=c(0.84, 0.82), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line")) 
 
 Fig9b <- create_harvestfig(river = "Berners River", 
                   setbreaks = seq(from=0, to=60000, by=20000), blank_x = FALSE, minyear = 1987) +
-   annotate("text", x = 2002, y = 75000, label = "Berners River", size = 3.5) 
+   annotate("text", x = 2002, y = 75000, label = "Berners River", size = 3.5) +
+   scale_x_continuous(breaks = seq(from=1987, to=2019, by = 2)) # manually set the x axis to start at 1987
 US_Fig9 <- Fig9a / Fig9b 
 #ggsave(US_Fig9, filename = here::here("output/US_Fig9.png"), width = 6.5, height = 6, units = "in")
 rm(Fig9a, Fig9b)
@@ -360,13 +371,14 @@ US_Fig14 <- Auke_survival %>%
    pivot_longer(cols = c("Survival_Adults", "Survival_Jacks"), 
                 names_to = "AdultJack", values_to = "Survival") %>%
    mutate(AdultJack = replace(AdultJack, AdultJack == "Survival_Adults", "Adult Survival"),
-          AdultJack = replace(AdultJack, AdultJack == "Survival_Jacks", "Jack Survival")) %>%
-   ggplot(aes(x = SmoltYear, y = Survival, fill = AdultJack)) +
+          AdultJack = replace(AdultJack, AdultJack == "Survival_Jacks", "Jack Survival"),
+          ReturnYear = SmoltYear + 1) %>%
+   ggplot(aes(x = ReturnYear, y = Survival, fill = AdultJack)) +
    geom_col(color = "black", width = 0.75) +
    scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
    scale_y_continuous(breaks = seq(from=0, to = 45, by = 5)) +
    scale_fill_manual(values = c("#4fa3bd", "black")) +
-   labs(x = "Smolt Outmigration Year", y = "Marine Survival (%)") +
+   labs(x = "Adult Return Year", y = "Marine Survival (%)") +
    theme_crisp(base_family = "Arial") +
    theme(legend.position=c(.8,0.8), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(1,"line")) 
@@ -546,10 +558,11 @@ US_Fig19 <- SEAK_escape %>%
    geom_line(size = 1.25) +
    geom_point(size = 2) +
    scale_x_continuous(breaks = seq(from=1980, to= 2019, by =2)) +
-   scale_color_manual(values = c("#6b6b6b", "#c77512", "black")) +
+   scale_color_manual(values = c("black", "#c77512", "#6b6b6b")) + # swapped blk/gray colors for river consistency
    scale_linetype_manual(values = c("solid", "solid", "solid")) + # Berners used to be dashed
    expand_limits(y = c(-1.7, 3.3)) +
-   labs(y = expression("Scaled Escapement (X-"*mu*" / "*sigma*")")) +
+   #labs(y = expression("Scaled Escapement (X-"*mu*" / "*sigma*")")) +
+   labs(y = expression("Scaled Escapement")) + # On advice from SEM
    theme_crisp(base_family = "Arial") +
    theme(legend.position=c(.5,.06), legend.title = element_blank(), legend.text = element_text(size = 10),
          legend.key.size = unit(2.5,"line"), legend.direction="horizontal") 
