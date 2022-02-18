@@ -1,7 +1,7 @@
 ---
 title: "Boundary Area Closure Trigger Assessment"
 author: "Justin Priest"
-date: "11 January 2020"
+date: "11 January 2021"
 output: 
   html_document:
     code_folding: "hide"
@@ -169,7 +169,7 @@ troll81to19 %>%
   scale_fill_adfg("glacier", discrete = FALSE) +
   labs(x = "US Troll CPUE (Weeks 27-29)", y = "Troll CPUE (All Weeks)", 
        title = "US Troll CPUE: Early vs All Season")  +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 
 troll81to19 %>% 
   left_join(troll81to19allweeks) %>%
@@ -196,7 +196,7 @@ troll81to19wk30 %>%
   scale_fill_adfg("glacier", discrete = FALSE) +
   labs(x = "US Troll CPUE (Weeks 27-30)", y = "Troll CPUE (All Weeks)", 
        title = "US Troll CPUE: Early vs All Season (INCLUDES week 30)")  +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 
 troll81to19wk30 %>% 
   left_join(troll81to19allweeks) %>%
@@ -244,7 +244,7 @@ ggplot(UStrollcpue_wildabund, aes(x=UStrollCPUE, y = EstTotalWildAbund, fill = n
        subtitle = "2018 is orange, 2019 is red",
        caption = "Early season US troll CPUE is mildly similar to SEAK wild coho abundance",
        fill = "Unique trips")  +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 
 lm(EstTotalWildAbund ~ UStrollCPUE, weights = numtrips, data = UStrollcpue_wildabund) %>% broom::tidy()
 
@@ -274,7 +274,7 @@ ggplot(UStrollcpue_wildabundwk30, aes(x=UStrollCPUEwk30, y = EstTotalWildAbund, 
        subtitle = "2018 is orange, 2019 is red",
        caption = "Early season US troll CPUE is mildly similar to SEAK wild coho abundance",
        fill = "Year")  +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 
 lm(EstTotalWildAbund ~ UStrollCPUEwk30, data = UStrollcpue_wildabundwk30) %>% broom::tidy()
 
@@ -303,20 +303,20 @@ ggplot(tyee_weekly %>% filter(Year >= 2000), aes(x = week, y = Tyee_cpue, color 
   geom_vline(xintercept = 30, color = "red", size = 1.5) +
   scale_y_continuous(limits = c(0, 5)) +
   labs(title = "Tyee CPUE by stat week", x = "Stat Week", y = "Coho CPUE") +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 
 ggplot(NassFW_weekly, aes(x=week, y = Nass_coho, group = Year, color = Year)) + 
   geom_line() +
   geom_vline(xintercept = 30, color = "red", size = 1.5) +
   labs(title = "Nass FW Catch by stat week", x = "Stat Week", y = "Coho Count") +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 
 ggplot(troll_USboundary, 
        aes(x=StatWeek, y = UStrollCPUE, group = Year, color = Year)) +
   geom_point() + 
   geom_line() +
   labs(title = "US Boundary Area Troll CPUE by Stat Week", x = "Stat Week", y = "Troll Coho CPUE") +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 
 
 ggplot(nbctroll %>% filter(between(StatWeek, 27, 30)), 
@@ -324,7 +324,7 @@ ggplot(nbctroll %>% filter(between(StatWeek, 27, 30)),
   geom_point() + 
   geom_line() +
   labs(title = "NBC Troll CPUE by Stat Week", x = "Stat Week", y = "Troll Coho CPUE") +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 
 
 ```
@@ -454,7 +454,7 @@ tyeetroll <- indices_2000 %>%
   scale_fill_adfg("glacier", discrete = FALSE) +
   labs(x = "US Troll FPD CPUE", y = "Tyee CPUE, same weeks", 
        title = "US Troll CPUE vs Tyee CPUE, Stat Weeks 27–29") +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 tyeetroll
 
 tyeelead <- indices_2000 %>%
@@ -464,7 +464,7 @@ tyeelead <- indices_2000 %>%
   scale_fill_adfg("glacier", discrete = FALSE) +
   labs(x = "US Troll FPD CPUE (Districts 101/102)", y = "Tyee CPUE, one week lead", 
        title = "US Troll CPUE vs following week Tyee CPUE, Stat Weeks 27–29") +
-  theme_coho(base_family = "Arial", rotate_text = FALSE) +
+  theme_crisp(base_family = "Arial", rotate_text = FALSE) +
   annotate(geom = "curve", x = 140, y = 0.1, xend = 115, yend = 0.232, 
             curvature = -0.2, arrow = arrow(length = unit(2, "mm"))) +
   annotate(geom = "curve", x = 179, y = 0.1, xend = 187, yend = 0.285, 
@@ -483,7 +483,7 @@ nasstroll <- indices_2000 %>%
   scale_y_continuous(labels = scales::comma) +
   labs(x = "US Troll FPD CPUE", y = "Nass Catch, same weeks", 
        title = "US Troll CPUE vs Nass catch, Stat Weeks 27–29") +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 nasstroll
 
 
@@ -495,7 +495,7 @@ nasslead <- indices_2000 %>%
   scale_y_continuous(labels = scales::comma) +
   labs(x = "US Troll FPD CPUE", y = "Nass Catch, one week lead", 
        title = "US Troll CPUE vs following week Nass catch, Stat Weeks 27–29") +
-  theme_coho(base_family = "Arial", rotate_text = FALSE) +
+  theme_crisp(base_family = "Arial", rotate_text = FALSE) +
   annotate(geom = "curve", x = 140, y = 470, xend = 116, yend = 1100, 
             curvature = -0.15, arrow = arrow(length = unit(2, "mm"))) +
   annotate(geom = "curve", x = 181, y = 470, xend = 187, yend = 1500, 
@@ -514,7 +514,7 @@ indices_2000 %>%
   scale_y_continuous(labels = scales::comma) +
   labs(x = "US Troll FPD CPUE", y = "NBC Troll CPUE, same weeks", 
        title = "US Troll CPUE vs NBC Troll CPUE, Stat Weeks 27–29") +
-  theme_coho(base_family = "Arial", rotate_text = FALSE)
+  theme_crisp(base_family = "Arial", rotate_text = FALSE)
 
 ```
 
